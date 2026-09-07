@@ -1,0 +1,83 @@
+# Roadmap
+
+Last updated: 2026-09-07
+
+## Focus
+
+**Focus topic:** .NET
+**Focus cluster:** none
+
+The focus decides what a session proposes by default. It is not a lock and not
+a ranking — change it by editing the two lines above. A focus cluster is
+optional steering inside the topic; leave it `none` to let the proposal rules
+in `CLAUDE.md` pick.
+
+## Topics
+
+Not an order, not closed. Topics, clusters, and concepts get added when
+wanted. A topic gets a folder on first excursion or when it becomes the focus.
+
+| Topic | Folder | Excursions | Notes |
+|---|---|---|---|
+| .NET | `topics/dotnet/` | — | Working stack. Honest priors here, so it is the right place to find out whether the grading is calibrated. |
+| System design | — | 0 | High interview leverage. |
+| DevOps | — | 0 | Adjacent to daily work, currently shallow. |
+| Web fundamentals | — | 0 | Underpins both frontend and system design. |
+| Frontend | — | 0 | Breadth, not depth. Lower bar than the rest. |
+| Interview prep | — | 0 | Draws on all of the above. |
+
+## .NET
+
+Scope, resources, and the full concept tree are in `topics/dotnet/TOPIC.md`
+and `topics/dotnet/mastery.md`.
+
+**Clusters**, in suggested path order (soft — see `TOPIC.md`):
+
+1. Memory and GC
+2. C# language internals
+3. Async and threading
+4. Concurrency
+5. Runtime and type system
+6. Performance and diagnostics
+7. Dependency injection and hosting
+8. Data access and EF Core internals
+9. HTTP, networking, and resilience
+
+Not on the starting list, add when wanted: ASP.NET Core pipeline; I/O,
+buffers, and serialization; cloud SDKs.
+
+### Definition of done
+
+Cold and unaided at a whiteboard:
+
+1. Draw the generational GC and say what triggers and pauses each collection
+   kind.
+2. Draw the async state machine and trace a continuation through the thread
+   pool.
+3. Argue whether a given lock-free pattern is safe under the memory model.
+4. Reason from a described production symptom to a runtime cause.
+5. Trace a LINQ query from expression tree to SQL and back to tracked
+   entities, and say where each layer can silently cost a round trip.
+
+Each demonstrated unprompted in a session and linked from
+`topics/dotnet/mastery.md`. This is a description of what the topic is for,
+not a gate on studying anything else.
+
+## Excursions
+
+A session on a topic other than the focus. Graded, logged, queued, and written
+back like any other — no lightweight mode. On first excursion the topic's
+folder is created and only the concepts touched are enumerated, plus their
+obvious siblings. The excursion count above goes up.
+
+`weekly-review` names the pattern when excursions outweigh the focus topic, or
+when a focus-topic cluster sits untouched while excursions continue.
+
+## Calibration checkpoint
+
+After five interview sessions: did any answer the user self-flagged as weak
+receive L3 or above? The self-assessment recorded in each session file is the
+data. If yes, tighten the rubric anchors in `CLAUDE.md` before adapting this
+system for anyone else.
+
+Status: **not yet reached** — 0 of 5 interview sessions.

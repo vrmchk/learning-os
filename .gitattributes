@@ -1,0 +1,2 @@
+# Same bytes on every machine — sessions run from Windows, mobile, and CI-less Linux.
+* text=auto eol=lf

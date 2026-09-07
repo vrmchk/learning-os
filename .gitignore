@@ -1,0 +1,19 @@
+# Obsidian — vault config travels with the repo, per-machine state does not
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.trash/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# Editors
+.vs/
+.vscode/
+.idea/
+*.swp
+*~
