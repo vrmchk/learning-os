@@ -15,15 +15,15 @@ Generations, triggers, heaps, and what the allocator and collector actually do.
 
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
-| gc-generations | L0 | — | — |
-| gc-triggers-and-budgets | L0 | — | — |
+| [[gc-generations]] | L1 | 2026-09-08 | [[2026-09-08-gc-generations]] |
+| [[gc-triggers-and-budgets]] | L0 | — | [[2026-09-08-gc-generations]] |
 | gc-modes | L0 | — | — |
 | large-object-heap | L0 | — | — |
 | card-table-and-write-barrier | L0 | — | — |
 | gc-pauses-and-latency-modes | L0 | — | — |
 | gc-regions-and-configuration | L0 | — | — |
 | finalization-and-freachable-queue | L0 | — | — |
-| stack-vs-heap-layout | L0 | — | — |
+| [[stack-vs-heap-layout]] | L1 | 2026-09-08 | [[2026-09-08-gc-generations]] |
 | boxing | L0 | — | — |
 | span-and-memory | L0 | — | — |
 | stackalloc-and-ref-structs | L0 | — | — |
