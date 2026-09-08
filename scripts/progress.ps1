@@ -400,7 +400,7 @@ W "| All time | $($rowAll -join ' | ') |"
 W
 $excursions = @($interviewSessions | Where-Object { $_.Excursion }).Count
 W "Excursions: $excursions of $($interviewSessions.Count) interview sessions."
-$lastLog = $log | Where-Object { $_.Date } | Sort-Object Date -Descending | Select-Object -First 1
+$lastLog = $log | Where-Object { $_.Date } | Select-Object -Last 1   # log is append-only, so file order is chronological
 W "Last session: $(if ($lastLog) { "$(Fmt-Date $lastLog.Date) — $($lastLog.Mode) — $($lastLog.Slug)" } else { 'none' })."
 W "Last weekly review: $(if ($lastWeekly) { "[[$($lastWeekly.BaseName)]]" } else { 'none' })."
 
