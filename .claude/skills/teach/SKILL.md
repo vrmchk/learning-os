@@ -13,11 +13,18 @@ level** — it makes the next interview possible.
 of `mastery.md`, `gaps.md`, `review/queue.md`, and `review/log.md`; this skill
 writes to them in those formats. This skill owns the **note** format.
 
+## 0. Sync
+
+If the repo has a remote, `git pull --ff-only`. If it fails or the tree is
+dirty, say so and ask before continuing.
+
 ## 1. Pick the concept
 
 1. If the user named a concept, use it. Resolve it to a concept slug in
    `mastery.md`; if it is not there, say which cluster it belongs to and add
-   the row at L0.
+   the row at L0 (plain text — it becomes a link when the note is written).
+   If the **topic** has no folder yet, create it exactly as `interview` §6
+   does for an excursion, then continue; do not bump the excursion count.
 2. If not, read the focus topic's `gaps.md` and propose, in this order:
    1. `regressed` gaps, oldest first — these were taught once and failed
    2. `open` gaps, oldest first
@@ -95,18 +102,52 @@ Drill results do not change a level.
 [[large-object-heap]] · [[gc-modes]] · [[write-barrier]]
 ```
 
+### Stub
+
+The minimum note. `interview` and `study` create it on first touch so that
+every `[[concept]]` wikilink in the vault resolves — an unresolved link is a
+ghost node in the graph. A stub is exactly this, nothing more:
+
+```markdown
+---
+concept: gc-generations
+topic: dotnet
+cluster: memory-and-gc
+created: 2026-09-14
+---
+
+# GC generations
+
+## Mechanism
+
+## Failure modes
+
+## Trade-offs
+
+## Resources
+
+## Related
+```
+
+No `taught` key, no drill section, empty headings. Creating a stub also
+turns the concept's cell in `mastery.md` from plain text into `[[concept]]`.
+Teaching later fills the stub in place.
+
 Rules:
 
 - Frontmatter keys are fixed. `taught` is the date of the most recent teach;
-  a stub note created by `study` or `interview` omits it.
+  a stub omits it.
 - Mechanism / Failure modes / Trade-offs are written from the explanation
   just given, tightened. Not a transcript of the chat.
 - Each teach appends a new `## Drill — <date>` section; earlier drills stay.
 - `## Resources` is owned by `study`. Leave it empty or as is; optionally
   append one or two *verified* links under it following `study`'s format.
 - `## Related` lists wikilinks to sibling concepts. Every link must resolve to
-  an existing note or an existing row in a `mastery.md`; do not invent
-  concept names.
+  an **existing note file** in `topics/**/notes/`. A sibling that has no
+  note yet is not linked — leave it out, or create its stub first. Never link
+  a name that is only a mastery row, and never invent one.
+- If the concept's `mastery.md` cell is still plain text, turn it into
+  `[[concept]]` when the note is written.
 - Concept file names are unique across the vault. Check `topics/**/notes/`
   before creating one.
 

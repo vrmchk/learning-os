@@ -80,4 +80,5 @@ receive L3 or above? The self-assessment recorded in each session file is the
 data. If yes, tighten the rubric anchors in `CLAUDE.md` before adapting this
 system for anyone else.
 
-Status: **not yet reached** — 0 of 5 interview sessions.
+Status is computed — see the "Calibration checkpoint" section of
+`PROGRESS.md`. Nothing here to keep in sync.

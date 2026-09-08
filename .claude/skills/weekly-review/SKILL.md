@@ -1,6 +1,6 @@
 ---
 name: weekly-review
-description: Audit the learning system for the past week and write a blunt report — volume, level movement, stagnant concepts, what the user is avoiding, excursion drift, and whether grades are climbing while difficulty is not. Use this whenever the user asks how they are doing, for a review, a retrospective, a weekly, "am I improving", "what am I avoiding", "is the grading too soft", or when more than seven days have passed since the last file in review/weekly/ and a session is starting. It proposes roadmap edits and never applies them.
+description: Audit the learning system for the past week and write a blunt report — volume, level movement, stagnant concepts, what the user is avoiding, excursion drift, and whether grades are climbing while difficulty is not. Use this whenever the user asks how they are doing, for a review, a retrospective, a weekly, "am I improving", "what am I avoiding", "is the grading too soft", or when they accept the interview skill's offer of a review because more than seven days have passed since the last file in review/weekly/. It never runs inside another skill uninvited. It proposes roadmap edits and never applies them.
 ---
 
 # weekly-review
@@ -10,6 +10,11 @@ log line and changes nothing else. It is instructed to be blunt: the user
 built this system to find out what they are avoiding and whether the grading
 is drifting, and a review that softens either finding has failed at its only
 job.
+
+## 0. Sync
+
+If the repo has a remote, `git pull --ff-only`. If it fails or the tree is
+dirty, say so and ask before continuing.
 
 ## 1. Period
 

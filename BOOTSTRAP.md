@@ -59,7 +59,7 @@ These words are used exactly and are not interchangeable. They go into
 | **Concept** | The graded unit. Carries a level, an evidence link, a note, and a due date. | a row in `mastery.md`, a file in `notes/`, a row in `review/queue.md` |
 | **Session** | One graded sitting, dated. | `sessions/YYYY-MM-DD-<slug>.md` |
 | **Gap** | A recorded miss, awaiting teaching. | `gaps.md` |
-| **Skill** | A Claude Code skill — `interview`, `teach`, `weekly-review`. Never learning content. | `.claude/skills/` |
+| **Skill** | A Claude Code skill — `interview`, `teach`, `study`, `weekly-review`. Never learning content. | `.claude/skills/` |
 
 The test for a concept: if it cannot carry a level and a due date on its own,
 it is a cluster. *EF Core* is a cluster; *change tracking* is a concept.
@@ -179,7 +179,8 @@ demonstrated it unprompted, linked from the mastery table.
 
 ### Anti-inflation rules
 
-These are the point of the whole system. They go into `CLAUDE.md` verbatim.
+These are the point of the whole system. They go into `CLAUDE.md` verbatim,
+together with the rules that follow from the session protocol in §6.
 
 - Never round up. Between two levels means the lower one.
 - An answer that missed the trade-off is capped at L2 regardless of correctness.
@@ -193,17 +194,25 @@ These are the point of the whole system. They go into `CLAUDE.md` verbatim.
 
 ## 6. Session protocol
 
-**Before the first question:** `git pull --ff-only` if the repo has a remote,
-so a phone session and a desk session do not collide on the queue. Read the
-roadmap, the review queue, and the relevant mastery and gaps files. Propose a
-specific concept or cluster and **say which rule chose it**, in this order:
+**Every skill, first:** `git pull --ff-only` if the repo has a remote, so a
+phone session and a desk session do not collide on the queue. This is not
+just the interview — teach, study, and the weekly review write state too.
+
+**Before the first question:** read the roadmap, the review queue, and the
+relevant mastery and gaps files. If the last weekly review is more than a
+week old and there have been two or more interviews since, say so and offer
+it — do not run it unasked. Propose a specific concept or cluster and **say
+which rule chose it**, in this order:
 
 1. overdue queue items
 2. regressed gaps — taught, then failed a later review
-3. untaught gaps — these redirect to `teach`, not `interview`
-4. the focus cluster, if one is set in the roadmap
-5. the lowest-level concepts in the focus topic
-6. the cluster that has gone untouched the longest
+3. the focus cluster, if one is set in the roadmap
+4. the lowest-level concepts in the focus topic, in row order
+5. the cluster that has gone untouched the longest
+
+Concepts with an untaught (`open`) gap are not proposed — re-testing a known
+miss records the same miss. They are mentioned and left for `teach` or
+`study`. Open gaps never stop a session.
 
 Then let me override, including onto another topic.
 
@@ -312,7 +321,8 @@ a feature.
 
 Gap status lifecycle: `open` → `studying` or `taught` → `verified` when a
 later interview grades the concept at L2 or above, or `regressed` when it
-grades below the recorded level. Never deleted.
+grades below the recorded level. Regressed takes precedence when both apply
+— an L3 concept graded L2 has regressed. Never deleted.
 
 ### File conventions
 
@@ -323,6 +333,12 @@ grades below the recorded level. Never deleted.
 - All internal links are Obsidian wikilinks — `[[gc-generations]]` for
   concepts, `[[2026-09-14-gc-generations]]` for sessions. Never relative
   markdown paths; that breaks the graph view and the backlinks.
+- **A wikilink is written only to a file that exists.** An unresolved link is
+  a ghost node in the graph, and clicking it creates a stray file in the
+  vault root. So an L0 concept in `mastery.md` is plain text, not a link.
+  The first skill to touch a concept — `interview`, `teach`, or `study` —
+  creates its stub note and turns the mastery cell into a link. A node
+  appears in the graph exactly when work on the concept starts.
 - Every session file links to each concept it tested. A concept with many
   backlinks from low-scoring sessions is the real gap list, visible without
   asking anyone.
@@ -330,8 +346,9 @@ grades below the recorded level. Never deleted.
   every concept up front is what makes avoidance visible — an L0 row I keep
   not touching is a signal, and the weekly review is instructed to name it.
   Excursion topics enumerate only what is touched, and fill in over time.
-- Gaps are marked taught, never deleted. A taught gap that fails a later
-  review is marked **regressed** — the highest-signal event in the system.
+- Gaps move through the lifecycle above, never deleted. A taught gap that
+  fails a later review is marked **regressed** — the highest-signal event in
+  the system.
 - `TOPIC.md` is referenced by path, never by wikilink: every topic has one,
   so `[[TOPIC]]` is ambiguous the moment a second topic exists.
 - Mastery is the only place a level lives. The queue schedules; it does not
@@ -347,7 +364,7 @@ grades below the recorded level. Never deleted.
 1. `CLAUDE.md` and `.gitignore` first — everything else is written under those
    rules.
 2. `ROADMAP.md` with .NET as focus and the other topics listed.
-3. The three skills — these fix the file formats everything else must match.
+3. The four skills — these fix the file formats everything else must match.
 4. The `dotnet` topic files, with the concept tree fully enumerated at L0.
 5. `review/queue.md` and `review/log.md`.
 6. `scripts/progress.ps1`, run once against the empty state to produce the

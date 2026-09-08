@@ -1,6 +1,6 @@
 # Progress
 
-Generated 2026-09-07 by `scripts/progress.ps1`. Do not edit — regenerate.
+Generated 2026-09-08 by `scripts/progress.ps1`. Do not edit — regenerate.
 
 **Focus:** .NET · cluster: none
 

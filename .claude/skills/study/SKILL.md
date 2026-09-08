@@ -12,10 +12,18 @@ write it into the note, and put the concept on the queue.
 This skill **never changes a level** and never explains the concept — that is
 `teach`. It owns the `## Resources` section of a note.
 
+## 0. Sync
+
+If the repo has a remote, `git pull --ff-only`. If it fails or the tree is
+dirty, say so and ask before continuing.
+
 ## 1. Pick the concept
 
 1. If the user named a concept, resolve it to a slug in `mastery.md`. If it
-   is not there, say which cluster it belongs to and add the row at L0.
+   is not there, say which cluster it belongs to and add the row at L0 (plain
+   text — it becomes a link when the stub is written). If the **topic** has
+   no folder yet, create it exactly as `interview` §6 does for an excursion,
+   then continue; do not bump the excursion count.
 2. If they named a cluster, pick up to three concepts in it — `regressed`
    gaps first, then `open` gaps, then lowest level — and say which.
 3. If they named nothing, propose from the focus topic's `gaps.md`: `open`
@@ -62,11 +70,11 @@ trip and their trust in every other link in the vault.
 
 ### 4.1 Note
 
-`topics/<topic>/notes/<concept>.md`. If it does not exist, create a stub in
-`teach`'s note format with frontmatter (`concept`, `topic`, `cluster`,
-`created`; no `taught`), empty Mechanism / Failure modes / Trade-offs
-headings, and the Resources section. If it exists, only touch
-`## Resources`.
+`topics/<topic>/notes/<concept>.md`. If it does not exist, create the
+**stub** — format in `teach/SKILL.md` under "Stub" — and turn the concept's
+cell in `mastery.md` from plain text into `[[concept]]`. If it exists, only
+touch `## Resources`. Do this before writing any other wikilink to the
+concept.
 
 ```markdown
 ## Resources

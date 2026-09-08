@@ -18,24 +18,29 @@ ever disagree, `CLAUDE.md` wins.
    the tree is dirty, say so and ask before continuing — never silently
    overwrite a phone session with a desk session.
 2. **Read** `ROADMAP.md`, `review/queue.md`, and the focus topic's
-   `mastery.md` and `gaps.md`. Today's date is the session date; never guess
-   it — check the system clock.
-3. **Propose** one concept or cluster and **name the rule that chose it**:
+   `mastery.md` and `gaps.md` — or the named topic's, if the user has already
+   said what they want. Today's date is the session date; never guess it —
+   check the system clock.
+3. **Weekly check.** If `review/weekly/` has no report or its newest is more
+   than seven days old, and at least two interview sessions have happened
+   since, say so in one line and offer `weekly-review`. Do not run it
+   unasked; the user came for a session.
+4. **Propose** one concept or cluster and **name the rule that chose it**:
    1. overdue queue items (`next` ≤ today), oldest first
    2. gaps with status `regressed`
-   3. gaps with status `open` — stop: these belong to `teach` or `study`, say
-      so and offer that instead
-   4. the focus cluster, if `ROADMAP.md` sets one
-   5. the lowest-level concepts in the focus topic
-   6. the cluster with the oldest `since` dates
-   Say it in one line: *"Proposing `thread-pool-starvation` — rule 1, overdue
-   3 days."*
-4. **Let the user override**, including onto another topic. If the topic
+   3. the focus cluster, if `ROADMAP.md` sets one
+   4. the lowest-level concepts in the focus topic, in row order
+   5. the cluster with the oldest `since` dates
+   Concepts with an `open` gap are **not proposed** — testing an untaught
+   miss again just records the same miss. Mention them in one line ("3 open
+   gaps waiting for `teach`") and move on. Say the rule in one line:
+   *"Proposing `thread-pool-starvation` — rule 1, overdue 3 days."*
+5. **Let the user override**, including onto another topic. If the topic
    folder does not exist, this is an excursion — see §6.
-5. **Plan the mix** before asking anything: 6 depth / 2–3 adjacent or
+6. **Plan the mix** before asking anything: 6 depth / 2–3 adjacent or
    prerequisite / 1–2 cold recall from the queue. If the queue has nothing
    due, cold-recall slots go to depth. Write the plan in your head, not in
-   chat.
+   chat. Dispute re-asks (§3) do not count toward the ten.
 
 ## 2. Asking
 
@@ -106,7 +111,15 @@ concept per session.
 
 ## 4. Write-back — mandatory, in this order
 
-Do all seven before saying anything to the user.
+Do all of it before saying anything to the user.
+
+### 4.0 Stub notes
+
+For every concept graded in this session that has no file in
+`topics/<topic>/notes/`, create its **stub** first — the format is in
+`teach/SKILL.md` under "Stub". Then turn that concept's cell in `mastery.md`
+from plain text into `[[concept]]`. Only now may the session file, gaps, and
+queue link it. A wikilink to a file that does not exist is never written.
 
 ### 4.1 Session file
 
@@ -239,14 +252,20 @@ topic: dotnet
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
 | [[gc-generations]] | L2 | 2026-09-14 | [[2026-09-14-gc-generations]] |
-| [[large-object-heap]] | L0 | — | — |
+| large-object-heap | L0 | — | — |
 ```
+
+The `Concept` cell is plain text until the concept's note exists, and a
+wikilink from then on. The progress script reads both. Never link a concept
+that has no note — see §4.0.
 
 For each graded concept, the session grade is the **minimum** awarded across
 its questions in this session, after disputes. Then:
 
 - higher than recorded → raise, set `Since` to today, `Evidence` to this
-  session
+  session — **unless** the concept's note has `taught:` equal to today. A
+  level rises only in an interview at least one day after teaching; record
+  the grade in the session file, keep the level, and say why in `Reason`.
 - lower than recorded → **demote to the demonstrated level** (not one step),
   set `Since` to today, `Evidence` to this session, and mark the gap
   `regressed` (§4.3)
@@ -277,12 +296,14 @@ Newest first. Never deleted. Status: open → studying | taught → verified | r
 
 - Every miss from the session becomes a row with status `open`. One row per
   distinct miss; a concept can have several.
-- If a concept with a `taught` or `studying` gap is graded **L2 or above**
-  this session, set that gap to `verified`, `Updated` = `YYYY-MM-DD
-  [[session]]`.
-- If a concept with a `taught` or `studying` gap is graded **below its
-  recorded level**, set that gap to `regressed`, same `Updated` format, and
-  add a new `open` row for the specific miss.
+- For a concept with a `taught` or `studying` gap, check in this order:
+  1. graded **below its recorded level** → `regressed`, `Updated` =
+     `YYYY-MM-DD [[session]]`, plus a new `open` row for the specific miss.
+  2. otherwise graded **L2 or above** → `verified`, same `Updated` format.
+  3. otherwise (L0–L1, not below recorded) → status unchanged; the miss gets
+     a new `open` row.
+  Regressed wins over verified: an L3 concept graded L2 has regressed, even
+  though L2 would verify a fresh gap.
 - `Miss` is one specific line: what was asked, what was not known. Never
   "weak on GC".
 
@@ -339,7 +360,8 @@ If the user overrides onto a topic with no folder:
 
 1. Create `topics/<topic>/` with `TOPIC.md` (one-paragraph scope stub),
    `mastery.md` (only the cluster being tested, only the concepts asked plus
-   obvious siblings, all L0), `gaps.md` (header only), `notes/`, `sessions/`.
+   obvious siblings, all L0, all plain text — not links), `gaps.md` (header
+   only), `notes/`, `sessions/`.
 2. In `ROADMAP.md`, fill the topic's `Folder` cell and set `Excursions` to 1.
 3. Run the session normally. `excursion: true` in the frontmatter.
 
@@ -354,3 +376,4 @@ than the session touched.
 - Never award above target.
 - Never invent a question the user did not answer, or an answer they did not
   give, to fill the file.
+- Never write `[[concept]]` before the concept's note file exists.
