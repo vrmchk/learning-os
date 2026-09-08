@@ -265,7 +265,7 @@ $last30 = @($log | Where-Object { $_.Date -and $_.Date -gt $Now.AddDays(-30) })
 # ---------------------------------------------------------------- write
 
 $sb = [System.Text.StringBuilder]::new()
-function W([string]$s = '') { [void]$sb.AppendLine($s) }
+function W([string]$s = '') { [void]$sb.Append($s).Append("`n") }
 
 W "# Progress"
 W
