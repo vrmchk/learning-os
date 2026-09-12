@@ -5,8 +5,9 @@
 
 .DESCRIPTION
   Reads ROADMAP.md, topics/*/mastery.md, topics/*/gaps.md,
-  topics/*/sessions/*.md (frontmatter + Grades table), review/queue.md,
-  review/log.md and review/weekly/*.md, and writes PROGRESS.md.
+  topics/*/<cluster>/sessions/*.md (frontmatter + Grades table),
+  review/queue.md, review/log.md and review/weekly/*.md, and writes
+  PROGRESS.md.
 
   Run from anywhere:  pwsh scripts/progress.ps1
   Formats are the ones fixed in .claude/skills/*/SKILL.md. If a file does
@@ -152,10 +153,12 @@ foreach ($dir in $topicDirs) {
         }
     }
 
-    # sessions
+    # sessions — under topics/<topic>/<cluster>/sessions/. Matched at any
+    # depth by folder name, so the pre-cluster flat layout still parses.
     $sessions = @()
-    $sDir = Join-Path $dir.FullName 'sessions'
-    foreach ($f in (Get-ChildItem $sDir -Filter '*.md' -File -ErrorAction SilentlyContinue)) {
+    $sFiles = Get-ChildItem $dir.FullName -Filter '*.md' -File -Recurse -ErrorAction SilentlyContinue |
+              Where-Object { $_.Directory.Name -eq 'sessions' } | Sort-Object FullName
+    foreach ($f in $sFiles) {
         $fm = Read-Frontmatter $f.FullName
         if (-not $fm) { throw "$($f.FullName): missing frontmatter" }
         foreach ($k in 'date', 'mode') { if (-not $fm.ContainsKey($k)) { throw "$($f.FullName): frontmatter missing '$k'" } }

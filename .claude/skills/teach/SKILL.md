@@ -58,7 +58,9 @@ Do not quiz during the explanation. Do not ask "does that make sense".
 
 ## 3. Write the note
 
-`topics/<topic>/notes/<concept>.md`. One concept per file. If the file
+`topics/<topic>/<cluster>/notes/<concept>.md`, where `<cluster>` is the
+kebab-case slug from `TOPIC.md` and matches the note's `cluster:` frontmatter.
+Create the cluster folder if this is its first use. One concept per file. If the file
 exists, replace the Mechanism / Failure modes / Trade-offs sections and keep
 everything else.
 
@@ -148,12 +150,14 @@ Rules:
 - `## Resources` is owned by `study`. Leave it empty or as is; optionally
   append one or two *verified* links under it following `study`'s format.
 - `## Related` lists wikilinks to sibling concepts. Every link must resolve to
-  an **existing note file** in `topics/**/notes/`. A sibling that has no
+  an **existing note file** under `topics/**/notes/` at any cluster. A sibling that has no
   note yet is not linked — leave it out, or create its stub first. Never link
   a name that is only a mastery row, and never invent one.
 - If the concept's `mastery.md` cell is still plain text, turn it into
   `[[concept]]` when the note is written.
-- Concept file names are unique across the vault. Check `topics/**/notes/`
+- Concept file names are unique across the vault, whatever cluster folder
+  they sit in — Obsidian resolves wikilinks by name, not path. Check
+  `topics/**/notes/`
   before creating one.
 
 ## 4. Drill

@@ -141,14 +141,16 @@ Do all of it before saying anything to the user.
 ### 4.0 Stub notes
 
 For every concept graded in this session that has no file in
-`topics/<topic>/notes/`, create its **stub** first — the format is in
+`topics/<topic>/<cluster>/notes/`, create its **stub** first — the format is in
 `teach/SKILL.md` under "Stub". Then turn that concept's cell in `mastery.md`
 from plain text into `[[concept]]`. Only now may the session file, gaps, and
 queue link it. A wikilink to a file that does not exist is never written.
 
 ### 4.1 Session file
 
-`topics/<topic>/sessions/YYYY-MM-DD-<slug>.md`. Slug is the proposed concept
+`topics/<topic>/<cluster>/sessions/YYYY-MM-DD-<slug>.md`, where `<cluster>`
+is the kebab-case slug from `TOPIC.md` and matches the `cluster:` frontmatter.
+Create the cluster folder if this is its first use. Slug is the proposed concept
 or cluster, kebab-case. If a second session on the same day has the same slug,
 append `-2`.
 
@@ -393,7 +395,8 @@ If the user overrides onto a topic with no folder:
 1. Create `topics/<topic>/` with `TOPIC.md` (one-paragraph scope stub),
    `mastery.md` (only the cluster being tested, only the concepts asked plus
    obvious siblings, all L0, all plain text — not links), `gaps.md` (header
-   only), `notes/`, `sessions/`.
+   only), and `<cluster>/notes/` and `<cluster>/sessions/` for the one cluster
+   being tested. No folders for clusters this session does not touch.
 2. In `ROADMAP.md`, fill the topic's `Folder` cell and set `Excursions` to 1.
 3. Run the session normally. `excursion: true` in the frontmatter.
 

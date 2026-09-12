@@ -70,7 +70,7 @@ trip and their trust in every other link in the vault.
 
 ### 4.1 Note
 
-`topics/<topic>/notes/<concept>.md`. If it does not exist, create the
+`topics/<topic>/<cluster>/notes/<concept>.md`. If it does not exist, create the
 **stub** — format in `teach/SKILL.md` under "Stub" — and turn the concept's
 cell in `mastery.md` from plain text into `[[concept]]`. If it exists, only
 touch `## Resources`. Do this before writing any other wikilink to the

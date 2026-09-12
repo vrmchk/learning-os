@@ -21,8 +21,8 @@ Use these words exactly. They are not interchangeable.
 |---|---|---|
 | **Topic** | A field of study. One is the current focus; the rest are available. | `topics/<topic>/`, `TOPIC.md` |
 | **Cluster** | A named group of concepts within a topic. | `##` heading in `mastery.md` |
-| **Concept** | The graded unit. Carries a level, an evidence link, a note, and a due date. | a row in `mastery.md`, a file in `notes/`, a row in `review/queue.md` |
-| **Session** | One graded sitting, dated. | `sessions/YYYY-MM-DD-<slug>.md` |
+| **Concept** | The graded unit. Carries a level, an evidence link, a note, and a due date. | a row in `mastery.md`, a file in `<cluster>/notes/`, a row in `review/queue.md` |
+| **Session** | One graded sitting, dated. | `<cluster>/sessions/YYYY-MM-DD-<slug>.md` |
 | **Gap** | A recorded miss, awaiting teaching. | `gaps.md` |
 | **Skill** | A Claude Code skill — `interview`, `teach`, `study`, `weekly-review`, and the career skills `cv`, `company`. **Never** learning content. | `.claude/skills/` |
 
@@ -42,7 +42,8 @@ it. Do not argue, do not require anything first, do not open with a lecture
 about focus.
 
 - On the first excursion into a topic, create `topics/<topic>/` with
-  `TOPIC.md`, `mastery.md`, `gaps.md`, `notes/`, and `sessions/`.
+  `TOPIC.md`, `mastery.md`, `gaps.md`, and a folder per cluster touched,
+  each holding `notes/` and `sessions/`.
 - Enumerate **only the concepts actually touched**, plus their obvious
   siblings within the same cluster. A topic earns its concept tree by being
   used. Never pre-scaffold a topic nobody has studied.
@@ -167,7 +168,8 @@ the original grade, the final grade, and the reason.
 **After — mandatory and unprompted.** Do all of it, in this order, before
 reporting anything:
 
-1. Write the dated session file `topics/<topic>/sessions/YYYY-MM-DD-<slug>.md`.
+1. Write the dated session file
+   `topics/<topic>/<cluster>/sessions/YYYY-MM-DD-<slug>.md`.
 2. Update the mastery table with new levels and evidence links.
 3. Append every miss to `gaps.md` (newest first).
 4. Reschedule everything touched in `review/queue.md`.
@@ -199,8 +201,19 @@ L4 +3 weeks, L5 +2 months. Compute `next` from the session date.
 - Session files and notes carry YAML frontmatter so the script and Obsidian
   Bases can read them.
 - Notes: one concept per file, kebab-case, named for the concept, in
-  `topics/<topic>/notes/`. Concept names are unique across the whole vault;
-  prefix when ambiguous (`http-caching`, `pipeline-caching`).
+  `topics/<topic>/<cluster>/notes/`. Concept names are unique across the whole
+  vault; prefix when ambiguous (`http-caching`, `pipeline-caching`).
+- Notes and sessions live under their **cluster** folder, whose name is the
+  slug in `TOPIC.md`'s cluster table. `mastery.md`, `gaps.md` and `TOPIC.md`
+  stay at topic level and never split per cluster. A cluster folder is created
+  on first use, never ahead of time.
+- The `##` heading in `mastery.md` is authoritative for a concept's cluster.
+  The folder path and the note's `cluster:` frontmatter must agree with it;
+  reassigning a concept changes all three together.
+- Moving a note between folders never breaks a wikilink — Obsidian resolves
+  `[[concept]]` by file name, not path. That is why names are unique vault-wide.
+- A session touching several clusters lives under the cluster in its
+  `cluster:` frontmatter, the one it was proposed for.
 - All internal links are Obsidian wikilinks — `[[gc-generations]]` for
   concepts, `[[2026-09-14-gc-generations]]` for sessions. Never relative
   markdown paths.

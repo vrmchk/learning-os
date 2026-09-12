@@ -56,8 +56,8 @@ These words are used exactly and are not interchangeable. They go into
 |---|---|---|
 | **Topic** | A field of study. One is the current focus; the rest are available. | `topics/<topic>/`, `TOPIC.md` |
 | **Cluster** | A named group of concepts within a topic. | `##` heading in `mastery.md` |
-| **Concept** | The graded unit. Carries a level, an evidence link, a note, and a due date. | a row in `mastery.md`, a file in `notes/`, a row in `review/queue.md` |
-| **Session** | One graded sitting, dated. | `sessions/YYYY-MM-DD-<slug>.md` |
+| **Concept** | The graded unit. Carries a level, an evidence link, a note, and a due date. | a row in `mastery.md`, a file in `<cluster>/notes/`, a row in `review/queue.md` |
+| **Session** | One graded sitting, dated. | `<cluster>/sessions/YYYY-MM-DD-<slug>.md` |
 | **Gap** | A recorded miss, awaiting teaching. | `gaps.md` |
 | **Skill** | A Claude Code skill — `interview`, `teach`, `study`, `weekly-review`. Never learning content. | `.claude/skills/` |
 
@@ -316,8 +316,9 @@ learning-os/
 │   ├── TOPIC.md           # scope, definition of done, trusted sources
 │   ├── mastery.md         # concept tree, one row per concept, all at L0
 │   ├── gaps.md            # misses, newest first, never deleted
-│   ├── notes/             # one concept per file
-│   └── sessions/          # YYYY-MM-DD-slug.md, transcript + scores
+│   └── memory-and-gc/     # one folder per cluster, created on first use
+│       ├── notes/         # one concept per file
+│       └── sessions/      # YYYY-MM-DD-slug.md, transcript + scores
 └── review/
     ├── queue.md           # concept | topic | last | next
     ├── log.md             # append-only, one line per session
@@ -326,6 +327,39 @@ learning-os/
 
 Build only the `dotnet` topic now. Other topics get folders on first
 excursion or when they become the focus — never before.
+
+### Notes and sessions live under their cluster
+
+`topics/<topic>/<cluster-slug>/notes/` and `.../sessions/`. The hierarchy is
+topic → cluster → concept in the vocabulary, in `mastery.md`, and in every
+session's frontmatter; the folders now match it instead of contradicting it. A
+topic with nine clusters and ninety concepts is not navigable as one flat
+`notes/` directory. The slug is the one in `TOPIC.md`'s cluster table.
+
+Three files stay at **topic** level and never split per cluster:
+
+- `mastery.md` — the whole concept tree, clusters as `##` headings. It is the
+  only place a level lives; splitting it would fragment the one authoritative
+  table and the dashboard's single-table parse.
+- `gaps.md` — one append-only feed across the topic, newest first. Reading
+  every miss in one place is most of its value.
+- `TOPIC.md` — describes the topic, not a cluster.
+
+A cluster folder is created when something is first written into it, never
+ahead of time. Same rule as topics: the structure is earned by use, and nine
+empty cluster folders are how these systems die.
+
+**Wikilinks are unaffected.** Obsidian resolves `[[concept]]` by file name,
+not by path — which is exactly why concept names are unique across the vault.
+Moving a note between folders never breaks a link, a backlink, or the graph.
+
+**`mastery.md`'s `##` heading is authoritative** for which cluster a concept
+belongs to. The folder path and the note's `cluster:` frontmatter must agree
+with it. Reassigning a concept means changing all three together.
+
+A session that touches several clusters lives under the cluster in its
+`cluster:` frontmatter — the one it was proposed for, not one folder per
+concept touched.
 
 ### The four skills
 
