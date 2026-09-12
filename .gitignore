@@ -17,3 +17,6 @@ $RECYCLE.BIN/
 .idea/
 *.swp
 *~
+
+# Generated CV output
+career/cv/out/

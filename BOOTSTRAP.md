@@ -378,3 +378,82 @@ After five real interview sessions, I check one thing: did any answer I
 privately thought was weak receive L3 or above? If yes, the rubric anchors get
 tightened before this system is adapted for anyone else. The scaffolding is
 worthless if the grading is generous.
+
+## 10. Career layer
+
+Added 2026-09-11. The learning system measures what I know. The career layer
+presents it: a CV that parses in an applicant tracking system (ATS), a
+LinkedIn profile that recruiter search finds, and, per company, research, a
+cover letter, and an interview prep plan. Same principle as the rest: the
+files are the state, the conversation is disposable, and nothing is written
+that cannot be backed.
+
+Two skills, both under `.claude/skills/`, both Claude Code skills in the §3
+sense:
+
+- **`cv`** — builds the achievement inventory, evaluates templates, writes the
+  master CV and tailored versions, maintains the keyword bank, fills every
+  LinkedIn section, runs the ATS check, and keeps a list of further
+  improvements.
+- **`company`** — researches one company from a job description, maps its
+  stack onto the concept tree, writes the cover letter and an interview prep
+  plan, and proposes `interview`/`teach` sessions. It reads `mastery.md` and
+  never writes to `topics/`.
+
+State lives under `career/`, never in `topics/` or `review/`:
+
+```
+career/
+├── PROFILE.md           # target titles, markets, constraints, contact block, improvements list
+├── experience.md        # achievement inventory — the only source a CV claim may come from
+├── keywords.md          # keyword bank across job descriptions
+├── linkedin.md          # every LinkedIn section, drafted, with character counts
+├── log.md               # one line per run
+├── cv/
+│   ├── master.md        # the master CV, markdown, built to .docx by scripts/cv-build.py
+│   ├── templates.md     # template evaluations against the ATS checklist
+│   ├── tailored/        # YYYY-MM-DD-<company>-<role>-cv.md
+│   └── out/             # generated .docx/.txt — gitignored
+├── applications/        # YYYY-MM-DD-<company>-<role>.md — JD, keywords, fit, cover letter, prep
+└── companies/           # <company>.md — verified research, reused across roles
+```
+
+Design decisions and why:
+
+- **The inventory is the source of truth, not the CV.** A CV is a view; the
+  inventory holds every role and every achievement with its number and
+  whether that number is confirmed or estimated. Tailoring reorders and
+  selects; it never adds. This is the anti-inflation rule applied to my own
+  history: a claim is written only when it is backed.
+- **Markdown in, `.docx` out.** `scripts/cv-build.py` renders `cv/master.md`
+  and tailored files into a single-column, standard-font, heading-styled
+  `.docx` with no tables, text boxes, images, headers, or footers — the
+  shape ATS parsers read reliably. `scripts/cv-check.py` reads a `.docx`,
+  `.pdf`, `.md`, or `.txt`, checks parse safety, and measures keyword
+  coverage against a job description. Both are standard-library Python so
+  they run anywhere the repo does.
+- **Templates are evaluated, not collected.** A designer template earns its
+  place by passing the same check as the generated one. No template gallery
+  is linked from memory; links enter the vault only through fetch
+  verification, as in `study`.
+- **What an ATS actually does.** It parses the file into fields, and then a
+  recruiter searches and filters. Auto-rejection comes from knockout
+  questions on the application form, not from a keyword percentage. So the
+  targets are: parse cleanly, contain the exact words recruiters type, and
+  survive a six-second human skim. No "ATS score" is real; the check script's
+  number is a heuristic and the skill says so.
+- **The honesty cross-check.** `cv` reads `topics/*/mastery.md` and lists
+  every technology claimed on the CV that is untested or at L0–L1 in the
+  concept tree. That is a finding, not a block: the tree measures interview
+  readiness, not whether I used the tool at work. The finding turns into a
+  proposed `interview` session, which is how the two layers feed each other.
+- **`company` proposes sessions, never levels.** Mapping a job's stack onto
+  the tree with current levels is the prep plan. Only `interview` can
+  change a level, and only `interview`, `teach`, or `study` create rows.
+- **Cover letters are a separate skill** because they need company facts,
+  and company facts need verification. The `cv` skill never fetches.
+
+Privacy: `career/` holds employers, dates, and a contact block. The repo is
+private. If that changes, move `career/` out or gitignore it before pushing.
+
+Commit conventions: `career: cv — <what>`, `career: company — <company>`.
