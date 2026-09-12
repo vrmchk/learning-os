@@ -31,9 +31,14 @@ ever disagree, `CLAUDE.md` wins.
    3. the focus cluster, if `ROADMAP.md` sets one
    4. the lowest-level concepts in the focus topic, in row order
    5. the cluster with the oldest `since` dates
-   Concepts with an `open` gap are **not proposed** — testing an untaught
-   miss again just records the same miss. Mention them in one line ("3 open
-   gaps waiting for `teach`") and move on. Say the rule in one line:
+   Concepts with an **untaught** `open` gap are **not proposed** — testing an
+   untaught miss again just records the same miss. Untaught means the
+   concept's note has no `taught:` date. A concept that **has** been taught is
+   proposable even with open gaps — that is what re-testing is for, and
+   "Coverage caps the target" in §2 decides how hard each specific point may
+   be asked. A `regressed` gap never blocks; it is rule 2 above. Mention
+   blocked concepts in one line ("3 untaught gaps waiting for `teach`") and
+   move on. Say the rule in one line:
    *"Proposing `thread-pool-starvation` — rule 1, overdue 3 days."*
 5. **Let the user override**, including onto another topic. If the topic
    folder does not exist, this is an excursion — see §6.

@@ -120,9 +120,14 @@ alike — a phone session and a desk session must never collide on the queue.
    3. the focus cluster, if `ROADMAP.md` sets one
    4. the lowest-level concepts in the focus topic, in row order
    5. the cluster untouched the longest
-   Concepts with an `open` gap are not proposed for interview — they belong
-   to `teach` or `study` first. Mention them in one line and move on; never
-   stop the session because open gaps exist.
+   Concepts with an **untaught** `open` gap are not proposed for interview —
+   they belong to `teach` or `study` first. Untaught is checkable: the
+   concept's note carries no `taught:` date. Once taught, an open gap does
+   **not** block the concept; it is what the interview exists to re-test, and
+   the coverage rule decides how hard that specific point may be asked. A
+   `regressed` gap never blocks — it is proposal rule 2. Mention blocked
+   concepts in one line and move on; never stop the session because open gaps
+   exist.
 4. Let the user override, including onto another topic.
 
 **During:**

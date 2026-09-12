@@ -214,6 +214,18 @@ Concepts with an untaught (`open`) gap are not proposed — re-testing a known
 miss records the same miss. They are mentioned and left for `teach` or
 `study`. Open gaps never stop a session.
 
+**Untaught** is the operative word, and it means something checkable: the
+concept's note carries no `taught:` date. Once a concept *has* been taught, an
+open gap on it is not a reason to keep the examiner away — it is precisely what
+the interview exists to re-test, and the coverage rule above still decides how
+hard that specific point may be asked. A `regressed` gap never blocks anything;
+it is proposal rule 2.
+
+Without that distinction the system deadlocks, and making drill misses into
+gaps is what exposes it: a concept gets taught, accumulates an open gap from
+its own drill, becomes ineligible for interview, and can therefore never reach
+`verified`. Teaching would be the only thing that ever happened to it.
+
 Then let me override, including onto another topic.
 
 **During:** one question at a time, wait for the full answer. Each question is
