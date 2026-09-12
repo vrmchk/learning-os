@@ -139,6 +139,98 @@ Drill results do not change a level.
 
 Drill results do not change a level.
 
+## Model answers — 2026-09-12
+
+For each interview question on this concept graded below target. The
+2026-09-08 Q3 is omitted: its content is today's Q1, which met target.
+
+### Q2 (2026-09-12) — target L3, awarded L2
+
+*What decides that a collection is a gen 1 or gen 2 rather than a gen 0, and
+when the GC picks gen 2, what does it actually collect?*
+
+Every generation has its own allocation budget, and all of them are dynamic.
+Gen 0's budget is spent by `new`. Gen 1's is spent by **promotions** out of
+gen 0, gen 2's by promotions out of gen 1, and the LOH has its own which bills
+to gen 2. When a collection comes due the GC condemns the **highest generation
+whose budget is spent, plus everything younger**. So a gen 2 collection is a
+full collection: gen 2, gen 1, gen 0 and the LOH, marked together. In this
+service the request state is still reachable across the `await`, so it survives
+gen 0 and promotes, which spends gen 1's budget, so gen 1 collections start;
+their survivors promote again and eventually spend gen 2's. That is why all
+three counts climb.
+
+Graded answer lacked: per-generation budgets (only produced under probing), and
+the condemned-younger-generations rule — a gen 2 GC was scoped to gen 2 plus
+the LOH.
+
+### Q3 (2026-09-12) — target L4, awarded L2
+
+*Two services allocate the same bytes; B holds request state across a slow
+`await`. Why is B more expensive?*
+
+Because a collection's cost is its **survivors**, not its garbage. Mark walks
+the graph from the roots and visits only reachable objects — dead objects are
+never touched, never counted, never individually freed. Then survivors are
+copied to compact the heap and every reference to them is rewritten. So the
+work is roughly survivors marked plus survivor bytes copied. A's gen 0
+collections have almost no survivors, so each is nearly free. B's have
+thousands, so B pays more *per collection* to mark and copy them. On top of
+that B's survivors promote, spending gen 1's budget and eventually gen 2's, and
+a gen 2 collection must mark the whole live set of the process. B pays three
+times: dearer gen 0 collections, then gen 1 collections, then gen 2. The irony
+is that the objects die anyway — just after being promoted to where dying is
+expensive. That is the mid-life crisis.
+
+Graded answer lacked: the cost model entirely. Collection work was described as
+"checking references", with nothing on marking the live set or copying
+survivors, so the question of why it costs more went unanswered.
+
+### Q4 (2026-09-12) — target L3, awarded L1
+
+*Server GC on a 32-core, 64 GB VM, moved into a 512 MB container. What changes,
+and what would you change?*
+
+Server GC gives the process **one heap per core**, each with its own gen 0/1/2
+budgets, and one dedicated GC thread per heap. On 32 cores that is 32 heaps and
+32 sets of budgets, so the process holds roughly 32× as much memory before it
+collects anything. That is the bargain: parallel collection on dedicated
+threads for throughput, paid for in footprint. In a 512 MB container the
+runtime reads the cgroup limit and sets the heap hard limit to **75% of it**,
+about 384 MB. Server GC then tries to fit 32 heaps' worth of budget inside
+384 MB, so either every budget shrinks until collections run almost
+continuously, or the process hits the hard limit and OOMs well below the host's
+free memory. The 32 GC threads also contend for a CPU quota that may be a
+fraction of one core. I would switch to Workstation GC: one heap, one small
+budget, collection on the allocating thread. If the mode is owned elsewhere, I
+would cap `GCHeapCount` to one or two and consider `GCConserveMemory`, and
+verify the container limits are actually visible to the runtime.
+
+Graded answer lacked: any mechanism. The right knob was named immediately, but
+per-core heaps, per-heap budgets, the 75% hard limit and the
+throughput-for-footprint trade-off were all absent.
+
+### Q5 (2026-09-12) — target L4, awarded L3
+
+*RSS 1.4 GB and flat; gen 0 in the thousands, gen 1 in the hundreds, gen 2
+exactly three. Leak? And what would a leak look like?*
+
+Not a leak. Three gen 2 collections against thousands of gen 0 means almost
+nothing survives to gen 2, so the live set is small. RSS sits at 1.4 GB because
+nothing has asked the process to give it back: with headroom the tuner grows
+the budgets and gen 2 almost never runs. **Flat** is the operative word — the
+process is holding memory, not accumulating it. A real leak is *reachable*
+memory growing, so I would expect the gen 2 count to climb as its budget kept
+being spent, and, decisively, the **heap size measured immediately after each
+gen 2 collection to trend upward**, because a full collection cannot reclaim
+what is still rooted. RSS alone cannot separate the two; live heap size across
+consecutive full collections can. I would read it from GC counters or two
+dumps, and if it is growing, diff the largest root sets between them.
+
+Graded answer lacked: the second half needed a probe; the discriminator was
+given as "used memory" rather than live heap size after a full collection; and
+nothing on why RSS on its own misleads.
+
 ## Resources
 
 ## Related

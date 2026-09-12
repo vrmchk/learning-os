@@ -38,7 +38,7 @@ Older half → newer half: target 2.70 → 2.80 (+0.10), awarded 0.30 → 1.60 (
 | Data access and EF Core internals | 11 | L0.00 | 11 | 0 | — |
 | HTTP, networking, and resilience | 6 | L0.00 | 6 | 0 | — |
 
-**Gaps:** open 6 · studying 0 · taught 3 · verified 0 · regressed 0
+**Gaps:** open 7 · studying 0 · taught 3 · verified 0 · regressed 0
 
 ## Review queue
 
