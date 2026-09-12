@@ -38,26 +38,26 @@ Older half → newer half: target 2.70 → 2.80 (+0.10), awarded 0.30 → 1.60 (
 | Data access and EF Core internals | 11 | L0.00 | 11 | 0 | — |
 | HTTP, networking, and resilience | 6 | L0.00 | 6 | 0 | — |
 
-**Gaps:** open 7 · studying 0 · taught 3 · verified 0 · regressed 0
+**Gaps:** open 8 · studying 0 · taught 4 · verified 0 · regressed 0
 
 ## Review queue
 
-5 scheduled · **1 overdue** · 4 due in the next 7 days.
+6 scheduled · **1 overdue** · 5 due in the next 7 days.
 
 | Concept | Topic | Due | Days overdue |
 |---|---|---|---|
 | [[gc-generations]] | dotnet | 2026-09-09 | 3 |
 
-Due soon: [[gc-triggers-and-budgets]] 2026-09-13 · [[large-object-heap]] 2026-09-13 · [[finalization-and-freachable-queue]] 2026-09-13 · [[stack-vs-heap-layout]] 2026-09-13
+Due soon: [[gc-triggers-and-budgets]] 2026-09-13 · [[large-object-heap]] 2026-09-13 · [[finalization-and-freachable-queue]] 2026-09-13 · [[stack-vs-heap-layout]] 2026-09-13 · [[boxing]] 2026-09-13
 
 ## Activity
 
 | Window | Interview | Teach | Study | Review |
 |---|---|---|---|---|
-| Last 7 days | 2 | 2 | 0 | 0 |
-| Last 30 days | 2 | 2 | 0 | 0 |
-| All time | 2 | 2 | 0 | 0 |
+| Last 7 days | 2 | 3 | 0 | 0 |
+| Last 30 days | 2 | 3 | 0 | 0 |
+| All time | 2 | 3 | 0 | 0 |
 
 Excursions: 0 of 2 interview sessions.
-Last session: 2026-09-12 — teach — gc-triggers-and-budgets.
+Last session: 2026-09-12 — teach — boxing.
 Last weekly review: none.

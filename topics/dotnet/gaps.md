@@ -8,8 +8,10 @@ Newest first. Never deleted. Status: open → studying | taught → verified | r
 
 | Date | Concept | Miss | Session | Status | Updated |
 |---|---|---|---|---|---|
+| 2026-09-12 | [[boxing]] | drill miss: identifies the boxing in a struct-keyed dictionary but not its scale — does not know the fallback comparer boxes BOTH operands per comparison, nor that the hash dispatch boxes too (~7 per lookup, not 1) | [[boxing]] | open | — |
+| 2026-09-12 | [[boxing]] | drill miss: picks the generic constraint over the interface parameter for the right reason, but cannot say what it costs — one JIT instantiation per value type, and the loss of a single heterogeneous call site | [[boxing]] | open | — |
 | 2026-09-12 | [[gc-triggers-and-budgets]] | drill miss: cannot say what capping `GCHeapCount` does to per-heap budgets, nor that the container heap hard limit defaults to 75% of the container limit | [[gc-triggers-and-budgets]] | open | — |
-| 2026-09-12 | [[boxing]] | believes `List<int>` boxes on add and read, and that a boxed copy lives on the stack | [[2026-09-12-gc-triggers-and-budgets]] | open | — |
+| 2026-09-12 | [[boxing]] | believes `List<int>` boxes on add and read, and that a boxed copy lives on the stack | [[2026-09-12-gc-triggers-and-budgets]] | taught | 2026-09-12 [[boxing]] |
 | 2026-09-12 | [[finalization-and-freachable-queue]] | attributes finalizer work to the originating thread, then to the thread pool; no finalizer queue, no finalizer thread; conflates the finalizer with `Dispose` | [[2026-09-12-gc-triggers-and-budgets]] | open | — |
 | 2026-09-12 | [[large-object-heap]] | does not know the 85,000-byte threshold, and cannot say the LOH is swept rather than compacted or what that costs | [[2026-09-12-gc-triggers-and-budgets]] | open | — |
 | 2026-09-12 | [[gc-triggers-and-budgets]] | cannot unpack Server versus Workstation GC: no per-core heaps, no per-heap budgets, no 75% heap hard limit | [[2026-09-12-gc-triggers-and-budgets]] | taught | 2026-09-12 [[gc-triggers-and-budgets]] |
