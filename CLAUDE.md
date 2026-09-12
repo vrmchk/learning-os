@@ -93,6 +93,12 @@ These are the point of the whole system. Follow them literally.
   the concept was taught.
 - On first contact: cannot define it → stays L0; can define but not use → L1.
 - A grade is never changed by argument. See Disputes below.
+- A concept's session grade is the minimum across its **graded** questions.
+  Discovery questions are excluded, so an untaught corner of a concept never
+  sets the concept's level. Under-reporting a level is the same class of
+  failure as inflating it.
+- A drill miss is written to `gaps.md` as `open`. An untaught miss recorded
+  only in a note's drill table is invisible to the interview.
 
 ## Every skill, first
 
@@ -132,8 +138,17 @@ alike — a phone session and a desk session must never collide on the queue.
 - Question mix: 60% depth on the target concept or cluster, 25% adjacent or
   prerequisite, 15% cold recall from the review queue. If the queue is empty,
   that share goes to depth.
-- If three consecutive answers land at L1 or lower, stop the session and
-  switch to teaching.
+- A question may be pitched above L2 only if the concept's note actually
+  covers the thing asked about in its Mechanism, Failure modes or Trade-offs
+  sections. A passing mention is not coverage. Where the note only mentions it,
+  or an `open` gap or recorded drill miss exists on that exact point, it is
+  `teach`'s job: leave it, or ask it as a `discovery` question.
+- **Discovery questions** find holes rather than measure them. Target L1,
+  labelled `discovery` in the session file, they create a gap row on a miss,
+  and they are excluded from the concept grade and from the stop rule below.
+  They can neither raise nor lower a level.
+- If three consecutive **graded** answers land at L1 or lower, stop the session
+  and switch to teaching. Discovery answers do not count.
 
 **Self-assessment:** after the last answer and before any grade is revealed,
 ask which answers the user thought were weak. Record the list next to the
@@ -168,7 +183,9 @@ L4 +3 weeks, L5 +2 months. Compute `next` from the session date.
   the queue, the log line, and gap entries; `teach` owns notes and gap status
   transitions; `study` owns the `## Resources` section of a note;
   `weekly-review` owns its report in `review/weekly/`. Follow those formats
-  exactly — the progress script parses them.
+  exactly — the progress script parses them. `teach` also writes gap rows for
+  drill misses and a `## Model answers` section in the note, both in the
+  formats its `SKILL.md` states.
 - Gap status lifecycle: `open` → `studying` or `taught` → `verified` (later
   interview grades L2+) or `regressed` (later interview grades below the
   recorded level). Regressed takes precedence when both apply. Never deleted.

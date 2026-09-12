@@ -225,8 +225,28 @@ every vague answer at least twice with *why* or *what breaks if*. Ten questions
 or thirty minutes, whichever comes first; Claude cannot measure wall-clock, so
 the question count governs. Question mix: 60% depth on the target concept or
 cluster, 25% adjacent or prerequisite, 15% cold recall from the queue — and if
-the queue is empty, that share goes to depth. If three consecutive answers
-land at L1, stop the session and switch to teaching.
+the queue is empty, that share goes to depth. If three consecutive *graded*
+answers land at L1, stop the session and switch to teaching.
+
+**Teaching coverage decides how hard a question may be.** A question may be
+pitched above L2 only if the concept's note actually treats the thing being
+asked about, in its Mechanism, Failure modes or Trade-offs sections. A passing
+mention is not coverage. Where the note only mentions something, or where there
+is an `open` gap or a recorded drill miss on that exact point, it belongs to
+`teach`, and the interview either leaves it alone or asks it as a **discovery**
+question.
+
+**Discovery questions** exist to find holes, not to measure. They are pitched
+at L1, labelled `discovery` in the session file, and they create a gap row on a
+miss. They are excluded from the concept grade — they can neither raise a level
+nor lower one — and they do not count toward the three-consecutive-lows stop.
+
+The reason is calibration in both directions. Pitching L4 at material that was
+never taught measures nothing about the concept, and under the minimum rule one
+such answer sets the concept's whole number. Under-reporting a level is the
+same class of failure as flattering it: the file stops describing what I know,
+and the next session gets pitched wrong. Holes are recorded as gaps, which is
+exactly what gaps are for.
 
 **Self-assessment:** after the last answer and before any grade is revealed,
 Claude asks which answers I thought were weak, and records the list next to
@@ -255,6 +275,15 @@ L4 +3 weeks, L5 +2 months.
   to what I demonstrated, not by one step.
 - On first contact: if I cannot define a concept it stays L0; if I can define
   it but not use it, L1.
+- A **drill miss is a gap.** It is specific, it is known, and it has not been
+  taught, so `teach` writes it to the gaps file as `open`. A drill miss that
+  lives only in the note's drill table is invisible to the interview's proposal
+  and coverage rules, which is how the same miss gets interviewed twice with no
+  teaching in between.
+- After the drill, `teach` writes out what a strong answer to each missed
+  interview question would have been. Being graded and told the grade, with no
+  model to compare against, leaves me knowing I was wrong and not knowing what
+  right looks like.
 
 ## 7. Structure to build
 
@@ -292,8 +321,10 @@ excursion or when they become the focus — never before.
   Grading lives inside this skill, not in a separate one, so there is no way to
   run a session and skip the scoring.
 - **`teach`** — explains a concept from the gaps file (mechanism first, then
-  failure modes, then trade-offs), writes the note, then immediately drills
-  three questions on it and queues it at +1 day.
+  failure modes, then trade-offs), writes the note, immediately drills three
+  questions on it, records each drill miss as an `open` gap, writes a model
+  answer for every interview question that was missed, and queues the concept
+  at +1 day.
 - **`study`** — for when I want to read or watch on my own instead of being
   taught. Finds three to five resources for a concept or cluster, **verifies
   every link by fetching it** before writing it down, records them in the

@@ -56,8 +56,24 @@ For **every** question, before it is asked, fix two things and keep them:
   use it* L2; *when and what it costs* L3; *what happens underneath and how
   it fails* L4; *design under constraints and defend* L5.
 
+- the **kind**: `depth`, `adjacent`, `cold recall`, or `discovery`.
+
 An awarded grade can never exceed the target. To earn L4 the question must be
 pitched at L4.
+
+**Coverage caps the target.** Before pitching a question above L2, check the
+concept's note: the Mechanism, Failure modes or Trade-offs sections must
+actually treat the thing you are about to ask about. A single clause in passing
+is not coverage. If the note only mentions it, the ceiling is L2. If there is
+an `open` gap row or a recorded drill miss on that exact point, it is `teach`'s
+job — skip it, or ask it as `discovery`.
+
+**Discovery questions** find holes; they do not measure. Pitch at L1, label the
+heading `discovery`, grade and record as normal, and write the miss to
+`gaps.md`. They are excluded from the concept grade (§4.2) and from the stop
+rule below. A discovery question can neither raise nor lower a level, so asking
+one is never a way to damage a number. It is how an untested corner gets found
+and handed to `teach`.
 
 For **open-ended design questions** (target L4–L5, "how would you…", "design
 a…"), write the checklist of what a strong answer must contain **before**
@@ -76,9 +92,11 @@ L2: a hinted answer is not unaided.
 **"pass"** — record it, award per the first-contact rule (cannot define →
 L0; can define but not use → L1), move on. Say nothing else.
 
-**Three consecutive L1 or lower** → end the session here. Do the full
-write-back for what was asked (§4), then tell the user you are switching to
-`teach` for the concept with the lowest grade, and run it.
+**Three consecutive graded questions at L1 or lower** → end the session here.
+Do the full write-back for what was asked (§4), then tell the user you are
+switching to `teach` for the concept with the lowest grade, and run it.
+`discovery` questions do not count toward the three: three L1s on material
+nobody has taught means it is new, not that teaching has failed.
 
 Stop at ten questions. Claude cannot measure wall-clock; if the user says time
 is up, stop at once and grade what was answered.
@@ -96,6 +114,8 @@ Apply `CLAUDE.md`'s anti-inflation rules literally. The ones that bite most:
   term in the miss.
 - Fluent, confident, well-structured → worth nothing. Grade the content.
 - Awarded ≤ target, always.
+- A `discovery` question is graded and recorded like any other, but it is
+  excluded from the concept grade in §4.2.
 
 Write the one-line reason at grading time, naming the rule if a cap applied.
 
@@ -235,6 +255,10 @@ Rules for the file:
   the answer.
 - `Self-flagged` is `weak` or `—`. `Dispute` is `—` or `<orig> → <final>:
   <reason>`.
+- The kind in each `## Q<n>` heading is `depth`, `adjacent`, `cold recall` or
+  `discovery`. The Grades table format does not change — the progress script
+  parses it — so `discovery` is recorded in the heading only, and the Level
+  changes table says which questions were excluded and why.
 
 ### 4.2 Mastery table
 
@@ -260,7 +284,10 @@ wikilink from then on. The progress script reads both. Never link a concept
 that has no note — see §4.0.
 
 For each graded concept, the session grade is the **minimum** awarded across
-its questions in this session, after disputes. Then:
+its **graded** questions in this session, after disputes. Questions whose
+heading says `discovery` are excluded from this minimum: they record a hole,
+they do not set a level. If every question on a concept was `discovery`, the
+level does not move and the evidence link is still written. Then:
 
 - higher than recorded → raise, set `Since` to today, `Evidence` to this
   session — **unless** the concept's note has `taught:` equal to today. A

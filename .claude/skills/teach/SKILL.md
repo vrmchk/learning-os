@@ -140,6 +140,11 @@ Rules:
 - Mechanism / Failure modes / Trade-offs are written from the explanation
   just given, tightened. Not a transcript of the chat.
 - Each teach appends a new `## Drill — <date>` section; earlier drills stay.
+- Each teach appends a `## Model answers — <date>` section, after the drill
+  sections and before `## Resources`: one `### Q<n> (<session date>) — target
+  L<n>, awarded L<n>` block per interview question graded below target, each
+  with the model answer and a closing line naming what the graded answer
+  lacked. Earlier model-answer sections stay.
 - `## Resources` is owned by `study`. Leave it empty or as is; optionally
   append one or two *verified* links under it following `study`'s format.
 - `## Related` lists wikilinks to sibling concepts. Every link must resolve to
@@ -163,13 +168,33 @@ what the interview will probe.
 
 After the third answer, say which ones missed and why, in one line each.
 
+Every drill miss becomes an `open` gap row (§5.2). A miss recorded only in the
+drill table is invisible to `interview`, which is how the same miss gets
+interviewed twice with nothing taught in between.
+
+### Model answers
+
+Then, in the same run, write out what a strong answer would have been to each
+**interview** question on this concept that was graded below its target. Read
+them from the session files that link the concept. One block per question: the
+question as asked, the grade it got, and the answer that would have earned the
+target, at the length a person could actually say out loud. Close each with the
+two or three things the graded answer was missing.
+
+This is not a second explanation. It is the shape of a good answer to a
+specific question, which is exactly what being graded does not teach. It goes
+in the note under `## Model answers — <date>` and into chat.
+
 ## 5. Write-back — in this order
 
 1. **Note** — §3, with the drill table filled in.
 2. **Gap** — in `gaps.md`, set every `open` or `regressed` row for this
    concept to `taught`, `Updated` = `YYYY-MM-DD [[note-name]]`. If there was
    no gap row, add one dated today with `Miss` = "taught on request" and
-   status `taught`.
+   status `taught`. Then add one **new `open` row per drill miss**, dated
+   today, `Miss` = the specific thing missed, `Session` = `[[note-name]]`.
+   A drill miss is a known untaught miss; it must be visible to `interview`'s
+   proposal and coverage rules, not buried in the drill table.
 3. **Queue** — in `review/queue.md`, set the concept's `Last` = today,
    `Next` = today + 1 day, regardless of its level. Insert if absent, re-sort.
 4. **Log** — append to `review/log.md`:
@@ -188,6 +213,8 @@ One sentence: the concept, the drill result, and the interview date.
 ## 7. Never
 
 - Never raise a level. Not for a perfect drill.
+- Never leave an interview question that was graded below target without a
+  model answer.
 - Never write a note without drilling. Never drill without writing the note.
 - Never teach two concepts in one run because they are "related".
 - Never invent a source or a link. Links go through `study`'s verification
