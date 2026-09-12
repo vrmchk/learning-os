@@ -16,15 +16,15 @@ Generations, triggers, heaps, and what the allocator and collector actually do.
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
 | [[gc-generations]] | L1 | 2026-09-08 | [[2026-09-08-gc-generations]] |
-| [[gc-triggers-and-budgets]] | L0 | — | [[2026-09-08-gc-generations]] |
+| [[gc-triggers-and-budgets]] | L1 | 2026-09-12 | [[2026-09-12-gc-triggers-and-budgets]] |
 | gc-modes | L0 | — | — |
-| large-object-heap | L0 | — | — |
+| [[large-object-heap]] | L1 | 2026-09-12 | [[2026-09-12-gc-triggers-and-budgets]] |
 | card-table-and-write-barrier | L0 | — | — |
 | gc-pauses-and-latency-modes | L0 | — | — |
 | gc-regions-and-configuration | L0 | — | — |
-| finalization-and-freachable-queue | L0 | — | — |
-| [[stack-vs-heap-layout]] | L1 | 2026-09-08 | [[2026-09-08-gc-generations]] |
-| boxing | L0 | — | — |
+| [[finalization-and-freachable-queue]] | L1 | 2026-09-12 | [[2026-09-12-gc-triggers-and-budgets]] |
+| [[stack-vs-heap-layout]] | L1 | 2026-09-08 | [[2026-09-12-gc-triggers-and-budgets]] |
+| [[boxing]] | L0 | — | — |
 | span-and-memory | L0 | — | — |
 | stackalloc-and-ref-structs | L0 | — | — |
 | pinning-and-gc-handles | L0 | — | — |
