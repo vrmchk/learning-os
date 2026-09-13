@@ -52,6 +52,38 @@ ever having been gen 0 or gen 1. Size is decided once at birth and never
 revisited; age moves an object between generations only within the heap it was
 born on.
 
+### Four budgets, one escalation
+
+There are **four separate allocation budgets**, not one shared counter. All are
+dynamic and retuned from observed survival after each collection.
+
+| Budget | Spent by | Exhaustion triggers |
+|---|---|---|
+| gen 0 | allocation in gen 0 | gen 0 collection |
+| gen 1 | promotions out of gen 0 | gen 1 collection (also takes gen 0) |
+| gen 2 | promotions out of gen 1 | gen 2 collection (everything, incl. LOH) |
+| **LOH** | large allocations directly | **gen 2 collection** |
+
+The LOH budget and the gen 2 budget are **separate counters with the same
+consequence**: whichever is exhausted, the collection that runs is a gen 2,
+because the LOH can only ever be collected as part of one. Separate
+accounting, shared escalation.
+
+Internally the runtime really does track the LOH as **generation 3**
+(`max_generation + 1`), with its own bookkeeping slot and budget alongside the
+three real generations — so the name is more than documentation shorthand, even
+though the memory is a separate heap and objects there never age through
+generations. The POH (.NET 5+) works the same way.
+
+**The practical consequence**, and the signature to recognise: you can drive
+full collections purely by LOH churn while gen 2's own budget is nowhere near
+exhausted. A per-request 200 KB buffer promotes nothing, so gen 2's budget is
+never spent and gen 0 and gen 1 never see the allocation at all — but the LOH
+budget is spent once per request, and each exhaustion forces a full collection.
+**Gen 2 collections at request rate with flat gen 0 and gen 1 counts is the
+signature of LOH churn**, and nothing else produces that shape. Observable via
+`GC.GetGCMemoryInfo()`, whose per-generation info includes the LOH.
+
 ### Swept, not compacted — and what that costs
 
 When a large object dies its space goes on a **free list**. Survivors stay
