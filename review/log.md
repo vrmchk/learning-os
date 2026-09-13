@@ -11,3 +11,4 @@ for interviews; drill or resource counts otherwise.
 | 2026-09-12 | dotnet | teach | gc-triggers-and-budgets | 3 | — | — | 2 hit 1 miss | [[gc-triggers-and-budgets]] |
 | 2026-09-12 | dotnet | teach | boxing | 3 | — | — | 1 hit 2 miss | [[boxing]] |
 | 2026-09-13 | dotnet | teach | gc-generations | 3 | — | — | 3 hit 0 miss | [[gc-generations]] |
+| 2026-09-13 | dotnet | teach | large-object-heap | 3 | — | — | 1 hit 2 miss | [[large-object-heap]] |
