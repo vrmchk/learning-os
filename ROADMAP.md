@@ -46,6 +46,33 @@ and `topics/dotnet/mastery.md`.
 Not on the starting list, add when wanted: ASP.NET Core pipeline; I/O,
 buffers, and serialization; cloud SDKs.
 
+#### Memory and GC — working order, decided 2026-09-13
+
+Priority for the rest of the cluster, in `mastery.md` row order:
+
+1. `stack-vs-heap-layout` — needs teaching first; overdue and blocking
+2. `finalization-and-freachable-queue` — needs teaching first; overdue and
+   blocking. The Dispose-versus-finalizer question is common in interviews
+3. `span-and-memory`
+4. `gc-modes`
+5. `card-table-and-write-barrier` — rarely asked directly, but it is what
+   separates a real answer on generational cost from a recited one
+6. `stackalloc-and-ref-structs` — pair it with Span
+
+**Deprioritised, revisit on request:** `gc-pauses-and-latency-modes`,
+`gc-regions-and-configuration`, `pinning-and-gc-handles`. Judged niche for the
+roles being targeted. They keep their rows and their L0 levels, sit last in row
+order, and come back when the user asks — not automatically on finishing the
+cluster.
+
+Note for `weekly-review`: this is a reprioritisation by interview value, made
+while levels were rising, not avoidance of a cluster that got hard. Two L2s were
+earned the same day.
+
+Unresolved: the topic's stated goal is production-debugging depth, while this
+ordering optimises for interviews. If interviews are the real objective, that
+framing belongs in `BOOTSTRAP.md` first.
+
 ### Definition of done
 
 Cold and unaided at a whiteboard:

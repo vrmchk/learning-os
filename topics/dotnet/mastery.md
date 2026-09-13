@@ -13,20 +13,27 @@ file that is not there.
 
 Generations, triggers, heaps, and what the allocator and collector actually do.
 
+Row order is the suggested working order and proposal rule 4 reads it. Reordered
+2026-09-13 by the user's decision. The last three — `gc-pauses-and-latency-modes`,
+`gc-regions-and-configuration`, `pinning-and-gc-handles` — are **deprioritised**,
+not dropped: judged niche for the roles being targeted, to be revisited **on the
+user's request** once the rest of the cluster is done. No rule forbids proposing
+them; they simply sit last, so nothing reaches them first. Never delete a row.
+
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
+| [[stack-vs-heap-layout]] | L1 | 2026-09-08 | [[2026-09-12-gc-triggers-and-budgets]] |
+| [[finalization-and-freachable-queue]] | L1 | 2026-09-12 | [[2026-09-12-gc-triggers-and-budgets]] |
+| span-and-memory | L0 | — | — |
+| gc-modes | L0 | — | — |
+| card-table-and-write-barrier | L0 | — | — |
+| stackalloc-and-ref-structs | L0 | — | — |
 | [[gc-generations]] | L1 | 2026-09-08 | [[2026-09-08-gc-generations]] |
 | [[gc-triggers-and-budgets]] | L2 | 2026-09-13 | [[2026-09-13-gc-triggers-and-budgets]] |
-| gc-modes | L0 | — | — |
 | [[large-object-heap]] | L1 | 2026-09-12 | [[2026-09-12-gc-triggers-and-budgets]] |
-| card-table-and-write-barrier | L0 | — | — |
+| [[boxing]] | L2 | 2026-09-13 | [[2026-09-13-gc-triggers-and-budgets]] |
 | gc-pauses-and-latency-modes | L0 | — | — |
 | gc-regions-and-configuration | L0 | — | — |
-| [[finalization-and-freachable-queue]] | L1 | 2026-09-12 | [[2026-09-12-gc-triggers-and-budgets]] |
-| [[stack-vs-heap-layout]] | L1 | 2026-09-08 | [[2026-09-12-gc-triggers-and-budgets]] |
-| [[boxing]] | L2 | 2026-09-13 | [[2026-09-13-gc-triggers-and-budgets]] |
-| span-and-memory | L0 | — | — |
-| stackalloc-and-ref-structs | L0 | — | — |
 | pinning-and-gc-handles | L0 | — | — |
 
 ## C# language internals
