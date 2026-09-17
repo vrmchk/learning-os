@@ -240,6 +240,45 @@ cluster, 25% adjacent or prerequisite, 15% cold recall from the queue — and if
 the queue is empty, that share goes to depth. If three consecutive *graded*
 answers land at L1, stop the session and switch to teaching.
 
+**Two interview modes.** `interview` takes one parameter, and everything else
+about the session is identical in both.
+
+- **exam** (the default) — nothing between the question and the answer, and no
+  correction until the whole session is graded. This is the measuring
+  instrument.
+- **coached** — after each question and its probes, Claude says where the
+  answer fell short and writes out the model answer, then moves on. Grades are
+  still withheld until after self-assessment, and no later question re-tests a
+  point already corrected, because an answer echoed back from a model answer is
+  not unaided evidence.
+
+Both grade, both write back, both move levels. The difference is only when the
+feedback arrives.
+
+The reason for two modes rather than one: being told a grade with no model to
+compare against leaves me knowing I was wrong and not knowing what right looks
+like — the same argument that made `teach` write model answers after a drill.
+Coached mode moves that from the next teach session to the moment the answer is
+still in my head, which is when it is cheapest to fix.
+
+The reason **exam stays the default**: a coached session is a worse
+measurement of itself. Corrections leak into later answers, so a level earned
+at question 9 may rest on something said at question 3. The self-assessment
+comes after the corrections, so it records what I knew after being told, not
+what I judged before. Both effects inflate, and inflation is the failure this
+system exists to prevent.
+
+That is why a coached session is marked `coached: true` in its frontmatter, why
+the progress script leaves those sessions out of the calibration checkpoint
+count, and why the softness table names each session's mode. A level raised in
+coached mode is still a real level — it was demonstrated in an answer, and the
+evidence link says where. What is not real is treating a coached session's
+self-assessment as calibration data.
+
+If the two modes drift apart on the same concept — coached grades consistently
+above exam grades — that is a finding for `weekly-review`, not a reason to stop
+using either.
+
 **Teaching coverage decides how hard a question may be.** A question may be
 pitched above L2 only if the concept's note actually treats the thing being
 asked about, in its Mechanism, Failure modes or Trade-offs sections. A passing
@@ -455,6 +494,11 @@ After five real interview sessions, I check one thing: did any answer I
 privately thought was weak receive L3 or above? If yes, the rubric anchors get
 tightened before this system is adapted for anyone else. The scaffolding is
 worthless if the grading is generous.
+
+"Real" means **exam mode**. Coached sessions are excluded from the count and
+from the self-flagged comparison, because their self-assessment is made after
+the corrections have been shown — see "Two interview modes" in §6. They still
+appear in the softness table, labelled, so the two modes can be compared.
 
 ## 10. Career layer
 

@@ -131,13 +131,31 @@ alike — a phone session and a desk session must never collide on the queue.
    exist.
 4. Let the user override, including onto another topic.
 
+**Interview modes.** `interview` takes one parameter, `exam` or `coached`.
+Default is `exam`. Everything else — proposal rules, targets, probing, the
+rubric, the stop rule, self-assessment, write-back — is identical.
+
+- **exam** — no correction, no model answer, nothing between question and
+  answer until the session is graded.
+- **coached** — after each question *and its probes*, state where the answer
+  fell short and write out the model answer, then move on. Grades are still
+  withheld until after self-assessment. No later question may re-test a point
+  corrected earlier in the session; move to another part of the concept.
+
+A coached session sets `coached: true` in its frontmatter and says so in one
+line in the file. It grades, moves levels, and writes back exactly like an
+exam session. It is excluded from the calibration checkpoint, because its
+self-assessment is made after the answers were revealed. Rationale:
+`BOOTSTRAP.md` §6, "Two interview modes".
+
 **During:**
 
 - One question at a time. Wait for the full answer.
 - Every question has a stated **target level**, written into the session file
   before the question is asked.
 - No hints, no corrections, no encouragement mid-answer unless the user says
-  "hint" or "pass".
+  "hint" or "pass". In `coached` mode this still holds *during* a question:
+  the correction comes after the answer and its probes, never inside them.
 - Probe every vague answer at least twice with *why* or *what breaks if*.
 - Ten questions or thirty minutes, whichever comes first. Claude cannot
   measure wall-clock; the question count governs.

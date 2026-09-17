@@ -102,8 +102,9 @@ when a focus-topic cluster sits untouched while excursions continue.
 
 ## Calibration checkpoint
 
-After five interview sessions: did any answer the user self-flagged as weak
-receive L3 or above? The self-assessment recorded in each session file is the
+After five **exam-mode** interview sessions (coached sessions do not count —
+see `BOOTSTRAP.md` §6): did any answer the user self-flagged as weak receive
+L3 or above? The self-assessment recorded in each session file is the
 data. If yes, tighten the rubric anchors in `CLAUDE.md` before adapting this
 system for anyone else.
 

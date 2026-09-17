@@ -190,6 +190,7 @@ foreach ($dir in $topicDirs) {
             AvgTarget  = if ($fm.ContainsKey('avg_target'))  { [double]$fm['avg_target'] }  else { $null }
             AvgAwarded = if ($fm.ContainsKey('avg_awarded')) { [double]$fm['avg_awarded'] } else { $null }
             Disputes   = if ($fm.ContainsKey('disputes'))    { [int]$fm['disputes'] }       else { 0 }
+            Coached    = ($fm.ContainsKey('coached') -and $fm['coached'] -eq 'true')
             Grades     = $grades
         }
     }
@@ -250,8 +251,11 @@ $allSessions       = $topics | ForEach-Object { $_.Sessions }
 $interviewSessions = @($allSessions | Where-Object { $_.Mode -eq 'interview' } | Sort-Object Date)
 $recent8           = @($interviewSessions | Select-Object -Last 8)
 
+$calibrationSessions = @($interviewSessions | Where-Object { -not $_.Coached })
+$coachedCount        = @($interviewSessions | Where-Object { $_.Coached }).Count
+
 $weakButHigh = @()
-foreach ($s in $interviewSessions) {
+foreach ($s in $calibrationSessions) {
     foreach ($g in $s.Grades) {
         if ($g.Weak -and $null -ne $g.Awarded -and $g.Awarded -ge 3) {
             $weakButHigh += [pscustomobject]@{ Session = $s.File; Q = $g.Q; Concept = $g.Concept; Awarded = $g.Awarded }
@@ -280,8 +284,8 @@ W
 # --- calibration
 W "## Calibration checkpoint"
 W
-$n = $interviewSessions.Count
-W "Interview sessions: **$n / 5**."
+$n = $calibrationSessions.Count
+W "Interview sessions: **$n / 5**$(if ($coachedCount) { " (excludes $coachedCount coached session$(if ($coachedCount -ne 1) { 's' }))" })."
 if ($weakButHigh.Count -eq 0) {
     W "Self-flagged-weak answers graded L3+: **0**."
 } else {
@@ -299,11 +303,12 @@ W
 if ($recent8.Count -lt 2) {
     W "Not enough interview sessions to compare. Needs 2; has $($recent8.Count)."
 } else {
-    W "| Session | Date | Target avg | Awarded avg | Gap | Disputes |"
-    W "|---|---|---|---|---|---|"
+    W "| Session | Date | Mode | Target avg | Awarded avg | Gap | Disputes |"
+    W "|---|---|---|---|---|---|---|"
     foreach ($s in $recent8) {
         $gap = if ($null -ne $s.AvgTarget -and $null -ne $s.AvgAwarded) { '{0:N2}' -f ($s.AvgTarget - $s.AvgAwarded) } else { '—' }
-        W "| [[$($s.File)]] | $(Fmt-Date $s.Date) | $('{0:N2}' -f $s.AvgTarget) | $('{0:N2}' -f $s.AvgAwarded) | $gap | $($s.Disputes) |"
+        $variant = if ($s.Coached) { 'coached' } else { 'exam' }
+        W "| [[$($s.File)]] | $(Fmt-Date $s.Date) | $variant | $('{0:N2}' -f $s.AvgTarget) | $('{0:N2}' -f $s.AvgAwarded) | $gap | $($s.Disputes) |"
     }
     $half = [math]::Floor($recent8.Count / 2)
     $first = @($recent8 | Select-Object -First $half); $second = @($recent8 | Select-Object -Last ($recent8.Count - $half))

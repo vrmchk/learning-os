@@ -12,6 +12,51 @@ way to be tested without being scored, or scored without it being recorded.
 protocol. This file adds the mechanics and the exact file formats. If they
 ever disagree, `CLAUDE.md` wins.
 
+## 0. Mode
+
+One parameter, `exam` or `coached`. **Default `exam`** — if the user said
+nothing, do not ask, just run `exam`.
+
+Recognise `coached` from the argument (`coached`, `show ideal answers`, `with
+feedback`, `coached mode`) or from the user asking for corrections as they go.
+Say which mode is running in the same line as the proposal:
+*"Proposing `gc-modes` — rule 1, overdue 2 days. Exam mode."*
+
+The mode changes **one thing**: when the feedback arrives. Proposal rules,
+targets, question mix, probing, coverage caps, the rubric, the three-lows stop
+rule, self-assessment, and the whole of §4 are identical.
+
+| | exam | coached |
+|---|---|---|
+| Between question and answer | nothing | nothing |
+| After the answer and its probes | next question | where it fell short, then the model answer |
+| Grades | after self-assessment | after self-assessment |
+| Level changes, write-back | full | full |
+| Frontmatter | `coached: false` | `coached: true` |
+| Calibration checkpoint | counts | excluded |
+
+**Coached mode, exactly:**
+
+1. Ask the question. Probe as normal. **No correction inside a question** — a
+   probe is part of the question, so the feedback waits until probing is done.
+2. Then, before the next question: a short **"Where you were short"** list —
+   what was wrong, what was missing, what was right — and a **model answer** at
+   the length a person could say out loud. Same content as `teach`'s model
+   answers; this is not a second lecture on the concept.
+3. Grade silently as always. **Never reveal the level**, not even loosely
+   ("that was about an L2"). The correction says what was missing, not what it
+   scored.
+4. **Never re-test a corrected point later in the session.** An answer repeated
+   back from a model answer is not unaided evidence. Move to another part of
+   the concept, and if that leaves nothing askable, switch concept.
+5. In the session file: set `coached: true`, and put one paragraph under the
+   proposal line saying the format was coached, that the self-assessment
+   followed the corrections, and which later questions were constrained by
+   rule 4.
+
+The reason for the default and for the exclusion is in `BOOTSTRAP.md` §6,
+"Two interview modes": a coached session teaches better and measures worse.
+
 ## 1. Before the first question
 
 1. **Sync.** If the repo has a remote, run `git pull --ff-only`. If it fails or
@@ -50,7 +95,8 @@ ever disagree, `CLAUDE.md` wins.
 ## 2. Asking
 
 One question at a time. Wait for the full answer. Nothing between the
-question and the answer.
+question and the answer — in both modes. Coached feedback comes after the
+probes, never inside them.
 
 For **every** question, before it is asked, fix two things and keep them:
 
@@ -109,7 +155,8 @@ is up, stop at once and grade what was answered.
 ## 3. Grading
 
 Grade each answer as it is completed, **silently**. Record the grade; say
-nothing about it. Grades are revealed only after self-assessment.
+nothing about it. Grades are revealed only after self-assessment — in coached
+mode too, where the correction says what was missing and never what it scored.
 
 Apply `CLAUDE.md`'s anti-inflation rules literally. The ones that bite most:
 
@@ -160,6 +207,7 @@ topic: dotnet
 cluster: memory-and-gc
 date: 2026-09-14
 mode: interview
+coached: false
 excursion: false
 questions: 10
 avg_target: 3.2
@@ -252,6 +300,8 @@ Rules for the file:
 
 - Frontmatter keys and order are fixed; the progress script reads them.
   `cluster` is the kebab-case of the cluster heading in `mastery.md`.
+  `coached` is `true` only for a coached session (§0) and is what keeps it out
+  of the calibration checkpoint.
   `excursion` is true when `topic` is not the focus topic in `ROADMAP.md`.
   `self_flagged` and `concepts` are YAML lists; empty is `[]`.
 - Every graded concept appears as a wikilink at least once. That is what
@@ -405,6 +455,10 @@ than the session touched.
 
 ## 7. Never
 
+- Never run coached mode unasked, and never ask which mode the user wants —
+  the default is `exam`.
+- Never reveal a level in a coached correction, and never re-test a point that
+  was corrected earlier in the same session.
 - Never grade in chat before self-assessment.
 - Never change a grade because the user argued. Re-ask instead.
 - Never skip a write-back step because the session was short.
