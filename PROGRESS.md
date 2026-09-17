@@ -1,6 +1,6 @@
 # Progress
 
-Generated 2026-09-15 by `scripts/progress.ps1`. Do not edit — regenerate.
+Generated 2026-09-17 by `scripts/progress.ps1`. Do not edit — regenerate.
 
 **Focus:** .NET · cluster: none
 
@@ -39,28 +39,30 @@ Older half → newer half: target 2.70 → 3.10 (+0.40), awarded 0.30 → 2.00 (
 | Data access and EF Core internals | 11 | L0.00 | 11 | 0 | — |
 | HTTP, networking, and resilience | 6 | L0.00 | 6 | 0 | — |
 
-**Gaps:** open 15 · studying 0 · taught 2 · verified 6 · regressed 0
+**Gaps:** open 17 · studying 0 · taught 3 · verified 6 · regressed 0
 
 ## Review queue
 
-6 scheduled · **3 overdue** · 3 due in the next 7 days.
+6 scheduled · **5 overdue** · 1 due in the next 7 days.
 
 | Concept | Topic | Due | Days overdue |
 |---|---|---|---|
-| [[finalization-and-freachable-queue]] | dotnet | 2026-09-13 | 2 |
-| [[gc-generations]] | dotnet | 2026-09-14 | 1 |
-| [[large-object-heap]] | dotnet | 2026-09-14 | 1 |
+| [[gc-generations]] | dotnet | 2026-09-14 | 3 |
+| [[large-object-heap]] | dotnet | 2026-09-14 | 3 |
+| [[gc-triggers-and-budgets]] | dotnet | 2026-09-16 | 1 |
+| [[boxing]] | dotnet | 2026-09-16 | 1 |
+| [[stack-vs-heap-layout]] | dotnet | 2026-09-16 | 1 |
 
-Due soon: [[gc-triggers-and-budgets]] 2026-09-16 · [[boxing]] 2026-09-16 · [[stack-vs-heap-layout]] 2026-09-16
+Due soon: [[finalization-and-freachable-queue]] 2026-09-18
 
 ## Activity
 
 | Window | Interview | Teach | Study | Review |
 |---|---|---|---|---|
-| Last 7 days | 2 | 5 | 0 | 0 |
-| Last 30 days | 3 | 6 | 0 | 0 |
-| All time | 3 | 6 | 0 | 0 |
+| Last 7 days | 2 | 6 | 0 | 0 |
+| Last 30 days | 3 | 7 | 0 | 0 |
+| All time | 3 | 7 | 0 | 0 |
 
 Excursions: 0 of 3 interview sessions.
-Last session: 2026-09-15 — teach — stack-vs-heap-layout.
+Last session: 2026-09-17 — teach — finalization-and-freachable-queue.
 Last weekly review: none.

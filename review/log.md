@@ -14,3 +14,4 @@ for interviews; drill or resource counts otherwise.
 | 2026-09-13 | dotnet | teach | large-object-heap | 3 | — | — | 1 hit 2 miss | [[large-object-heap]] |
 | 2026-09-13 | dotnet | interview | gc-triggers-and-budgets | 10 | 3.4 | 2.4 | +2 −0 =1 | [[2026-09-13-gc-triggers-and-budgets]] |
 | 2026-09-15 | dotnet | teach | stack-vs-heap-layout | 3 | — | — | 0 hit 3 miss | [[stack-vs-heap-layout]] |
+| 2026-09-17 | dotnet | teach | finalization-and-freachable-queue | 3 | — | — | 0 hit 3 miss | [[finalization-and-freachable-queue]] |
