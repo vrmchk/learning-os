@@ -22,16 +22,16 @@ them; they simply sit last, so nothing reaches them first. Never delete a row.
 
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
-| [[stack-vs-heap-layout]] | L1 | 2026-09-08 | [[2026-09-12-gc-triggers-and-budgets]] |
+| [[stack-vs-heap-layout]] | L1 | 2026-09-08 | [[2026-09-17-gc-generations-and-loh]] |
 | [[finalization-and-freachable-queue]] | L1 | 2026-09-12 | [[2026-09-12-gc-triggers-and-budgets]] |
 | span-and-memory | L0 | — | — |
 | gc-modes | L0 | — | — |
 | card-table-and-write-barrier | L0 | — | — |
 | stackalloc-and-ref-structs | L0 | — | — |
-| [[gc-generations]] | L1 | 2026-09-08 | [[2026-09-08-gc-generations]] |
-| [[gc-triggers-and-budgets]] | L2 | 2026-09-13 | [[2026-09-13-gc-triggers-and-budgets]] |
-| [[large-object-heap]] | L1 | 2026-09-12 | [[2026-09-12-gc-triggers-and-budgets]] |
-| [[boxing]] | L2 | 2026-09-13 | [[2026-09-13-gc-triggers-and-budgets]] |
+| [[gc-generations]] | L2 | 2026-09-17 | [[2026-09-17-gc-generations-and-loh]] |
+| [[gc-triggers-and-budgets]] | L2 | 2026-09-13 | [[2026-09-17-gc-generations-and-loh]] |
+| [[large-object-heap]] | L2 | 2026-09-17 | [[2026-09-17-gc-generations-and-loh]] |
+| [[boxing]] | L3 | 2026-09-17 | [[2026-09-17-gc-generations-and-loh]] |
 | gc-pauses-and-latency-modes | L0 | — | — |
 | gc-regions-and-configuration | L0 | — | — |
 | pinning-and-gc-handles | L0 | — | — |
