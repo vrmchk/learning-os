@@ -6,7 +6,7 @@ Generated 2026-09-18 by `scripts/progress.ps1`. Do not edit — regenerate.
 
 ## Calibration checkpoint
 
-Interview sessions: **3 / 5** (excludes 2 coached sessions).
+Interview sessions: **5 / 5** (of which 2 coached).
 Self-flagged-weak answers graded L3+: **0**.
 
 ## Softness — last 5 interview sessions

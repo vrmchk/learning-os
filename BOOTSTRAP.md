@@ -243,9 +243,10 @@ answers land at L1, stop the session and switch to teaching.
 **Two interview modes.** `interview` takes one parameter, and everything else
 about the session is identical in both.
 
-- **exam** (the default) — nothing between the question and the answer, and no
-  correction until the whole session is graded. This is the measuring
-  instrument.
+- **coached** (the default since 2026-09-18) — see below.
+- **exam** — nothing between the question and the answer, and no correction
+  until the whole session is graded. The stricter measuring instrument, now
+  asked for by name.
 - **coached** — after each question and its probes, Claude says where the
   answer fell short and writes out the model answer, then moves on. Grades are
   still withheld until after self-assessment, and no later question re-tests a
@@ -261,19 +262,31 @@ like — the same argument that made `teach` write model answers after a drill.
 Coached mode moves that from the next teach session to the moment the answer is
 still in my head, which is when it is cheapest to fix.
 
-The reason **exam stays the default**: a coached session is a worse
-measurement of itself. Corrections leak into later answers, so a level earned
-at question 9 may rest on something said at question 3. The self-assessment
-comes after the corrections, so it records what I knew after being told, not
-what I judged before. Both effects inflate, and inflation is the failure this
-system exists to prevent.
+**Coached became the default on 2026-09-18, and coached sessions now count
+toward the calibration checkpoint.** My decision, and the reason is that I get
+more out of a session that shows me the model answer while the question is
+still in my head than out of one that is a purer measurement. Sessions I
+actually want to run beat sessions that grade me perfectly and that I avoid.
 
-That is why a coached session is marked `coached: true` in its frontmatter, why
-the progress script leaves those sessions out of the calibration checkpoint
-count, and why the softness table names each session's mode. A level raised in
-coached mode is still a real level — it was demonstrated in an answer, and the
-evidence link says where. What is not real is treating a coached session's
-self-assessment as calibration data.
+The cost is real and stays on the record. A coached session is a worse
+measurement of itself, in two specific ways. Corrections leak into later
+answers, so a level earned at question 9 may rest on something said at question
+3 — the skill's rule against re-testing a corrected point limits this but does
+not remove it. And the self-assessment comes after the corrections, so it
+records what I knew after being told, not what I judged before. Both effects
+inflate, and inflation is the failure this system exists to prevent. Counting
+coached sessions for calibration therefore means the checkpoint is answered
+with weaker evidence than it was designed for: it can still catch grades that
+are generous outright, but it can no longer catch the subtler failure of a
+self-assessment that looks well calibrated only because the answer had already
+been shown.
+
+What survives: a coached session is still marked `coached: true`, the softness
+table still names each session's mode, and `weekly-review` can still compare
+the two. A level raised in coached mode was demonstrated in an answer and the
+evidence link says where. If the checkpoint closes clean on a mostly-coached
+run, that result is worth less than a clean exam run, and this paragraph is
+where to look for why.
 
 If the two modes drift apart on the same concept — coached grades consistently
 above exam grades — that is a finding for `weekly-review`, not a reason to stop
@@ -495,10 +508,13 @@ privately thought was weak receive L3 or above? If yes, the rubric anchors get
 tightened before this system is adapted for anyone else. The scaffolding is
 worthless if the grading is generous.
 
-"Real" means **exam mode**. Coached sessions are excluded from the count and
-from the self-flagged comparison, because their self-assessment is made after
-the corrections have been shown — see "Two interview modes" in §6. They still
-appear in the softness table, labelled, so the two modes can be compared.
+"Real" means **any graded interview session**, coached or exam. Coached
+sessions counted from 2026-09-18; before that they were excluded because their
+self-assessment is made after the corrections have been shown. That objection
+has not gone away — it is now an accepted cost, argued in "Two interview
+modes" in §6 — so a checkpoint answered largely by coached sessions is weaker
+evidence than one answered by exam sessions. The softness table labels every
+session's mode, which is how to tell which kind of evidence closed it.
 
 ## 10. Career layer
 

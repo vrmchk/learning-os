@@ -102,11 +102,14 @@ when a focus-topic cluster sits untouched while excursions continue.
 
 ## Calibration checkpoint
 
-After five **exam-mode** interview sessions (coached sessions do not count —
-see `BOOTSTRAP.md` §6): did any answer the user self-flagged as weak receive
-L3 or above? The self-assessment recorded in each session file is the
-data. If yes, tighten the rubric anchors in `CLAUDE.md` before adapting this
-system for anyone else.
+After five interview sessions of **either mode** — coached sessions started
+counting on 2026-09-18, see `BOOTSTRAP.md` §6 and §9 — did any answer the user
+self-flagged as weak receive L3 or above? The self-assessment recorded in each
+session file is the data. If yes, tighten the rubric anchors in `CLAUDE.md`
+before adapting this system for anyone else. A checkpoint closed largely by
+coached sessions is weaker evidence than one closed by exam sessions, because
+a coached self-assessment is made after the corrections were shown; the mode
+column in `PROGRESS.md`'s softness table says which kind closed it.
 
 Status is computed — see the "Calibration checkpoint" section of
 `PROGRESS.md`. Nothing here to keep in sync.

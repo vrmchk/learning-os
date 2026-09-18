@@ -14,13 +14,16 @@ ever disagree, `CLAUDE.md` wins.
 
 ## 0. Mode
 
-One parameter, `exam` or `coached`. **Default `exam`** — if the user said
-nothing, do not ask, just run `exam`.
+One parameter, `exam` or `coached`. **Default `coached`** (changed
+2026-09-18) — if the user said nothing, do not ask, just run `coached`.
 
-Recognise `coached` from the argument (`coached`, `show ideal answers`, `with
-feedback`, `coached mode`) or from the user asking for corrections as they go.
+Recognise `exam` from the argument (`exam`, `exam mode`, `no feedback`, `don't
+correct me`) or from the user asking to be measured rather than taught.
+Coached is also what the words `coached`, `show ideal answers`, `with
+feedback` and `coached mode` select, and what a request for corrections as you
+go means.
 Say which mode is running in the same line as the proposal:
-*"Proposing `gc-modes` — rule 1, overdue 2 days. Exam mode."*
+*"Proposing `gc-modes` — rule 1, overdue 2 days. Coached mode."*
 
 The mode changes **one thing**: when the feedback arrives. Proposal rules,
 targets, question mix, probing, coverage caps, the rubric, the three-lows stop
@@ -33,7 +36,7 @@ rule, self-assessment, and the whole of §4 are identical.
 | Grades | after self-assessment | after self-assessment |
 | Level changes, write-back | full | full |
 | Frontmatter | `coached: false` | `coached: true` |
-| Calibration checkpoint | counts | excluded |
+| Calibration checkpoint | counts | counts |
 
 **Coached mode, exactly:**
 
@@ -54,8 +57,10 @@ rule, self-assessment, and the whole of §4 are identical.
    followed the corrections, and which later questions were constrained by
    rule 4.
 
-The reason for the default and for the exclusion is in `BOOTSTRAP.md` §6,
-"Two interview modes": a coached session teaches better and measures worse.
+The reason for the default, and the cost accepted by letting coached sessions
+count for calibration, is in `BOOTSTRAP.md` §6, "Two interview modes", and
+§9: a coached session teaches better and measures worse, and the system now
+prefers the sessions that get run.
 
 ## 1. Before the first question
 
@@ -300,8 +305,8 @@ Rules for the file:
 
 - Frontmatter keys and order are fixed; the progress script reads them.
   `cluster` is the kebab-case of the cluster heading in `mastery.md`.
-  `coached` is `true` only for a coached session (§0) and is what keeps it out
-  of the calibration checkpoint.
+  `coached` is `true` only for a coached session (§0); it no longer affects the
+  calibration checkpoint, and drives the mode column in the softness table.
   `excursion` is true when `topic` is not the focus topic in `ROADMAP.md`.
   `self_flagged` and `concepts` are YAML lists; empty is `[]`.
 - Every graded concept appears as a wikilink at least once. That is what
@@ -455,8 +460,8 @@ than the session touched.
 
 ## 7. Never
 
-- Never run coached mode unasked, and never ask which mode the user wants —
-  the default is `exam`.
+- Never ask which mode the user wants — the default is `coached`, and `exam`
+  is theirs to name.
 - Never reveal a level in a coached correction, and never re-test a point that
   was corrected earlier in the same session.
 - Never grade in chat before self-assessment.

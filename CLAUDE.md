@@ -132,8 +132,9 @@ alike — a phone session and a desk session must never collide on the queue.
 4. Let the user override, including onto another topic.
 
 **Interview modes.** `interview` takes one parameter, `exam` or `coached`.
-Default is `exam`. Everything else — proposal rules, targets, probing, the
-rubric, the stop rule, self-assessment, write-back — is identical.
+**Default is `coached`** (changed 2026-09-18). Everything else — proposal
+rules, targets, probing, the rubric, the stop rule, self-assessment,
+write-back — is identical.
 
 - **exam** — no correction, no model answer, nothing between question and
   answer until the session is graded.
@@ -143,10 +144,13 @@ rubric, the stop rule, self-assessment, write-back — is identical.
   corrected earlier in the session; move to another part of the concept.
 
 A coached session sets `coached: true` in its frontmatter and says so in one
-line in the file. It grades, moves levels, and writes back exactly like an
-exam session. It is excluded from the calibration checkpoint, because its
-self-assessment is made after the answers were revealed. Rationale:
-`BOOTSTRAP.md` §6, "Two interview modes".
+line in the file. It grades, moves levels, writes back, and **counts toward
+the calibration checkpoint** exactly like an exam session (changed
+2026-09-18). Its self-assessment is still made after the answers were
+revealed, which is a known weakness of that evidence rather than a reason to
+drop it; the softness table labels every session's mode so the two can be
+compared. Rationale and the accepted cost: `BOOTSTRAP.md` §6, "Two interview
+modes", and §9.
 
 **During:**
 

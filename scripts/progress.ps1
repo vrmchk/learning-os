@@ -251,7 +251,8 @@ $allSessions       = $topics | ForEach-Object { $_.Sessions }
 $interviewSessions = @($allSessions | Where-Object { $_.Mode -eq 'interview' } | Sort-Object Date)
 $recent8           = @($interviewSessions | Select-Object -Last 8)
 
-$calibrationSessions = @($interviewSessions | Where-Object { -not $_.Coached })
+# Coached sessions count toward the checkpoint from 2026-09-18 - BOOTSTRAP.md SS6, SS9.
+$calibrationSessions = @($interviewSessions)
 $coachedCount        = @($interviewSessions | Where-Object { $_.Coached }).Count
 
 $weakButHigh = @()
@@ -285,7 +286,7 @@ W
 W "## Calibration checkpoint"
 W
 $n = $calibrationSessions.Count
-W "Interview sessions: **$n / 5**$(if ($coachedCount) { " (excludes $coachedCount coached session$(if ($coachedCount -ne 1) { 's' }))" })."
+W "Interview sessions: **$n / 5**$(if ($coachedCount) { " (of which $coachedCount coached)" })."
 if ($weakButHigh.Count -eq 0) {
     W "Self-flagged-weak answers graded L3+: **0**."
 } else {
