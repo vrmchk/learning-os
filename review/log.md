@@ -17,3 +17,4 @@ for interviews; drill or resource counts otherwise.
 | 2026-09-17 | dotnet | teach | finalization-and-freachable-queue | 3 | — | — | 0 hit 3 miss | [[finalization-and-freachable-queue]] |
 | 2026-09-17 | dotnet | interview | gc-generations-and-loh | 10 | 3.4 | 2.3 | +3 −0 =2 | [[2026-09-17-gc-generations-and-loh]] |
 | 2026-09-18 | dotnet | interview | finalization-and-stack-layout | 5 | 2.8 | 2.2 | +2 −0 =0 | [[2026-09-18-finalization-and-stack-layout]] |
+| 2026-09-18 | — | review | weekly | — | — | — | +12 −0 =0 | [[2026-09-18]] |
