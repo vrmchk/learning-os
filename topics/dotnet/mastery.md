@@ -22,8 +22,8 @@ them; they simply sit last, so nothing reaches them first. Never delete a row.
 
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
-| [[stack-vs-heap-layout]] | L1 | 2026-09-08 | [[2026-09-17-gc-generations-and-loh]] |
-| [[finalization-and-freachable-queue]] | L1 | 2026-09-12 | [[2026-09-12-gc-triggers-and-budgets]] |
+| [[stack-vs-heap-layout]] | L2 | 2026-09-18 | [[2026-09-18-finalization-and-stack-layout]] |
+| [[finalization-and-freachable-queue]] | L2 | 2026-09-18 | [[2026-09-18-finalization-and-stack-layout]] |
 | span-and-memory | L0 | — | — |
 | gc-modes | L0 | — | — |
 | card-table-and-write-barrier | L0 | — | — |
