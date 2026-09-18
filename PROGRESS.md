@@ -2,7 +2,7 @@
 
 Generated 2026-09-18 by `scripts/progress.ps1`. Do not edit — regenerate.
 
-**Focus:** .NET · cluster: none
+**Focus:** .NET · cluster: async-and-threading
 
 ## Calibration checkpoint
 
@@ -53,10 +53,10 @@ Due soon: [[gc-generations]] 2026-09-20 · [[gc-triggers-and-budgets]] 2026-09-2
 
 | Window | Interview | Teach | Study | Review |
 |---|---|---|---|---|
-| Last 7 days | 4 | 6 | 0 | 0 |
-| Last 30 days | 5 | 7 | 0 | 0 |
-| All time | 5 | 7 | 0 | 0 |
+| Last 7 days | 4 | 6 | 0 | 1 |
+| Last 30 days | 5 | 7 | 0 | 1 |
+| All time | 5 | 7 | 0 | 1 |
 
 Excursions: 0 of 5 interview sessions.
-Last session: 2026-09-18 — interview — finalization-and-stack-layout.
-Last weekly review: none.
+Last session: 2026-09-18 — review — weekly.
+Last weekly review: [[2026-09-18]].

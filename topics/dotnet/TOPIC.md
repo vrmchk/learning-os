@@ -6,8 +6,16 @@ created: 2026-09-07
 
 # .NET
 
-Runtime and language depth, not framework surface area. I can already build
-things; the gap is knowing what happens underneath when they misbehave.
+Runtime and language depth, and the framework behaviour that gets asked about.
+I can already build things; the gap is knowing what happens underneath when
+they misbehave, and being able to show it in an interview.
+
+*Changed 2026-09-18.* This used to read "runtime and language depth, **not
+framework surface area**". Cluster order is now set by interview frequency
+rather than by dependency, and that evidence puts EF Core, dependency injection
+and ASP.NET Core — framework surface area — above the runtime internals this
+topic was built around. Rationale and the limits of the evidence:
+`BOOTSTRAP.md` §4, "Reordered by interview evidence".
 
 Referenced by path, never by wikilink — every topic has a `TOPIC.md`.
 
@@ -29,49 +37,81 @@ order; the first row is where an untouched cluster is entered.
 | HTTP, networking, and resilience | `http-and-networking` | 6 |
 
 **Add when wanted:** ASP.NET Core pipeline (middleware order, routing, model
-binding, filters, Kestrel threading, `HttpContext` across awaits); I/O,
-buffers, and serialization (`Pipelines`, `IBufferWriter`, `System.Text.Json`
-internals); cloud SDKs.
+binding, filters, Kestrel threading, `HttpContext` across awaits) — now ranked
+**6th** in `ROADMAP.md`, to be created as a real cluster on its first session
+rather than pre-scaffolded; I/O, buffers, and serialization (`Pipelines`,
+`IBufferWriter`, `System.Text.Json` internals); cloud SDKs.
 
 ## Suggested path
 
 Not enforced. The proposal rules in `CLAUDE.md` pick when no focus cluster is
 set; set one in `ROADMAP.md` to commit to a stage.
 
-1. **Memory and GC** — everything else allocates. The vocabulary for every
-   later "what does this cost" question.
-2. **C# language internals** — know what the code you wrote actually compiles
-   to before asking what the runtime does with it.
-3. **Async and threading** — needs 1 (state machine allocations) and 2
-   (closures, lowering).
-4. **Concurrency** — needs 3; the memory model questions assume you can
-   already trace a continuation.
-5. **Runtime and type system** — JIT, generics, dispatch. Explains the
-   numbers you will see in 6.
-6. **Performance and diagnostics** — the tools that turn a symptom into a
-   cause. Needs 1, 3, 5 to interpret what they show.
-7. **Dependency injection and hosting** — where most production lifetime bugs
-   live; needs 2 (disposal) and 3 (background services).
-8. **Data access and EF Core internals** — needs 7 (`DbContext` lifetime) and
-   3 (async query pipeline).
-9. **HTTP, networking, and resilience** — needs 7 and 3; socket exhaustion
-   and stale DNS are the classic "misbehaves underneath" failures.
+**Reordered 2026-09-18 by interview frequency**, replacing the dependency
+ordering below. The ranked table with the evidence per cluster lives in
+`ROADMAP.md`; the rationale and the limits of that evidence are in
+`BOOTSTRAP.md` §4.
+
+1. **Async and threading** — the only cluster rated major by every source
+   surveyed, and harder at senior level.
+2. **Performance and diagnostics** — production incident diagnosis, a bucket
+   that does not exist below senior. Makes Memory and GC pay.
+3. **Dependency injection and hosting** — smallest cluster, "near-certain"
+   questions, unblocks 4.
+4. **Data access and EF Core internals** — named the senior-versus-mid filter
+   by three independent sources.
+5. **Concurrency** — asked as primitive choice, not memory model.
+6. **ASP.NET Core pipeline** — not a cluster yet; create on first use.
+7. **C# language internals** — assumed baseline at senior, rarely asked alone.
+8. **HTTP, networking, and resilience** — lowest verified question density.
+9. **Memory and GC** — closed at 6 of 13 rows; remainder on request.
+10. **Runtime and type system** — one outlier source, no first-hand support.
+
+**The dependency order this replaced**, kept because it is still true about
+what *builds on* what, and is the right order if the goal ever swings back from
+interviews to production debugging: Memory and GC (everything allocates) → C#
+language internals (know what the code lowers to) → Async and threading (needs
+both) → Concurrency (needs async) → Runtime and type system (explains the
+numbers) → Performance and diagnostics (needs 1, 3, 5 to read the tools) →
+Dependency injection and hosting (needs disposal and background services) →
+Data access and EF Core (needs `DbContext` lifetime and the async query
+pipeline) → HTTP, networking and resilience.
+
+Where the two orders disagree most: Performance and diagnostics moves from
+sixth to second, and Runtime and type system from fifth to last.
 
 ## Definition of done
 
 Cold and unaided at a whiteboard:
 
 1. Draw the generational GC and say what triggers and pauses each collection
-   kind.
-2. Draw the async state machine and trace a continuation through the thread
-   pool.
-3. Argue whether a given lock-free pattern is safe under the memory model.
-4. Reason from a described production symptom to a runtime cause.
-5. Trace a LINQ query from expression tree to SQL and back to tracked
-   entities, and say where each layer can silently cost a round trip.
+   kind. *(Substantially met 2026-09-18 — five concepts at L2, one at L3.)*
+2. Take a production symptom to a cause with named tools: memory climbing
+   across restarts, or a timeout at 15% CPU. Say which counter or command you
+   would pull **before** naming the cause.
+3. Trace a continuation through the thread pool and explain what
+   `ConfigureAwait` changes, what deadlocks sync-over-async, and how you would
+   bound concurrency over a downstream service.
+4. Take an EF Core query from `IQueryable` to SQL and back to tracked
+   entities, and name where each layer silently costs a round trip.
+5. Choose a synchronisation primitive for a stated scenario and defend it
+   against the alternatives.
 
 Each demonstrated unprompted in a session and linked from `mastery.md`. A
 description of what the topic is for, not a gate.
+
+*Rewritten 2026-09-18 to match the interview-frequency ordering.* Two items
+changed on evidence rather than preference. The old item 2 was "draw the async
+state machine and trace a continuation through the thread pool" — no source
+surveyed asks for the state machine as a question in its own right, including a
+first-hand account from a named .NET engineer whose whole post is about the
+async question he asks; it is background competence that should inform an
+answer, so item 3 now asks for what the competence is *for*. The old item 3 was
+"argue whether a given lock-free pattern is safe under the memory model" —
+lock-free and memory-model questions surfaced mainly in general-CS sources
+rather than .NET ones, so item 5 asks for the primitive choice that .NET
+sources actually ask for. The previous wording is preserved in git history and
+in `BOOTSTRAP.md` §4.
 
 ## Trusted sources
 

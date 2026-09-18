@@ -108,6 +108,10 @@ hard is the failure mode this system exists to make visible.
 Runtime and language depth first, not framework surface area. I can already
 build things; the gap is knowing what happens underneath when they misbehave.
 
+*Superseded 2026-09-18 for ordering purposes — see "Reordered by interview
+evidence" below. The sentence still describes what I find worth knowing; it no
+longer describes what the cluster order optimises for.*
+
 Starting clusters for the concept tree, in suggested path order — extend
 freely. Full enumeration is in `topics/dotnet/mastery.md`.
 
@@ -145,6 +149,79 @@ freely. Full enumeration is in `topics/dotnet/mastery.md`.
 Order is soft: row order within a cluster is the suggested order, `TOPIC.md`
 carries the suggested cluster path with reasons, and the focus cluster in
 `ROADMAP.md` is the only steering knob. Nothing is gated.
+
+#### Reordered by interview evidence — 2026-09-18
+
+**The ordering principle changed.** The nine clusters were originally ordered by
+**dependency** — memory first because everything else allocates, language
+internals before async because async lowers to a state machine, and so on. They
+are now ordered by **how often the material is actually asked in senior .NET
+interviews**. My decision, made after finishing the graded part of Memory and
+GC and judging that interviews do not reach the depth I had already reached.
+
+This resolves the tension §4 has carried since 2026-09-13, recorded then as
+"the topic's stated goal is production-debugging depth, while this ordering
+optimises for interviews". It is resolved in favour of **interviews**. The
+consequence is written down rather than smoothed over: the topic's opening
+line, "runtime and language depth first, not framework surface area", no
+longer describes what the order optimises for. Interview evidence promotes EF
+Core, dependency injection and ASP.NET Core — framework surface area — above
+the runtime internals the topic was built around. `TOPIC.md` was changed to
+say so. If the goal ever swings back to production debugging, this paragraph
+is the thing to reverse.
+
+**The evidence, and what it is worth.** Three parallel web-research agents on
+2026-09-18 fetched roughly forty pages between them: question compilations
+(codewithmukesh, Toptal, InterviewBit, GeeksforGeeks, doit.software,
+InterviewKickstart, codingdroplets, bool.dev, Simplilearn), a first-hand post
+by a named engineer, and three first-hand Blind threads.
+
+Its limits matter as much as its findings, and none of the three agents hid
+them:
+
+- **Reddit was unfetchable** — blocked at the domain level on every attempt.
+  Glassdoor returned 403, a Redlib mirror rate-limited, roadmap.sh would not
+  render. Two of the three agents tried and failed independently.
+- **Blind yielded almost nothing.** Six threads were opened across two agents,
+  including one titled exactly "what to expect for an interview for senior
+  software developer in dotnet"; it contained one unanswered question and a
+  joke. What survived confirms interview *structure* (a separate system-design
+  round) and almost no question content.
+- **One author dominates.** codewithmukesh supplied 6 of one agent's top 10
+  questions and 6 of another's top 12, and all three agents independently rated
+  it their best source. A single well-calibrated voice is not a consensus.
+
+So this is a survey of what curated compilations *say* is asked, corroborated
+on structure but not on content by a thin first-hand layer. It is better than
+ordering from memory and worse than data. Treat the ranking as a strong prior,
+not a measurement, and revise it the first time a real interview contradicts
+it — a recorded contradiction from an actual loop outweighs this entire survey.
+
+**The finding that justified the reorder.** Deep GC internals — card tables,
+write barriers, LOH compaction mechanics, GC regions, finalization-queue
+mechanics — drew **zero mentions across all sixteen sources** one agent
+fetched, including the two most GC-heavy ones. What *is* asked about memory is
+diagnostic: walk me through finding a leak, what lands on the LOH and why does
+it hurt, server versus workstation GC. The same pattern holds for IL and
+reflection internals (one outlier source) and Native AOT (one passing
+mention). This vindicates stopping Memory and GC where it stopped.
+
+**The correction that came with it.** "Memory questions are shallow" is not
+what the evidence says. Memory and GC was rated a major topic by 8 of 12
+structured sources and "strongly MORE" at senior level. The shallow part is
+the *mechanism*; the deep part is the *diagnosis*, and diagnosis lives in
+**Performance and diagnostics**, a cluster still entirely at L0. The six
+concepts earned in Memory and GC are the vocabulary for that cluster's
+questions, and they are worth much less until it is done. That is why
+Performance and diagnostics ranks second in the new order rather than sixth.
+
+**System design outranks most of this.** Every agent found system design to be
+the most senior-exclusive topic in the dataset — absent from junior tiers
+entirely, and the only subject the first-hand Blind accounts confirm as a
+separate interview round. It is not a .NET cluster; it is the `System design`
+topic in `ROADMAP.md`, which has no folder and zero sessions. An ordering of
+.NET clusters cannot express its priority, which is a limitation of ordering
+clusters at all when the highest-value work sits in another topic.
 
 Not on the starting list, add when wanted: ASP.NET Core pipeline; I/O,
 buffers, and serialization; cloud SDKs.
