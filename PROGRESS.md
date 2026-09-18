@@ -23,18 +23,18 @@ Older half → newer half: target 2.75 → 3.20 (+0.45), awarded 0.95 → 2.30 (
 
 ## .NET
 
-90 concepts · average **L0.14** · last evidence 2026-09-18
+93 concepts · average **L0.14** · last evidence 2026-09-18
 
 | L0 | L1 | L2 | L3 | L4 | L5 |
 |---|---|---|---|---|---|
-| 84 | 0 | 5 | 1 | 0 | 0 |
+| 87 | 0 | 5 | 1 | 0 | 0 |
 
 | Cluster | Concepts | Avg | L0 | ≥L3 | Last evidence |
 |---|---|---|---|---|---|
 | Memory and GC | 13 | L1.00 | 7 | 1 | 2026-09-18 |
 | C# language internals | 10 | L0.00 | 10 | 0 | — |
-| Async and threading | 12 | L0.00 | 12 | 0 | — |
-| Concurrency | 10 | L0.00 | 10 | 0 | — |
+| Async and threading | 18 | L0.00 | 18 | 0 | — |
+| Concurrency | 7 | L0.00 | 7 | 0 | — |
 | Runtime and type system | 9 | L0.00 | 9 | 0 | — |
 | Performance and diagnostics | 11 | L0.00 | 11 | 0 | — |
 | Dependency injection and hosting | 8 | L0.00 | 8 | 0 | — |

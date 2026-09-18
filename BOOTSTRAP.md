@@ -150,6 +150,66 @@ Order is soft: row order within a cluster is the suggested order, `TOPIC.md`
 carries the suggested cluster path with reasons, and the focus cluster in
 `ROADMAP.md` is the only steering knob. Nothing is gated.
 
+#### How a cluster is planned — decided 2026-09-18
+
+The standing method for every cluster from here on, replacing "row order is the
+suggested order" with something that says *what* order and *why*. Decided after
+the first attempt at planning Async and threading ranked its rows purely by
+interview frequency and put `async-deadlocks` first — a question you can be
+quizzed on but cannot be taught in, because it needs `SynchronizationContext`,
+which needs threads.
+
+**Three tiers, in this order.**
+
+1. **Foundations** — the concepts that make the rest learnable. Thin: two to
+   four concepts, occasionally six where a cluster has a genuine primitive
+   family. Not a survey of the field.
+2. **Most asked** — ranked by interview evidence, hardest-hitting first. This
+   is where the cluster earns its place.
+3. **On request** — rows with thin or no evidence. They keep their rows and
+   their L0 levels and are never proposed automatically.
+
+**Every foundation tier carries an exit test**: a named question, written into
+`mastery.md` under the cluster heading, that must be answerable unaided before
+the tier is done. Without it "foundations" has no floor, and the tier expands
+until the cluster is abandoned — which is what happened to Memory and GC.
+
+**The failure this guards against, in both directions.**
+
+- *Ordering by frequency alone* produces a list that cannot be taught in
+  order. The first Async plan had this fault.
+- *Ordering by foundations alone* produces Memory and GC: eleven days, six
+  concepts, abandoned because it got too niche before reaching anything asked.
+  The vault also records the cost — the last two teach sessions in that
+  cluster drilled **0 hit / 3 miss** each, both on concepts taught without
+  their prerequisites.
+
+Tier 1 exists to make tier 2 teachable. It is not an end in itself, and the
+exit test is what enforces that.
+
+**Rows follow evidence, in both directions.** A recurring interview question
+with no row to hold it gets a new row — `task-whenall-and-bounded-concurrency`
+was added this way. A row with no evidence behind it goes to tier 3 or is
+dropped outright — `data-parallelism-parallel-and-plinq` was considered and
+dropped, because `Parallel.For`, PLINQ and TPL Dataflow drew nothing in the
+survey. Padding a cluster with material nobody asks about is the same failure
+as inflating a level: it makes the tree look more complete than the evidence
+supports.
+
+**Concepts move between clusters when the tiers say so.** Reassignment changes
+the `##` heading in `mastery.md`, the folder path, and the note's `cluster:`
+frontmatter together. `lock-and-monitor-internals`, `interlocked-and-cas` and
+`semaphoreslim-and-async-locks` moved from Concurrency into Async and threading
+on 2026-09-18, because they are foundations for it and because the evidence
+says the asked form is "pick between `lock`, `SemaphoreSlim` and `Interlocked`
+and defend it" rather than the memory model. What stayed in Concurrency is the
+deep end, which is what the evidence found thin.
+
+**Row order in `mastery.md` is the tier order.** Proposal rule 4 reads row
+order, so a cluster planned this way proposes itself correctly without anyone
+overriding it by hand. That is the point: the plan lives in the file, not in a
+conversation.
+
 #### Reordered by interview evidence — 2026-09-18
 
 **The ordering principle changed.** The nine clusters were originally ordered by

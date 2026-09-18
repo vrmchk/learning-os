@@ -55,34 +55,91 @@ What the compiler lowers your code to, before the runtime ever sees it.
 
 ## Async and threading
 
-The state machine, the thread pool, and every way a continuation goes wrong.
+Threads and the primitives that coordinate them, then what replaces a blocked
+thread and every way a continuation goes wrong.
+
+Planned in tiers on 2026-09-18 — the first cluster built this way. Method:
+`CLAUDE.md`, "Cluster planning"; rationale: `BOOTSTRAP.md` §4, "How a cluster
+is planned". Row order is tier order and proposal rule 4 reads it, so no
+override by hand should be needed.
+
+**Exit test for tier 1** — answer both unaided before moving to tier 2:
+
+1. Pick between `lock`, `SemaphoreSlim` and `Interlocked` for a stated
+   shared-state scenario and defend the choice against the other two.
+2. Say why async is not multithreading, and what `Task.Run` actually does.
+
+**Exit test for the cluster:** "your API times out under load but CPU sits at
+15%" — diagnosed by naming the counter before naming the cause — and "explain
+how `.Result` deadlocks, and why the same code does not deadlock in a console
+app".
+
+**Tier 1 — Foundations.** Threads and the primitive family. Deliberately thin;
+it exists to make tier 2 teachable, not as a course in parallel programming.
+`Parallel.For`, PLINQ and TPL Dataflow were considered and dropped — the
+2026-09-18 survey found no interview evidence for them.
+
+| Concept | Level | Since | Evidence |
+|---|---|---|---|
+| threads-and-scheduling | L0 | — | — |
+| parallelism-vs-concurrency | L0 | — | — |
+| thread-pool-internals | L0 | — | — |
+| lock-and-monitor-internals | L0 | — | — |
+| interlocked-and-cas | L0 | — | — |
+| semaphoreslim-and-async-locks | L0 | — | — |
+
+The last three moved here from **Concurrency** on 2026-09-18: they are
+foundations for this cluster, and the evidence says the asked form is the
+primitive choice above, not the memory model. What stayed in Concurrency is the
+deep end.
+
+**Tier 2 — Most asked.** Ranked by the 2026-09-18 interview survey.
+`async-state-machine` leads this tier rather than the cluster: no source
+surveyed asks for it standalone, but it is what makes the four rows under it
+answerable at depth, so it is taught as the mechanism and graded as support.
 
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
 | async-state-machine | L0 | — | — |
-| task-vs-valuetask | L0 | — | — |
 | synchronization-context-and-configureawait | L0 | — | — |
-| thread-pool-internals | L0 | — | — |
-| thread-pool-starvation | L0 | — | — |
 | async-deadlocks | L0 | — | — |
+| thread-pool-starvation | L0 | — | — |
 | cancellation-tokens | L0 | — | — |
-| execution-context-and-asynclocal | L0 | — | — |
-| task-continuations-and-scheduling | L0 | — | — |
+| task-whenall-and-bounded-concurrency | L0 | — | — |
 | async-exceptions-and-async-void | L0 | — | — |
+| task-vs-valuetask | L0 | — | — |
+
+`task-whenall-and-bounded-concurrency` is a **new row**, added because "call a
+downstream API 500 times without taking it down" and "`Task.WhenAll` versus
+awaiting in a loop" recur across three sources each and no existing row held
+them.
+
+**Tier 3 — On request.** Thin or no evidence. Rows and L0 levels kept; never
+proposed automatically.
+
+| Concept | Level | Since | Evidence |
+|---|---|---|---|
+| task-continuations-and-scheduling | L0 | — | — |
 | iasyncenumerable | L0 | — | — |
+| execution-context-and-asynclocal | L0 | — | — |
 | channels-and-producer-consumer | L0 | — | — |
 
 ## Concurrency
 
-The memory model, the primitives, and what each one does not guarantee.
+The memory model and what each guarantee does not cover. The everyday
+primitives — `lock`, `Interlocked`, `SemaphoreSlim` — moved to **Async and
+threading** on 2026-09-18, where they are tier 1. What is left here is the deep
+end, which the 2026-09-18 survey found thin: ABA, lock-free and wait-free
+structures and acquire/release semantics surfaced mainly in general-CS sources
+rather than .NET ones.
+
+Not tiered yet. Tier it when the cluster is next picked up, per `CLAUDE.md`,
+"Cluster planning".
 
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
 | dotnet-memory-model | L0 | — | — |
 | volatile-and-memory-barriers | L0 | — | — |
-| interlocked-and-cas | L0 | — | — |
-| lock-and-monitor-internals | L0 | — | — |
-| semaphoreslim-and-async-locks | L0 | — | — |
 | reader-writer-locks | L0 | — | — |
 | concurrent-collections-costs | L0 | — | — |
 | lazy-and-double-checked-locking | L0 | — | — |

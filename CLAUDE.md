@@ -57,6 +57,33 @@ about focus.
   outweigh the focus topic, or when a focus-topic cluster goes untouched while
   excursions continue. The system never refuses a session.
 
+## Cluster planning
+
+Every cluster is planned in three tiers, and `mastery.md` row order **is** the
+tier order. Rationale: `BOOTSTRAP.md` §4, "How a cluster is planned".
+
+1. **Foundations** — what makes the rest learnable. Two to four concepts, six
+   at the outside. Thin by design.
+2. **Most asked** — ranked by interview evidence, hardest-hitting first.
+3. **On request** — thin or no evidence. Keeps its rows and L0 levels; never
+   proposed automatically.
+
+- The foundation tier carries an **exit test** written under the cluster
+  heading in `mastery.md`: a named question that must be answerable unaided
+  before the tier is done. A foundation tier without one expands until the
+  cluster is abandoned.
+- A recurring interview question with no row to hold it earns a new row. A row
+  with no evidence behind it goes to tier 3 or is dropped. Never pad a cluster
+  with material nobody asks about.
+- Reassigning a concept between clusters changes the `##` heading in
+  `mastery.md`, the folder path, and the note's `cluster:` frontmatter
+  together.
+- Tier boundaries are written as **bold text between separate tables** under
+  the one cluster heading. Never as an extra `##` heading — the script reads
+  `##` as a new cluster. Never as a table row either — the script throws on any
+  row whose second cell is not `L0`–`L5`. Several tables under one heading are
+  fine; all their rows are collected into that cluster.
+
 ## Mastery rubric
 
 Applies to every topic and every concept.

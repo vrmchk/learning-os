@@ -21,15 +21,18 @@ Referenced by path, never by wikilink — every topic has a `TOPIC.md`.
 
 ## Clusters
 
-Nine, enumerated in `mastery.md`. Row order within a cluster is the suggested
-order; the first row is where an untouched cluster is entered.
+Nine, enumerated in `mastery.md`. **Row order within a cluster is its tier
+order** — foundations, then most-asked, then on-request — and the first row is
+where an untouched cluster is entered. Method: `CLAUDE.md`, "Cluster planning".
+Async and threading was the first cluster tiered this way, on 2026-09-18; the
+others are tiered when next picked up.
 
 | Cluster | Slug | Concepts |
 |---|---|---|
 | Memory and GC | `memory-and-gc` | 13 |
 | C# language internals | `csharp-language-internals` | 10 |
-| Async and threading | `async-and-threading` | 12 |
-| Concurrency | `concurrency` | 10 |
+| Async and threading | `async-and-threading` | 18 |
+| Concurrency | `concurrency` | 7 |
 | Runtime and type system | `runtime-and-type-system` | 9 |
 | Performance and diagnostics | `performance-and-diagnostics` | 11 |
 | Dependency injection and hosting | `di-and-hosting` | 8 |

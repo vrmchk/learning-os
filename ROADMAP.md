@@ -38,11 +38,11 @@ nothing is gated.
 
 | # | Cluster | Rows | Why here |
 |---|---|---|---|
-| 1 | Async and threading | 12 | The only topic rated major by **every** structured source surveyed, and rated harder at senior level. The recurring questions are scenario-shaped: thread-pool starvation ("times out under load, CPU at 15%"), sync-over-async deadlock, bounded concurrency over a downstream API, cancellation. |
+| 1 | Async and threading | 18 | The only topic rated major by **every** structured source surveyed, and rated harder at senior level. The recurring questions are scenario-shaped: thread-pool starvation ("times out under load, CPU at 15%"), sync-over-async deadlock, bounded concurrency over a downstream API, cancellation. |
 | 2 | Performance and diagnostics | 11 | "Production incident diagnosis" is a question bucket that does not exist at junior level at all. Also the cluster that makes Memory and GC pay: "walk me through finding the leak" is answered with `dotnet-counters` then `dotnet-dump`, `dumpheap -stat` and `gcroot`, none of which is in the vault yet. |
 | 3 | Dependency injection and hosting | 8 | Captive dependency and `IServiceScopeFactory` in background services were called "near-certain" in a senior loop and appeared in every source covering DI. Smallest cluster on the list, highest hit-rate per concept, and it unblocks the `DbContext` lifetime questions in 4. |
 | 4 | Data access and EF Core internals | 11 | Named **the** senior-versus-mid filter by three independent sources, and given the largest single share in an evidence-weighted split. N+1, captive `DbContext`, `AsNoTracking`, concurrency conflicts, migrations at scale. Plain SQL indexing questions land here too. |
-| 5 | Concurrency | 10 | Rated harder at senior, but the asked form is "pick between `lock`, `SemaphoreSlim` and `Interlocked` and defend it", not the memory model. The deep end — ABA, lock-free and wait-free structures, acquire/release semantics — surfaced mainly in general-CS sources, not .NET ones. Expect to stop short of the last few rows. |
+| 5 | Concurrency | 7 | Rated harder at senior, but the asked form is "pick between `lock`, `SemaphoreSlim` and `Interlocked` and defend it", not the memory model. The deep end — ABA, lock-free and wait-free structures, acquire/release semantics — surfaced mainly in general-CS sources, not .NET ones. Expect to stop short of the last few rows. |
 | 6 | ASP.NET Core pipeline | — | **Cluster does not exist yet**; create it on the first session, do not pre-scaffold. Middleware order, filters versus middleware, `HttpContext` across an `await`, the Options-pattern variants, Kestrel and reverse proxies. Ranked here and not higher because the sources themselves frame middleware ordering as separating *junior from mid*, not mid from senior. |
 | 7 | C# language internals | 10 | Rated major by most sources but explicitly **less** asked as standalone questions at senior level — treated as assumed baseline, resurfacing inside performance questions (struct versus class, boxing). Much of it is already implied by the Memory and GC work. |
 | 8 | HTTP, networking, and resilience | 6 | Lowest verified question density of any cluster here. The valuable material — idempotency, retries, circuit breakers — turned up inside *architecture* questions rather than as an HTTP-client topic. See the note below on socket exhaustion. |
@@ -85,7 +85,7 @@ to avoid the work.
 Stopped at 6 of 13 rows graded: `gc-generations`, `gc-triggers-and-budgets`,
 `large-object-heap`, `stack-vs-heap-layout`,
 `finalization-and-freachable-queue` at L2, `boxing` at L3. Cluster average
-L1.23.
+L1.00.
 
 Reason: the 2026-09-18 survey found **zero mentions of deep GC internals — card
 tables, write barriers, LOH compaction mechanics, GC regions,
