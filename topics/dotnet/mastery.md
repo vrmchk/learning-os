@@ -81,7 +81,7 @@ it exists to make tier 2 teachable, not as a course in parallel programming.
 
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
-| threads-and-scheduling | L0 | — | — |
+| [[threads-and-scheduling]] | L0 | — | — |
 | parallelism-vs-concurrency | L0 | — | — |
 | thread-pool-internals | L0 | — | — |
 | lock-and-monitor-internals | L0 | — | — |
