@@ -19,3 +19,4 @@ for interviews; drill or resource counts otherwise.
 | 2026-09-18 | dotnet | interview | finalization-and-stack-layout | 5 | 2.8 | 2.2 | +2 −0 =0 | [[2026-09-18-finalization-and-stack-layout]] |
 | 2026-09-18 | — | review | weekly | — | — | — | +12 −0 =0 | [[2026-09-18]] |
 | 2026-09-19 | dotnet | teach | threads-and-scheduling | 3 | — | — | 1 hit 2 miss | [[threads-and-scheduling]] |
+| 2026-09-20 | dotnet | teach | parallelism-vs-concurrency | 3 | — | — | 1 hit 2 miss | [[parallelism-vs-concurrency]] |
