@@ -8,6 +8,7 @@ Newest first. Never deleted. Status: open → studying | taught → verified | r
 
 | Date | Concept | Miss | Session | Status | Updated |
 |---|---|---|---|---|---|
+| 2026-09-20 | [[thread-pool-internals]] | taught on request — row 3 of tier 1 in async-and-threading. Drill skipped, so no drill-miss rows exist for this concept and nothing is recorded about where it is weak | [[thread-pool-internals]] | taught | 2026-09-20 [[thread-pool-internals]] |
 | 2026-09-20 | [[parallelism-vs-concurrency]] | taught on request — row 2 of tier 1 in async-and-threading | [[parallelism-vs-concurrency]] | taught | 2026-09-20 [[parallelism-vs-concurrency]] |
 | 2026-09-20 | [[parallelism-vs-concurrency]] | drill miss: classifies I/O `Task.WhenAll` as concurrency and estimates ~8 threads correctly, but both reasons are wrong — gives "we do not create threads explicitly" as the criterion rather than the work holding no thread while waiting, and treats core count as a cap on pool threads rather than a rough proxy for how many continuations run at once | [[parallelism-vs-concurrency]] | open | — |
 | 2026-09-20 | [[parallelism-vs-concurrency]] | drill miss: declined to trace an awaited I/O call from issue to resumption — no OS completion port or epoll registration, no release of the pool thread, no statement that nothing holds a thread during the wait, no completion dispatching `MoveNext` on a different thread. Taught in this session; distinct from `async-state-machine`, which is untaught | [[parallelism-vs-concurrency]] | open | — |

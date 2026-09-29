@@ -1,6 +1,6 @@
 # Progress
 
-Generated 2026-09-20 by `scripts/progress.ps1`. Do not edit — regenerate.
+Generated 2026-09-29 by `scripts/progress.ps1`. Do not edit — regenerate.
 
 **Focus:** .NET · cluster: async-and-threading
 
@@ -41,10 +41,40 @@ Older half → newer half: target 2.75 → 3.20 (+0.45), awarded 0.95 → 2.30 (
 | Data access and EF Core internals | 11 | L0.00 | 11 | 0 | — |
 | HTTP, networking, and resilience | 6 | L0.00 | 6 | 0 | — |
 
-**Gaps:** open 41 · studying 0 · taught 3 · verified 8 · regressed 0
+**Gaps:** open 41 · studying 0 · taught 4 · verified 8 · regressed 0
 
 Open for more than 7 days:
 
+- [[parallelism-vs-concurrency]] — drill miss: classifies I/O `Task.WhenAll` as concurrency and estimates ~8 threads correctly, but both reasons are wrong — gives "we do not create threads explicitly" as the criterion rather than the work holding no thread while waiting, and treats core count as a cap on pool threads rather than a rough proxy for how many continuations run at once (since 2026-09-20)
+- [[parallelism-vs-concurrency]] — drill miss: declined to trace an awaited I/O call from issue to resumption — no OS completion port or epoll registration, no release of the pool thread, no statement that nothing holds a thread during the wait, no completion dispatching `MoveNext` on a different thread. Taught in this session; distinct from `async-state-machine`, which is untaught (since 2026-09-20)
+- [[parallelism-vs-concurrency]] — design answers are not quantified: restructures the batch job correctly but gives no payoff figure when asked directly. Second occurrence — see the 2026-09-19 drill miss on [[threads-and-scheduling]], where the capacity arithmetic was also absent (since 2026-09-20)
+- [[threads-and-scheduling]] — drill miss: cannot say `Task.Run` in an ASP.NET Core handler is a no-op because the handler already runs on a pool thread; does not reach the capacity arithmetic (300 rps x 200 ms = 60 core-seconds against 8 cores) or name it a capacity problem rather than a concurrency one; no bounded concurrency, load shedding, or moving the work off the request path (since 2026-09-19)
+- [[threads-and-scheduling]] — drill miss: identifies oversubscription and thread-pool starvation correctly but gives no mechanism for either signature — no time-slicing and cache-refill cost behind high CPU with stable threads, and no blocked threads plus the pool’s 1–2 per second injection behind low CPU with climbing threads (since 2026-09-19)
+- [[finalization-and-freachable-queue]] — does not know the freachable queue is a root: cannot say the object and its whole graph are re-marked live and promoted, so the second collection is a gen 1 or gen 2 one; inverts the direction, saying the object "has a reference to the finalize queue" (since 2026-09-18)
+- [[finalization-and-freachable-queue]] — describes `GC.SuppressFinalize` as preventing registration; registration already happened at `new`, and the flag makes the GC skip the existing entry (since 2026-09-18)
+- [[finalization-and-freachable-queue]] — answers the clean-shutdown case with the crash; needed a probe to state that .NET 5+ does not run pending finalizers at process exit (since 2026-09-18)
+- [[finalization-and-freachable-queue]] — chooses `SafeHandle` over `GC.KeepAlive` on ergonomics alone; cannot name the marshaller’s ref-counting across P/Invoke as what makes the fix structural, nor `CriticalFinalizerObject`. Second occurrence — see the 2026-09-17 drill miss (since 2026-09-18)
+- [[finalization-and-freachable-queue]] — cannot say why Debug hides an early-collection bug — unoptimised code reports locals live to method end — and does not address Tier-0 in Release; passed on the probe (since 2026-09-18)
+- [[stack-vs-heap-layout]] — cannot say what `in` costs on a non-`readonly` struct — a defensive copy at every member access — and does not name `readonly struct` or `readonly` members as the fix (since 2026-09-18)
+- [[stack-vs-heap-layout]] — calls 5 x 64 bytes of by-value copying "allocation", and does not name the compiler’s defensive copy to a stack temporary as the mechanism behind the lost counter (since 2026-09-18)
+- [[stack-vs-heap-layout]] — states the placement rule as "value types on the stack, reference types on the heap" rather than "a value lives where its container lives"; does not mention enregistration, giving "on the stack" as certain (since 2026-09-18)
+- [[gc-generations]] — does not say that evicted cache entries become garbage inside gen 2, reclaimable only by a full collection; priced the options only when prompted (since 2026-09-17)
+- [[gc-generations]] — states twice that survivors are compacted "to the end" of the generation; they are compacted down against gen 1 and the boundary slides up above them (since 2026-09-17)
+- [[gc-generations]] — does not know that a full ephemeral segment is retired into gen 2 and a fresh one started (two probes needed), and does not place gen 2 in its own segments (since 2026-09-17)
+- [[gc-generations]] — inverts the .NET 7 regions model: says each region is split across the three generations rather than each region belonging to one generation (since 2026-09-17)
+- [[large-object-heap]] — cannot name what is false in calling the LOH "generation 3" — nothing ever ages into or out of it; argued instead that the shared escalation to a gen 2 collection is the falsehood (since 2026-09-17)
+- [[large-object-heap]] — no discriminating measure for fragmentation: total free space rising while the largest contiguous free block stays flat; treats gen 2 and the LOH as one pool, and does not mention that adjacent free blocks coalesce (since 2026-09-17)
+- [[large-object-heap]] — design answer neither costed nor bounded: no pooling and no pricing of its hazards, no incremental hashing, and no memory ceiling (concurrency x buffer size) when asked for it directly (since 2026-09-17)
+- [[large-object-heap]] — does not price `StringBuilder.ToString()` — it allocates the large string and copies every chunk, so both are live at once (since 2026-09-17)
+- [[stack-vs-heap-layout]] — does not apply 8-byte object alignment even when told to, and gives the array length slot as 4 bytes rather than 8; shallow versus retained size unknown (since 2026-09-17)
+- [[gc-triggers-and-budgets]] — does not state that the budget is a byte count, so cannot explain why fewer allocations mean fewer collections of unchanged cost (since 2026-09-17)
+- [[boxing]] — does not count the `params object[]` as an allocation separate from the boxes (three per call), and describes the `[LoggerMessage]` source generator as a compile-time level check rather than a strongly-typed delegate that removes the boxing entirely (since 2026-09-17)
+- [[finalization-and-freachable-queue]] — drill miss: cannot trace a blocked finalizer thread to OOM — no single finalizer thread, no freachable queue as a root keeping the objects and their graphs alive and promoted, and no dump signature separating it from a static-rooted leak (`!gcroot` path from a static vs a ready-for-finalization count plus a waiting finalizer stack) (since 2026-09-17)
+- [[finalization-and-freachable-queue]] — drill miss: picks `SafeHandle` over a hand-written finalizer only as "standard, more optimised" — cannot price the hand-written finalizer at thousands of objects per minute (slow-path allocation, extra GC and promotion of the whole graph, no ref-counting across P/Invoke) nor the `SafeHandle` cost (one extra small object per handle) (since 2026-09-17)
+- [[finalization-and-freachable-queue]] — drill miss: spots no ordering and a blocked finalizer thread in a flushing finalizer, but gives no replacement (`IDisposable`, no finalizer, flush in `Dispose`, `FileStream`'s `SafeFileHandle` is the net, a finalizer may never run) and believes finalizers run during the GC (since 2026-09-17)
+- [[stack-vs-heap-layout]] — drill miss: cannot say how the GC knows a reference is dead before the method returns — no JIT GC info, no stack walk — gives no reason Debug keeps locals alive longer, and does not address Tier-0 code in Release (since 2026-09-15)
+- [[stack-vs-heap-layout]] — drill miss: rejects a class-to-struct change for the right costs (copying, interface boxing) but cannot state what it gains — no per-element header or reference, one array instead of N objects, contiguity, less mark work — nor the conditions to approve it (since 2026-09-15)
+- [[stack-vs-heap-layout]] — drill miss: places a lambda-captured local on the stack rather than in a heap closure object; nests a referenced object's contents "inside" its owner instead of following the references (`Order` → `List<int>` → `int[]`) (since 2026-09-15)
 - [[gc-triggers-and-budgets]] — cannot say what to measure to confirm a change in allocation or budget; declined the measurement half of Q1 and omitted it again in the Q10 design (since 2026-09-13)
 - [[gc-triggers-and-budgets]] — Q10 design: gen 2 never identified as the p99 latency risk, and no trade-off stated for the configuration chosen (since 2026-09-13)
 - [[boxing]] — believes the boxes behind a `List<object>` sit contiguously and live on the LOH; they are 24-byte objects scattered on the small object heap. Held under two probes (since 2026-09-13)
@@ -59,25 +89,28 @@ Open for more than 7 days:
 
 ## Review queue
 
-8 scheduled · **4 overdue** · 4 due in the next 7 days.
+9 scheduled · **9 overdue** · 0 due in the next 7 days.
 
 | Concept | Topic | Due | Days overdue |
 |---|---|---|---|
-| [[gc-generations]] | dotnet | 2026-09-20 | 0 |
-| [[gc-triggers-and-budgets]] | dotnet | 2026-09-20 | 0 |
-| [[large-object-heap]] | dotnet | 2026-09-20 | 0 |
-| [[threads-and-scheduling]] | dotnet | 2026-09-20 | 0 |
-
-Due soon: [[finalization-and-freachable-queue]] 2026-09-21 · [[parallelism-vs-concurrency]] 2026-09-21 · [[stack-vs-heap-layout]] 2026-09-21 · [[boxing]] 2026-09-24
+| [[gc-generations]] | dotnet | 2026-09-20 | 9 |
+| [[gc-triggers-and-budgets]] | dotnet | 2026-09-20 | 9 |
+| [[large-object-heap]] | dotnet | 2026-09-20 | 9 |
+| [[threads-and-scheduling]] | dotnet | 2026-09-20 | 9 |
+| [[finalization-and-freachable-queue]] | dotnet | 2026-09-21 | 8 |
+| [[parallelism-vs-concurrency]] | dotnet | 2026-09-21 | 8 |
+| [[stack-vs-heap-layout]] | dotnet | 2026-09-21 | 8 |
+| [[thread-pool-internals]] | dotnet | 2026-09-21 | 8 |
+| [[boxing]] | dotnet | 2026-09-24 | 5 |
 
 ## Activity
 
 | Window | Interview | Teach | Study | Review |
 |---|---|---|---|---|
-| Last 7 days | 2 | 4 | 0 | 1 |
-| Last 30 days | 5 | 9 | 0 | 1 |
-| All time | 5 | 9 | 0 | 1 |
+| Last 7 days | 0 | 0 | 0 | 0 |
+| Last 30 days | 5 | 10 | 0 | 1 |
+| All time | 5 | 10 | 0 | 1 |
 
 Excursions: 0 of 5 interview sessions.
-Last session: 2026-09-20 — teach — parallelism-vs-concurrency.
+Last session: 2026-09-20 — teach — thread-pool-internals.
 Last weekly review: [[2026-09-18]].
