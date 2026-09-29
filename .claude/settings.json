@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pwsh -NoProfile -File scripts/progress.ps1)"
+    ]
+  }
+}
