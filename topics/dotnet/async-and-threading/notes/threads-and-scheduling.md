@@ -3,247 +3,266 @@ concept: threads-and-scheduling
 topic: dotnet
 cluster: async-and-threading
 created: 2026-09-18
-taught: 2026-09-19
+taught: 2026-10-01
 ---
 
 # Threads and scheduling
 
-## Mechanism
+## What it is
 
-**A thread is an OS object.** `System.Threading.Thread` is a managed wrapper
-over a real kernel thread, 1:1 — .NET has no green threads or fibres. The **OS
-scheduler**, not the CLR, decides which thread runs on which core and when.
+When a program runs, something has to execute its instructions one after
+another — call this method, then that one, remember where to return to. A
+**thread** is one such line of execution. A program can have many threads,
+each working through its own code, so it can do several things at once or keep
+going while one part waits.
 
-Each thread owns:
+Each thread needs its own scratch space — its local variables and the chain of
+"which method called which, and where to return". That is the **stack** from
+the GC topic ([[stack-vs-heap-layout]]); every thread has its own.
 
-```
-Thread
-├── stack            ~1 MB reserved address space (Windows default)
-├── kernel object    scheduling state, priority, handle
-├── register context saved on every switch (RIP, RSP, general + SIMD)
-└── TLS              thread-local storage slots
-```
+Threads belong to the **operating system**, not to .NET. A
+`System.Threading.Thread` is a thin wrapper around exactly one OS thread — one
+to one. That is why creating one is relatively expensive: you are asking the OS
+to set up a real thread.
 
-### Reserved, committed, touched
+The OS also decides **when** each thread runs. A machine has a few **cores**
+(the parts of the CPU that actually execute instructions), usually far fewer
+than there are threads. The OS **scheduler** decides which thread gets a core
+now and for how long. Not .NET, and not the thread pool — the pool only decides
+which *job* goes to which of its threads; when that thread gets a core is the
+OS's call.
 
-A **page** is the unit the MMU and OS manage memory in — 4 KB on x64 (huge
-pages of 2 MB or 1 GB exist for special cases). Code only sees virtual
-addresses; page tables map virtual pages to physical ones and the TLB caches
-those mappings. Three states:
+## Using it
 
-```
-RESERVED   address range claimed, no physical memory, costs only address space
-COMMITTED  backing promised (RAM or page file), still no physical page assigned
-TOUCHED    first read/write → page fault → OS assigns a real 4 KB physical page
-```
+*So a thread is something the OS runs your code on. Where do you meet threads
+in everyday .NET code?*
 
-So a thread's "1 MB stack" is **1 MB of reserved address space**. A thread
-whose call stack never exceeds 12 KB holds **three** physical pages. Real RAM
-per thread is typically 8–32 KB of touched stack plus the kernel object.
-"1,000 threads = 1 GB" is true of *address space*, not RAM — a bookkeeping and
-address-space ceiling, not a memory bill.
+Mostly you don't create them — they are already there:
 
-### Green threads and fibres, and why .NET has neither
+- Every ASP.NET Core request runs on a thread from the **thread pool**, a set of
+  threads .NET keeps alive for reuse ([[thread-pool-internals]]).
+- `Task.Run(...)` hands a job to the pool; one of its threads runs it.
 
-Both mean a unit of execution scheduled in **user mode by a runtime**, not by
-the kernel — many multiplexed onto few OS threads (**M:N**, against .NET's
-1:1).
-
-| | OS thread | Green thread |
-|---|---|---|
-| Switch cost | ~1–10 µs, kernel transition | ~10–100 ns, a function call |
-| Stack | ~1 MB reserved, fixed at creation | ~2–8 KB, grows on demand |
-| Scheduled by | Kernel | Language runtime |
-| Practical ceiling | thousands | millions |
-
-Live examples: Go goroutines, Java 21 virtual threads (Project Loom), Erlang
-processes. **Fibre** is the Windows term (`ConvertThreadToFiber`,
-`SwitchToFiber`) and is strictly **cooperative** — a fibre runs until it
-explicitly yields.
-
-Fibres were tried in .NET — SQL Server could host the CLR in fibre mode — and
-abandoned. They break everything assuming thread affinity: `lock` ownership is
-tracked per OS thread, thread-local storage, and native libraries requiring
-calls from one thread.
-
-**`async`/`await` solves the same problem by a different route.** Go gives a
-pending operation a cheap *stack*; C# gives it a cheap *object* — the compiler
-rewrites the method into a state machine, so a paused operation is a few
-hundred bytes on the heap with **no stack at all**. Same goal, compiler
-transform instead of runtime scheduler.
-
-### Scheduling
-
-Preemptive and time-sliced. A runnable thread gets a quantum of tens of
-milliseconds; the kernel reclaims the core when it expires, when a
-higher-priority thread becomes runnable, or when the thread blocks. Code never
-controls when it is descheduled. Priority is a hint, not a guarantee, and using
-it to fix a design problem is an anti-pattern.
-
-```
-  ┌─────────┐   quantum expires / preempted   ┌─────────┐
-  │ RUNNING │ ──────────────────────────────► │  READY  │
-  │ on core │ ◄────────────────────────────── │ wants a │
-  └────┬────┘        scheduler picks it       │  core   │
-       │                                      └─────────┘
-       │ blocks on I/O, lock, Sleep, Wait          ▲
-       ▼                                           │
-  ┌─────────────┐                                  │
-  │   BLOCKED   │ ─────────────────────────────────┘
-  │ not         │   the thing it waited on completes
-  │ schedulable │
-  └─────────────┘
-```
-
-A **blocked** thread burns no CPU but still holds its stack, kernel object and
-address space for the whole wait. Blocking is not free; it is only not
-*CPU*-expensive. That fact is the foundation of the rest of this cluster.
-
-**A context switch** saves registers, swaps kernel stacks, and across processes
-swaps the address space. Direct cost is a few microseconds; the indirect cost
-is usually larger, because the incoming thread runs with cold L1/L2 caches and
-a partly invalid TLB.
-
-**Parallelism is bounded by cores.** On 8 cores exactly 8 threads run at any
-instant. Thread 9 adds context switches, not throughput. More threads help only
-when existing threads are **blocked**, never when they are busy.
-
-### Foreground vs background
-
-One difference, with teeth:
-
-- **Foreground** — the CLR keeps the process alive until the thread finishes.
-  `Main` returning is not enough.
-- **Background** — the CLR does not wait. At shutdown these threads are
-  **terminated abruptly**: no `finally`, no `using` disposal, no `catch`. Work
-  in flight is lost.
+Creating a thread yourself is rare and deliberate:
 
 ```csharp
-var t = new Thread(Work);      // foreground by DEFAULT
-t.IsBackground = true;         // opt in to background
+var worker = new Thread(ProcessQueueForever) { IsBackground = true };
+worker.Start();
 ```
 
-Every thread-pool thread, every `Task.Run`, and every timer callback is
-**background**. Neither default is what a worker wants: foreground hangs
-shutdown, background kills work mid-write. The correct pattern is background
-**plus** cooperative shutdown — a `CancellationToken` to ask it to stop and a
-bounded wait for it to finish.
+- **Foreground or background.** A `new Thread` is **foreground** by default —
+  the process will not exit until it finishes. **Background** threads (every
+  pool thread, every `Task.Run`) are killed immediately when the process exits:
+  no `finally`, no cleanup.
+- **You cannot kill a thread from outside.** On .NET Core `Thread.Abort` throws
+  `PlatformNotSupportedException`. The only way to stop a thread is to *ask* it,
+  and its own code must check the request — normally a `CancellationToken`
+  ([[cancellation-tokens]], tier 2).
 
-**A thread cannot be killed.** `Thread.Abort` throws
-`PlatformNotSupportedException` on .NET Core and later. Cooperative
-cancellation is the only mechanism, which is why `CancellationToken` is a
-tier-1 concept rather than a convenience.
+So a thread you own is normally **background + a cancellation token + a short
+bounded wait on shutdown**: it neither holds the process open nor gets killed
+mid-write.
 
-## Failure modes
-
-- **Thread-per-request.** 1,000 concurrent I/O-bound requests on 1,000 threads:
-  ~1 GB reserved address space, 1,000 kernel objects, a scheduler juggling them
-  — while nearly all sit BLOCKED doing nothing. This is the problem `async` was
-  invented to solve, and the honest answer to "why do we need async at all".
-- **Oversubscription.** More runnable threads than cores. Symptom: **CPU pinned
-  at 100%**, throughput flat or falling, latency variance exploding. The high
-  CPU is what separates it from starvation.
-- **Blocking a pool thread.** The pool is a fixed, shared, slowly-growing set
-  sized on the assumption that work items are short:
-
-  ```
-  1. Pool starts at roughly core count.                       say 8
-  2. 100 requests arrive; each handler calls .Result on a
-     500 ms HTTP call.
-  3. All 8 threads are BLOCKED — not slow, blocked. They
-     cannot pick up work item 9.
-  4. Items 9..100 sit in the queue. CPU near 0%.
-  5. The pool injects threads at roughly 1–2 per second.
-  6. Each new thread takes an item, calls .Result, blocks too.
-  7. Latency in seconds, CPU 5%, thread count past 100.
-  ```
-
-  Signature: **thread count climbing while CPU stays low** — the inverse of
-  oversubscription. Self-inflicted: the work was I/O and needed no thread at
-  all. With `await`, 100 concurrent requests need roughly 8 threads. Covered
-  properly by `thread-pool-starvation`.
-- **Thread leak.** Threads created and never finished, or parked forever.
-  Symptom: thread count climbing monotonically with no plateau.
-- **The forgotten foreground thread.** Work completes, the process will not
-  exit, nothing is logged. A container that never terminates and is SIGKILLed
-  after the grace period.
-- **`StackOverflowException`** kills the process and cannot be caught — each
-  stack is finite and fixed at thread creation. See [[stack-vs-heap-layout]].
+**PLINQ does not give you a dedicated thread.** It splits the data into chunks
+and runs them on *pool* threads.
 
 ## Trade-offs
 
-| | Dedicated `Thread` | Thread pool | `async`/`await` |
+*So the pool usually gives you a thread, and occasionally you create one. When
+is creating your own right, and what does each option cost?*
+
+A thread is **blocked** when it waits for something — a network response, a
+lock, `Thread.Sleep`, `.Result` — and cannot continue until it arrives. A
+blocked thread uses no CPU but still exists and still holds everything a thread
+holds.
+
+| | Your own `Thread` | Thread pool | `async`/`await` |
 |---|---|---|---|
-| **For** | Long-running or special work | Short CPU-bound work items | I/O-bound waiting |
-| **Costs** | ~1 MB reserved, ~100 µs to create, you own its lifetime | No lifetime control; blocking one hurts every other user | State-machine allocation, viral through the call stack |
-| **Use when** | Runs for minutes or forever; needs a custom stack size, priority or apartment state; must not occupy a pool thread | Bursty, short, CPU-bound | Anything waiting on network, disk or another process |
+| **Good for** | Work tied to one specific thread, or running forever | Short jobs, CPU work | Waiting on I/O — network, disk, DB |
+| **Costs** | ~100 µs to create; ~1 MB **reserved address space**; you own its lifetime and shutdown | Shared with the whole process — block one of its threads and everyone slows | A small heap object per call that waits; async "all the way up" |
 
-### Which downside actually binds
+**Reserved address space** — a range of memory *addresses* set aside for the
+stack. Not 1 MB of RAM; why, in the next layer.
 
-Depends on the workload, and the two limits bind in different situations.
+**When your own thread genuinely wins.** "Heavy CPU work" is the weak answer —
+the pool handles CPU jobs fine. The real cases involve something tied to **the
+thread itself**, or work that never ends:
 
-- **CPU-bound:** the **core count** binds; memory is irrelevant. You never want
-  more than ~core-count threads, so 8–16 × 1 MB is nothing. Extra threads here
-  actively hurt — context switches and cold caches.
-- **I/O-bound:** **memory and scheduler overhead** bind, and core count is
-  irrelevant because the threads are waiting, not computing. This is the case
-  that kills web services.
+1. **Thread affinity** — a native library (hardware driver, OpenGL, some native
+   DB drivers) requires every call from the same OS thread. After an `await`
+   you don't control which thread you're on, so async cannot do this at all.
+2. **COM / STA** — COM is an old Windows component technology still behind
+   Office automation and some Windows APIs; STA is its rule that an object may
+   only be called from the thread that created it. The thread is marked before
+   it starts: `t.SetApartmentState(ApartmentState.STA)`. WinForms and WPF UI
+   threads are STA. Rare in backend code.
+3. **A custom stack size** — deep recursion that would overflow 1 MB:
+   `new Thread(Parse, 16 * 1024 * 1024)`.
+4. **A loop for the whole life of the process** — a queue consumer, or a
+   **device poller** (a loop that asks a device "anything new?" every few
+   milliseconds, forever — a scale, a scanner, a sensor). On the pool it would
+   occupy a pool thread permanently.
+5. **A third-party SDK with no async API that blocks for minutes** — it will
+   block somewhere; better on a thread you own than one the pool needs.
+6. **Priority** — belongs to a thread, not a `Task`.
 
-One sentence for the real downside:
+**Middle path:** `Task.Factory.StartNew(work, TaskCreationOptions.LongRunning)`
+asks .NET for a dedicated thread instead of a pool thread, and you still get a
+`Task` to await.
 
-> A thread is a very expensive way to represent an operation that is merely
-> waiting.
+**Two things that do not help:**
 
-10,000 pending operations as threads: ~10 GB of address space, 10,000 kernel
-objects, a scheduler managing all of them. The same 10,000 as `async` state
-machines: ~1–2 MB of heap objects and **zero** threads. That ratio is the whole
-argument for `async`, and it has nothing to do with speed.
+- **Adding threads to CPU-bound work.** 8 cores run exactly 8 threads at any
+  instant; thread 9 adds overhead, not speed.
+- **`Task.Run` inside an ASP.NET Core handler.** The handler is already on a
+  pool thread; `Task.Run` moves the work to another pool thread while the first
+  waits for it. A hop, nothing gained.
 
-### Task vs Thread
+## How it works
 
-- **Threads give parallelism** — more than one core at once. Bounded by core
-  count. For CPU-bound work.
-- **`async` gives concurrency without threads** — not holding a thread while
-  waiting. Unbounded by core count, because nothing is occupied. For I/O.
-- **`Task` is neither.** It is a *handle to work in progress*. It may run on a
-  pool thread, or be nothing but a callback registered on an I/O completion
-  port with no thread behind it. "Task vs Thread" is a category error as a
-  comparison, and saying so is the strong answer.
+*So a thread "costs" ~1 MB and a blocked one uses no CPU — but the 1 MB is not
+RAM. What is a thread made of, and how does the OS move threads on and off
+cores?*
 
-### When a dedicated `Thread` genuinely wins
+```
+Thread
+├── stack                1 MB of reserved addresses (Windows default)
+├── kernel object        the OS's record of this thread
+├── saved registers      where it was when last paused
+└── thread-local storage a few per-thread slots
+```
 
-"CPU-bound" is the textbook answer and it is incomplete. The real cases:
+- **Kernel object.** The **kernel** is the core part of the OS that runs with
+  full privileges. A *kernel object* is a small record the OS keeps in its own
+  protected memory to track something — here, a thread: running, ready or
+  blocked, its priority, where its saved state is. Your code never touches it;
+  it gets a *handle*, an ID to pass back to the OS. Files and locks have kernel
+  objects too. Every thread is one more entry the OS must keep and manage.
+- **Why 1 MB is not RAM.** Memory is handed out in **pages** — 4 KB chunks.
+  Reserving 1 MB only claims the *address range*; no physical memory yet. A page
+  becomes real RAM the first time the thread writes into it. A thread whose calls
+  never go deeper than 12 KB uses three pages. Real memory per thread is roughly
+  8–32 KB plus the kernel object. "1,000 threads = 1 GB" is true of addresses,
+  not RAM.
+- **Only the stack is per thread.** Objects live on **one managed heap shared by
+  all threads** — any thread can use any object, which is why shared objects
+  need synchronisation. As a speed trick the GC gives each thread a small
+  **allocation context** (a private few-KB slice of gen 0) to allocate from
+  without coordinating; once created, the object is an ordinary shared object.
 
-- **Thread affinity demanded by a native library** — hardware and instrument
-  drivers, OpenGL contexts, some native DB drivers require every call from the
-  same OS thread. `async` gives no control over which thread resumes after an
-  `await`, so this is structurally impossible with `async`. One dedicated
-  thread plus a work queue fed to it.
-- **COM / STA apartment state** — Office interop, Windows shell APIs, WPF and
-  WinForms UI. Apartment state belongs to an OS thread and is set before start:
-  `t.SetApartmentState(ApartmentState.STA)`.
-- **A custom stack size** — a deeply recursive parser that blows 1 MB:
-  `new Thread(Parse, 16 * 1024 * 1024)`. No equivalent exists for a pool thread
-  or an async method.
-- **A loop running for the process lifetime** — a queue consumer, a device
-  poller. It never returns, so it must never occupy a pool thread. `new Thread`,
-  or `Task.Factory.StartNew(..., TaskCreationOptions.LongRunning)`, which
-  quietly creates a dedicated thread instead of using the pool.
-- **A third-party SDK with no async API that blocks for minutes.** It cannot be
-  made async — there is no async API underneath to await. The only choice is
-  *where* it blocks: on a thread you own, not one the pool needs.
-- **Elevated priority for a latency-sensitive loop** — audio capture, telemetry
-  sampling. Priority belongs to a thread, not to a `Task`.
+**How the scheduler moves threads:**
 
-**The common mistake in the other direction:** in an ASP.NET Core handler,
-wrapping CPU-bound work in `Task.Run` buys nothing. The handler is *already* on
-a pool thread; the work moves from one pool thread to another, adding a hop
-while the first thread waits for the second. For genuine CPU-bound throughput
-the answer is bounded parallelism, backpressure, or scaling out — not
-`Task.Run`.
+```
+  ┌─────────┐   time slice used up / preempted   ┌─────────┐
+  │ RUNNING │ ─────────────────────────────────► │  READY  │
+  │ on core │ ◄───────────────────────────────── │ wants a │
+  └────┬────┘        scheduler picks it          │  core   │
+       │                                         └─────────┘
+       │ waits: I/O, lock, Sleep, .Result             ▲
+       ▼                                              │
+  ┌─────────┐                                         │
+  │ BLOCKED │ ────────────────────────────────────────┘
+  └─────────┘   the thing it waited for arrives
+```
 
-**Adding threads to a saturated CPU-bound system makes it slower** — more
-context switches, colder caches, same core count.
+A running thread gets a **time slice** of a few to tens of milliseconds. When it
+runs out, when a higher-priority thread needs the core, or when the thread
+blocks, the OS takes the core away. Your code never controls when.
+
+Swapping one thread off a core and another on is a **context switch**: save the
+first thread's registers into its record, load the second's. The direct cost is
+a few microseconds. The bigger cost is indirect: the incoming thread's data is
+not in the core's **cache** (the CPU's small, very fast memory for recently used
+data), so it runs slowly until the cache warms up. More threads fighting for the
+same cores means more switches and colder caches.
+
+## Where it breaks
+
+*So a thread is an OS record plus a stack, and the scheduler moves threads on
+and off cores, paying for every switch. What goes wrong when the number of
+threads does not match the work?*
+
+Each failure has a **signature** — the combination of CPU and thread count on a
+dashboard — which is how you tell them apart.
+
+**1. Oversubscription** — more threads *wanting CPU* than cores (40 CPU-heavy
+threads on 8 cores). The scheduler rotates 40 threads through 8 cores; every
+rotation is a context switch and a cold cache. The CPU is fully busy, but more
+and more of that is switching and cache refills rather than work.
+**Signature: CPU ~100%, thread count stable, throughput flat or falling,
+latency jumping around.** Fix: about core-count threads doing CPU work, not
+more.
+
+**2. Thread-pool starvation** — the opposite: pool threads **blocked**, not
+computing, so they cannot take new work.
+
+```
+1. Pool has ~8 threads (about one per core).
+2. 100 requests arrive; each handler calls .Result on a 500 ms HTTP call.
+3. All 8 threads BLOCKED waiting. Request 9 sits in the queue.
+4. CPU near 0% — nobody computing, everyone waiting.
+5. The pool notices no progress and adds threads, slowly — ~1–2 per second
+   (why so slowly: thread-pool-internals).
+6. Each new thread takes a request, calls .Result, blocks too.
+7. Latency in seconds, CPU 5%, thread count climbing past 100.
+```
+
+**Signature: CPU low, thread count climbing steadily, latency terrible** — the
+mirror of oversubscription. Fix: stop blocking — `await`, not `.Result`.
+
+**3. Thread-per-request for I/O.** Each waiting request gets its own thread.
+Those threads are almost always **blocked**, so they are not competing for
+cores and **core count is not the limit**. What binds is the per-thread cost
+from the last layer — a kernel object each, stack pages, a scheduler entry, and
+on the pool the slow injection rate. A thread is a very expensive way to
+represent an operation that is only *waiting*; async represents the same wait as
+a small heap object and no thread.
+
+**Smaller ones:**
+
+- **Forgotten foreground thread** — work done, process will not exit, nothing
+  logged. A container hangs on shutdown and is force-killed after the grace
+  period.
+- **Background thread killed mid-write** — no `finally` at exit; a half-written
+  file or message. Fix: cancellation token + bounded wait on shutdown.
+- **`StackOverflowException`** — recursion deeper than the stack. Kills the
+  process; cannot be caught.
+
+## In practice
+
+*So oversubscription is too many threads wanting CPU, and starvation is threads
+blocked waiting. A situation that needs all of it — and the arithmetic an
+interviewer is waiting for.*
+
+**Situation.** An ASP.NET Core endpoint resizes an uploaded image: ~**200 ms of
+pure CPU** per request, **300 requests/s**, **8 cores**. It is wrapped in
+`await Task.Run(() => Resize(img))` "so it won't block". Latency climbs until
+requests time out.
+
+1. **Classify.** CPU-bound — 200 ms of computing, not waiting.
+2. **`Task.Run` bought nothing.** The handler was already on a pool thread; the
+   resize moves to another pool thread. The same 200 ms of CPU still needs a
+   core.
+3. **Arithmetic first.** Demand: 300 × 0.2 s = **60 core-seconds of work per
+   second**. Supply: **8 core-seconds per second**. **7.5× over capacity** —
+   work piles up in queues, latency grows to timeouts, CPU pinned at 100%.
+   **A capacity problem, not a threading problem**: total work and cores are
+   both fixed, so no arrangement of threads, tasks or async fixes it.
+4. **Options, priced:**
+
+| Option | Buys | Costs |
+|---|---|---|
+| **Make each resize cheaper** — smaller output, faster library, cache repeat images | Cuts the 60 at the source; often the biggest win | Engineering time; cache memory and invalidation |
+| **Scale out** — 60 ÷ 8 ≈ 8 boxes at 100%, **~10 at ~75%** | Handles the load as is | Money, roughly linear with traffic |
+| **Bound and shed** — ~8 resizes at once (a `SemaphoreSlim` limits how many run concurrently; tier 1, later), reject the rest with **HTTP 429** | Protects the rest of the service | Some uploads rejected; clients retry |
+| **Off the request path** — accept upload, queue a job, core-count workers resize, result delivered later | Upload latency small and stable; workers scale separately | Complexity; result not instant |
+
+**Decision:** queue plus workers sized at about core count, workers scaled
+horizontally (~10 × 8-core at this load), cache repeat resizes, and delete the
+`Task.Run` — it only added a hop.
+
+**What the interviewer listens for:** "capacity problem" *with the number*
+(60 vs 8), why `Task.Run` in a handler is a no-op, and a price on every option.
 
 ## Drill — 2026-09-19
 
@@ -255,8 +274,53 @@ context switches, colder caches, same core count.
 
 Drill results do not change a level.
 
+## Drill — 2026-10-01
+
+| Q | Question | Answer (summary) | Result |
+|---|---|---|---|
+| 1 | A loop that consumes messages for the whole life of a service — how do you start it, and how do you make it stop cleanly on shutdown? | Dedicated thread; foreground rejected because it holds the process open; background plus a `CancellationToken` the loop observes. Did not add the bounded wait (`Join` with a timeout) after cancelling. | hit |
+| 2 | A vendor's native card-reader SDK needs every call from the same OS thread, some calls block for seconds; async ASP.NET Core service. Why not `Task.Run` or `await`, what instead, at what cost? | Said the work must move off the request thread and that `Task.Run` would block pool threads toward starvation. Did not name thread affinity as the reason neither works — no control over which thread runs the call — nor the answer (one dedicated thread owning the SDK, fed by a queue) nor its cost (calls serialised, a bottleneck, lifetime owned). | miss |
+| 3 | 8 cores, CPU 98%, 40 threads stable, throughput falling — what is happening underneath? | Oversubscription: more threads wanting CPU than cores, frequent context switches, and the core's cache refilled after every switch, so work done per CPU-second drops. | hit |
+
+Drill results do not change a level.
+
+## Model answers — 2026-10-01
+
+### Q1 (2026-09-30) — target L4, awarded L2
+
+*"We can't go thread-per-request — 1,000 threads is 1 GB of RAM." What is right and wrong, and what does a thread actually cost?* — [[2026-09-30-async-and-threading-tier-1]]
+
+> Right in direction, wrong in the number. The 1 MB is reserved *address
+> space* for the stack; physical pages are only used when touched, so an idle
+> thread holds maybe 8–32 KB plus a kernel object. The real cost of
+> thread-per-request for I/O is representing a *waiting* operation with an OS
+> thread — ~100 µs to create, a kernel object, a scheduler entry, a stack — and
+> those threads are blocked, not competing for cores, so core count isn't the
+> limit; the per-thread overhead and the pool's slow injection are. Async
+> represents the same wait as a few hundred bytes of heap and no thread.
+
+Missing from the graded answer: address space versus RAM; that blocked threads
+are not waiting for cores; what actually binds.
+
+### Q2 (2026-09-30) — target L5, awarded L2
+
+*Rung 3: when does a dedicated thread genuinely beat the pool or async, and what do you pay for it?* — [[2026-09-30-async-and-threading-tier-1-2]]
+
+> Rarely for plain CPU work — the pool handles that. A dedicated thread wins
+> when something is tied to the thread itself: a native library needing every
+> call from one OS thread, STA for COM or UI, a custom stack size, or priority.
+> It also wins for work that never ends — a process-lifetime consumer loop, or a
+> blocking SDK with no async API — because on the pool that looks like a blocked
+> thread and makes the pool inject more. You pay ~100 µs and 1 MB of address
+> space per thread, no reuse, and you own the lifetime: background, a
+> cancellation token, a bounded wait on shutdown. `StartNew` with `LongRunning`
+> gets you the thread without giving up the `Task`.
+
+Missing from the graded answer: the thread-bound cases; the pool mistaking
+long-running work for blocked; the costs and the `LongRunning` middle path.
+
 ## Resources
 
 ## Related
 
-[[stack-vs-heap-layout]]
+[[stack-vs-heap-layout]] · [[thread-pool-internals]] · [[parallelism-vs-concurrency]] · [[cancellation-tokens]]

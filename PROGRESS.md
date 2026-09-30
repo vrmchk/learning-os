@@ -1,6 +1,6 @@
 # Progress
 
-Generated 2026-09-30 by `scripts/progress.ps1`. Do not edit — regenerate.
+Generated 2026-10-01 by `scripts/progress.ps1`. Do not edit — regenerate.
 
 **Focus:** .NET · cluster: async-and-threading
 
@@ -43,15 +43,13 @@ Older half → newer half: target 2.97 → 3.50 (+0.53), awarded 1.43 → 1.88 (
 | Data access and EF Core internals | 11 | L0.00 | 11 | 0 | — |
 | HTTP, networking, and resilience | 6 | L0.00 | 6 | 0 | — |
 
-**Gaps:** open 55 · studying 0 · taught 2 · verified 10 · regressed 0
+**Gaps:** open 48 · studying 0 · taught 10 · verified 10 · regressed 0
 
 Open for more than 7 days:
 
 - [[parallelism-vs-concurrency]] — drill miss: classifies I/O `Task.WhenAll` as concurrency and estimates ~8 threads correctly, but both reasons are wrong — gives "we do not create threads explicitly" as the criterion rather than the work holding no thread while waiting, and treats core count as a cap on pool threads rather than a rough proxy for how many continuations run at once (since 2026-09-20)
 - [[parallelism-vs-concurrency]] — drill miss: declined to trace an awaited I/O call from issue to resumption — no OS completion port or epoll registration, no release of the pool thread, no statement that nothing holds a thread during the wait, no completion dispatching `MoveNext` on a different thread. Taught in this session; distinct from `async-state-machine`, which is untaught (since 2026-09-20)
 - [[parallelism-vs-concurrency]] — design answers are not quantified: restructures the batch job correctly but gives no payoff figure when asked directly. Second occurrence — see the 2026-09-19 drill miss on [[threads-and-scheduling]], where the capacity arithmetic was also absent (since 2026-09-20)
-- [[threads-and-scheduling]] — drill miss: cannot say `Task.Run` in an ASP.NET Core handler is a no-op because the handler already runs on a pool thread; does not reach the capacity arithmetic (300 rps x 200 ms = 60 core-seconds against 8 cores) or name it a capacity problem rather than a concurrency one; no bounded concurrency, load shedding, or moving the work off the request path (since 2026-09-19)
-- [[threads-and-scheduling]] — drill miss: identifies oversubscription and thread-pool starvation correctly but gives no mechanism for either signature — no time-slicing and cache-refill cost behind high CPU with stable threads, and no blocked threads plus the pool’s 1–2 per second injection behind low CPU with climbing threads (since 2026-09-19)
 - [[finalization-and-freachable-queue]] — does not know the freachable queue is a root: cannot say the object and its whole graph are re-marked live and promoted, so the second collection is a gen 1 or gen 2 one; inverts the direction, saying the object "has a reference to the finalize queue" (since 2026-09-18)
 - [[finalization-and-freachable-queue]] — describes `GC.SuppressFinalize` as preventing registration; registration already happened at `new`, and the flag makes the GC skip the existing entry (since 2026-09-18)
 - [[finalization-and-freachable-queue]] — answers the clean-shutdown case with the crash; needed a probe to state that .NET 5+ does not run pending finalizers at process exit (since 2026-09-18)
@@ -91,27 +89,28 @@ Open for more than 7 days:
 
 ## Review queue
 
-9 scheduled · **6 overdue** · 3 due in the next 7 days.
+9 scheduled · **7 overdue** · 2 due in the next 7 days.
 
 | Concept | Topic | Due | Days overdue |
 |---|---|---|---|
-| [[gc-generations]] | dotnet | 2026-09-20 | 10 |
-| [[gc-triggers-and-budgets]] | dotnet | 2026-09-20 | 10 |
-| [[large-object-heap]] | dotnet | 2026-09-20 | 10 |
-| [[finalization-and-freachable-queue]] | dotnet | 2026-09-21 | 9 |
-| [[stack-vs-heap-layout]] | dotnet | 2026-09-21 | 9 |
-| [[boxing]] | dotnet | 2026-09-24 | 6 |
+| [[gc-generations]] | dotnet | 2026-09-20 | 11 |
+| [[gc-triggers-and-budgets]] | dotnet | 2026-09-20 | 11 |
+| [[large-object-heap]] | dotnet | 2026-09-20 | 11 |
+| [[finalization-and-freachable-queue]] | dotnet | 2026-09-21 | 10 |
+| [[stack-vs-heap-layout]] | dotnet | 2026-09-21 | 10 |
+| [[boxing]] | dotnet | 2026-09-24 | 7 |
+| [[thread-pool-internals]] | dotnet | 2026-10-01 | 0 |
 
-Due soon: [[thread-pool-internals]] 2026-10-01 · [[parallelism-vs-concurrency]] 2026-10-03 · [[threads-and-scheduling]] 2026-10-03
+Due soon: [[threads-and-scheduling]] 2026-10-02 · [[parallelism-vs-concurrency]] 2026-10-03
 
 ## Activity
 
 | Window | Interview | Teach | Study | Review |
 |---|---|---|---|---|
-| Last 7 days | 2 | 0 | 0 | 0 |
-| Last 30 days | 7 | 10 | 0 | 1 |
-| All time | 7 | 10 | 0 | 1 |
+| Last 7 days | 2 | 1 | 0 | 0 |
+| Last 30 days | 7 | 11 | 0 | 1 |
+| All time | 7 | 11 | 0 | 1 |
 
 Excursions: 0 of 7 interview sessions.
-Last session: 2026-09-30 — interview — async-and-threading-tier-1-2.
+Last session: 2026-10-01 — teach — threads-and-scheduling.
 Last weekly review: [[2026-09-18]].

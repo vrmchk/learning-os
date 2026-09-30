@@ -11,5 +11,5 @@ Sorted by Next, earliest first. Levels live in mastery.md.
 | [[stack-vs-heap-layout]] | dotnet | 2026-09-18 | 2026-09-21 |
 | [[boxing]] | dotnet | 2026-09-17 | 2026-09-24 |
 | [[thread-pool-internals]] | dotnet | 2026-09-30 | 2026-10-01 |
+| [[threads-and-scheduling]] | dotnet | 2026-10-01 | 2026-10-02 |
 | [[parallelism-vs-concurrency]] | dotnet | 2026-09-30 | 2026-10-03 |
-| [[threads-and-scheduling]] | dotnet | 2026-09-30 | 2026-10-03 |
