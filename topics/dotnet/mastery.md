@@ -81,9 +81,9 @@ it exists to make tier 2 teachable, not as a course in parallel programming.
 
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
-| [[threads-and-scheduling]] | L2 | 2026-09-30 | [[2026-09-30-async-and-threading-tier-1]] |
-| [[parallelism-vs-concurrency]] | L1 | 2026-09-30 | [[2026-09-30-async-and-threading-tier-1]] |
-| [[thread-pool-internals]] | L0 | — | — |
+| [[threads-and-scheduling]] | L2 | 2026-09-30 | [[2026-09-30-async-and-threading-tier-1-2]] |
+| [[parallelism-vs-concurrency]] | L2 | 2026-09-30 | [[2026-09-30-async-and-threading-tier-1-2]] |
+| [[thread-pool-internals]] | L1 | 2026-09-30 | [[2026-09-30-async-and-threading-tier-1-2]] |
 | lock-and-monitor-internals | L0 | — | — |
 | interlocked-and-cas | L0 | — | — |
 | semaphoreslim-and-async-locks | L0 | — | — |
@@ -104,7 +104,7 @@ answerable at depth, so it is taught as the mechanism and graded as support.
 | synchronization-context-and-configureawait | L0 | — | — |
 | async-deadlocks | L0 | — | — |
 | thread-pool-starvation | L0 | — | — |
-| cancellation-tokens | L0 | — | — |
+| [[cancellation-tokens]] | L0 | — | [[2026-09-30-async-and-threading-tier-1-2]] |
 | task-whenall-and-bounded-concurrency | L0 | — | — |
 | async-exceptions-and-async-void | L0 | — | — |
 | task-vs-valuetask | L0 | — | — |

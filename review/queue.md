@@ -9,7 +9,7 @@ Sorted by Next, earliest first. Levels live in mastery.md.
 | [[large-object-heap]] | dotnet | 2026-09-17 | 2026-09-20 |
 | [[finalization-and-freachable-queue]] | dotnet | 2026-09-18 | 2026-09-21 |
 | [[stack-vs-heap-layout]] | dotnet | 2026-09-18 | 2026-09-21 |
-| [[thread-pool-internals]] | dotnet | 2026-09-20 | 2026-09-21 |
 | [[boxing]] | dotnet | 2026-09-17 | 2026-09-24 |
-| [[parallelism-vs-concurrency]] | dotnet | 2026-09-30 | 2026-10-01 |
+| [[thread-pool-internals]] | dotnet | 2026-09-30 | 2026-10-01 |
+| [[parallelism-vs-concurrency]] | dotnet | 2026-09-30 | 2026-10-03 |
 | [[threads-and-scheduling]] | dotnet | 2026-09-30 | 2026-10-03 |
