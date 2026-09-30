@@ -609,6 +609,40 @@ Trade-offs headings until they are next taught; both sets count for the
 interview's coverage rule in the meantime. The async-and-threading notes
 taught so far are re-taught in the new format first, at my request.
 
+**The glossary — decided 2026-10-01.** Teaching in layers means every new term
+gets a one-line definition where it first appears — but that definition then
+lives inside one concept's note. When "kernel" turns up again in a networking
+note a week later, there is nowhere to look it up, and a lot of what I lack is
+exactly this general vocabulary: operating systems, networking, DevOps. I know
+SDK stands for Software Development Kit and still could not explain what one is.
+
+So there is one file, `glossary.md` at the vault root: one entry per **term**,
+alphabetical, each short — *what it is* in one or two plain sentences, *say it
+like this* (how to explain it out loud, with an example), optionally *not to
+confuse with* and *deeper* (a link to a concept note). One file, not a file per
+term: a hundred stub files would flood the graph and compete with concept names
+for vault-wide uniqueness, and Obsidian links to a heading
+(`[[glossary#Kernel]]`) just as well.
+
+Entries arrive three ways: `teach` adds every term it defines; `interview` adds
+any term a gap says I used without unpacking; and a small `define` skill answers
+"what is X?" on request with a short answer and an entry — no session, no
+drill. A glossary entry is a few sentences, so `define` is not an exception to
+"never explain at length outside `teach`".
+
+**Terms are never graded.** No level, no queue, no evidence. A term that turns
+out to deserve depth is promoted: it becomes a concept row in the right topic's
+`mastery.md` and is taught and interviewed like any other, and its entry gains a
+*deeper* link to the note.
+
+Seeded on 2026-10-01 from the terms already used in the notes and gaps.
+**Deferred, with a trigger:** a recall warm-up — three glossary terms at the
+start of an interview, "explain it in one sentence", ungraded, misses noted.
+Knowing a word and being able to say it on the spot are different, but the
+warm-up is not worth building until the glossary holds about forty entries and
+there is evidence I actually forget them. `weekly-review` names the trigger
+when it is reached.
+
 ## 7. Structure to build
 
 ```
@@ -685,6 +719,9 @@ concept touched.
   questions on it, records each drill miss as an `open` gap, writes a model
   answer for every interview question that was missed, and queues the concept
   at +1 day.
+- **`define`** (added 2026-10-01) — answers "what is X?" for a general term
+  with a short entry in `glossary.md`: what it is, how to say it, what not to
+  confuse it with. No session, no drill, no level. See §6, "The glossary".
 - **`study`** — for when I want to read or watch on my own instead of being
   taught. Finds three to five resources for a concept or cluster, **verifies
   every link by fetching it** before writing it down, records them in the

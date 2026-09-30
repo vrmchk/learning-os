@@ -84,6 +84,10 @@ the one before it is fine; a section that starts cold is not.
   though known.
 - Before writing, read the user's gap rows and session misses for terms they
   used without unpacking. Those get the definition even if they seem basic.
+- Every general term defined this way also belongs in `glossary.md` (§5 step
+  2). If an entry already exists, the note still gives the one-line definition
+  where the term first appears — the note must read on its own — and may link
+  the entry: `[[glossary#Kernel]]`.
 
 **Pauses.** After about every two layers — after *Using it*, after *How it
 works*, and before *In practice* — stop and ask exactly: *"Questions on this,
@@ -260,19 +264,25 @@ in the note under `## Model answers — <date>` and into chat.
 ## 5. Write-back — in this order
 
 1. **Note** — §3, with the drill table filled in.
-2. **Gap** — in `gaps.md`, set every `open` or `regressed` row for this
+2. **Glossary** — every general term the explanation defined (and every term
+   the user asked about in a pause) gets an entry in `glossary.md`, in
+   `define`'s format (`define/SKILL.md` §2), with `first met:` linking this
+   note. Improve existing entries rather than duplicating. Terms that are
+   this concept's own vocabulary — the thing being taught — do not need one;
+   general words the user will meet again elsewhere do.
+3. **Gap** — in `gaps.md`, set every `open` or `regressed` row for this
    concept to `taught`, `Updated` = `YYYY-MM-DD [[note-name]]`. If there was
    no gap row, add one dated today with `Miss` = "taught on request" and
    status `taught`. Then add one **new `open` row per drill miss**, dated
    today, `Miss` = the specific thing missed, `Session` = `[[note-name]]`.
    A drill miss is a known untaught miss; it must be visible to `interview`'s
    proposal and coverage rules, not buried in the drill table.
-3. **Queue** — in `review/queue.md`, set the concept's `Last` = today,
+4. **Queue** — in `review/queue.md`, set the concept's `Last` = today,
    `Next` = today + 1 day, regardless of its level. Insert if absent, re-sort.
-4. **Log** — append to `review/log.md`:
+5. **Log** — append to `review/log.md`:
    `| 2026-09-15 | dotnet | teach | gc-generations | 3 | — | — | 1 hit 2 miss | [[gc-generations]] |`
-5. **Dashboard** — `pwsh scripts/progress.ps1`.
-6. **Commit** — offer `teach: <concept>`.
+6. **Dashboard** — `pwsh scripts/progress.ps1`.
+7. **Commit** — offer `teach: <concept>`.
 
 Mastery is not touched. `Since`, `Level`, `Evidence` stay as they were.
 

@@ -24,7 +24,8 @@ Use these words exactly. They are not interchangeable.
 | **Concept** | The graded unit. Carries a level, an evidence link, a note, and a due date. | a row in `mastery.md`, a file in `<cluster>/notes/`, a row in `review/queue.md` |
 | **Session** | One graded sitting, dated. | `<cluster>/sessions/YYYY-MM-DD-<slug>.md` |
 | **Gap** | A recorded miss, awaiting teaching. | `gaps.md` |
-| **Skill** | A Claude Code skill — `interview`, `teach`, `study`, `weekly-review`, and the career skills `cv`, `company`. **Never** learning content. | `.claude/skills/` |
+| **Term** | A word worth knowing and being able to explain — kernel, SDK, page. Never graded, never queued. Promoted to a concept if it earns depth. | `glossary.md`, one `###` heading each |
+| **Skill** | A Claude Code skill — `interview`, `teach`, `study`, `define`, `weekly-review`, and the career skills `cv`, `company`. **Never** learning content. | `.claude/skills/` |
 
 - "Track", "skill tree", and "sub-skill" are not used.
 - A concept is the atom: if it cannot carry a level and a due date on its own,
@@ -134,8 +135,8 @@ These are the point of the whole system. Follow them literally.
 
 If the repo has a remote, `git pull --ff-only` before reading anything.
 Report if it fails; do not proceed on a dirty or diverged tree without telling
-the user. This applies to `interview`, `teach`, `study`, and `weekly-review`
-alike — a phone session and a desk session must never collide on the queue.
+the user. This applies to `interview`, `teach`, `study`, `define`, and
+`weekly-review` alike — a phone session and a desk session must never collide on the queue.
 
 ## Session protocol
 
@@ -277,11 +278,27 @@ note's section headings too.
 - In chat, pause after about every two layers: "Questions on this, or next
   layer?" Never a comprehension check, never a quiz.
 
+## Glossary
+
+`glossary.md` at the vault root holds every **term** (added 2026-10-01;
+rationale: `BOOTSTRAP.md` §6, "The glossary"). `define` owns its format.
+
+- An entry is short: *what it is*, *say it like this*, optionally *not to
+  confuse with* and *deeper*. A few sentences, never a lesson.
+- Entries arrive from `teach` (every term it defines), from `interview` (every
+  term a gap says was used without unpacking), and from `define` on request.
+  Before adding, check for an existing entry; improve it rather than duplicate.
+- Terms are never graded and never queued. A term that deserves depth becomes a
+  concept row in the right topic and goes through `teach` and `interview`; its
+  entry then links the note under *deeper*.
+- Link to an entry as `[[glossary#Term]]`. Never link a term that has no entry.
+
 ## File conventions
 
 - Each skill owns the exact format of the files it writes and states it in
   full in its `SKILL.md`. `interview` owns session files, the mastery table,
-  the queue, the log line, and gap entries; `teach` owns notes and gap status
+  the queue, the log line, and gap entries; `define` owns `glossary.md`;
+  `teach` owns notes and gap status
   transitions; `study` owns the `## Resources` section of a note;
   `weekly-review` owns its report in `review/weekly/`. Follow those formats
   exactly — the progress script parses them. `teach` also writes gap rows for
@@ -362,6 +379,7 @@ folder layout: `BOOTSTRAP.md` §10.
 - Session commits: `session: <topic> — <slug> (avg L<n>)`
 - Teaching commits: `teach: <concept>`
 - Study commits: `study: <concept>`
+- Glossary commits: `define: <term>[, <term>…]`
 - Review commits: `review: weekly <date>`
 - System changes: `system: <what changed>`
 - Career: `career: cv — <what>`, `career: company — <company>`

@@ -36,6 +36,7 @@ otherwise is the same failure as inflating a grade.
   `avg_awarded`, `self_flagged`, `disputes`, `excursion`, `concepts`) and,
   for the softness check, the previous four weeks' as well
 - the previous weekly report's Proposals section, to say which were acted on
+- `glossary.md` — entry count, and entries added in the period (git log)
 
 ## 3. Compute
 
@@ -91,6 +92,12 @@ highest-signal events in the system; they go near the top.
 **Calibration checkpoint.** Interview sessions so far, out of five. If five or
 more, state whether the checkpoint condition has been met and quote the
 evidence.
+
+**Glossary.** Count the `###` entries in `glossary.md` and the ones added in the
+period. At about forty entries, name the deferred recall warm-up
+(`BOOTSTRAP.md` §6, "The glossary") under Proposals, with any evidence that
+terms already defined are being forgotten — a gap on a term that already had an
+entry is that evidence.
 
 ## 4. Write the report
 

@@ -501,6 +501,16 @@ Newest first. Never deleted. Status: open → studying | taught → verified | r
 - `Miss` is one specific line: what was asked, what was not known. Never
   "weak on GC".
 
+### 4.3a Glossary
+
+Every miss that says a **term** was used without being unpacked ("used
+'kernel object' without being able to say what it is") also gets an entry in
+`glossary.md`, in `define`'s format (`define/SKILL.md` §2), `first met:`
+linking this session. If the entry exists, leave it. The gap row stays: the
+entry is for looking up, the gap is what the next interview re-tests. Terms
+that are a concept in their own right — a row in `mastery.md` — do not get an
+entry; they get taught.
+
 ### 4.4 Queue
 
 `review/queue.md`, sorted by `Next` ascending:
