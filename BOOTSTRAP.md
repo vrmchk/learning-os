@@ -505,7 +505,9 @@ using either.
 
 **Teaching coverage decides how hard a question may be.** A question may be
 pitched above L2 only if the concept's note actually treats the thing being
-asked about, in its Mechanism, Failure modes or Trade-offs sections. A passing
+asked about: rung 3 in its *Trade-offs* section, rung 4 in *How it works* or
+*Where it breaks*, rung 5 in *In practice* (notes in the pre-2026-09-30
+format: *Mechanism*, *Failure modes* or *Trade-offs*). A passing
 mention is not coverage. Where the note only mentions something, or where there
 is an `open` gap or a recorded drill miss on that exact point, it belongs to
 `teach`, and the interview either leaves it alone or asks it as a **discovery**
@@ -568,6 +570,44 @@ L4 +3 weeks, L5 +2 months.
 - The `teach` drill climbs the same way as an interview ladder — use, then
   trade-off, then mechanism or failure — so the practice has the shape of the
   exam.
+
+**Teaching in layers — decided 2026-09-30.** Until this date `teach`
+explained a concept as Mechanism, then Failure modes, then Trade-offs: one
+paragraph on what the thing is, then straight into its internals, with terms
+named faster than they were defined. It read as rushed, and it taught in the
+opposite order to the one the interview now asks in — the "when would I use
+this" came last, after the machinery. Two days of evidence agree: the rung I
+missed most on 2026-09-30 was *Use*, the layer the old notes skipped.
+
+So a note is now written as the same ladder the interview climbs:
+
+| Section | Answers | Rung |
+|---|---|---|
+| **What it is** | the problem it solves, in plain words, no internals | 1 |
+| **Using it** | where it appears in everyday code, with a short example | 2 |
+| **Trade-offs** | when to reach for it, what it costs, the alternatives | 3 |
+| **How it works** | the machinery underneath, built on the layers above | 4 |
+| **Where it breaks** | failure modes, edge cases, what the symptom looks like | 4 |
+| **In practice** | one worked scenario that uses all of the above | 5 |
+
+Three rules make it read smoothly rather than just reordered:
+
+- **Every section opens with a bridge** — one sentence picking up the question
+  the previous layer left open.
+- **No term is used before it is explained.** A new term gets a plain one-line
+  definition where it first appears. *What it is* and *Using it* introduce
+  almost none; each later section introduces at most three. A term that
+  belongs to another concept gets a one-line gloss and is marked as a later
+  concept rather than dropped in as though known.
+- **The chat explanation pauses.** After about every two layers `teach` stops
+  and asks "questions on this, or next layer?" — a place to ask what a term
+  means before the next layer builds on it. That is not a comprehension check
+  and never becomes one; `teach` still does not quiz during the explanation.
+
+Notes written before this date keep their Mechanism / Failure modes /
+Trade-offs headings until they are next taught; both sets count for the
+interview's coverage rule in the meantime. The async-and-threading notes
+taught so far are re-taught in the new format first, at my request.
 
 ## 7. Structure to build
 
@@ -638,8 +678,10 @@ concept touched.
 - **`interview`** — runs a graded session end to end and does the write-back.
   Grading lives inside this skill, not in a separate one, so there is no way to
   run a session and skip the scoring.
-- **`teach`** — explains a concept from the gaps file (mechanism first, then
-  failure modes, then trade-offs), writes the note, immediately drills three
+- **`teach`** — explains a concept from the gaps file layer by layer (what it
+  is, using it, trade-offs, how it works, where it breaks, in practice — §6,
+  "Teaching in layers"), pausing between layers for questions, writes the
+  note in that shape, immediately drills three
   questions on it, records each drill miss as an `open` gap, writes a model
   answer for every interview question that was missed, and queues the concept
   at +1 day.

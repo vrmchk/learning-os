@@ -1,6 +1,6 @@
 ---
 name: teach
-description: Explain one concept from the gaps file — mechanism, then failure modes, then trade-offs — write the concept note, drill three questions immediately, and queue it for review at +1 day. Use this whenever the user asks to be taught, wants something explained, says "teach me X", "explain X", "I don't get X", "walk me through X", or when the interview skill stops a session for two consecutive ladders at L1 or lower. Also use it when they ask what a gap means. Never explain a concept at length outside this skill — an explanation that is not written to a note and drilled is forgotten by the next session.
+description: Explain one concept from the gaps file layer by layer — what it is, using it, trade-offs, how it works, where it breaks, in practice — pausing for questions between layers, write the concept note, drill three questions immediately, and queue it for review at +1 day. Use this whenever the user asks to be taught, wants something explained, says "teach me X", "explain X", "I don't get X", "walk me through X", or when the interview skill stops a session for two consecutive ladders at L1 or lower. Also use it when they ask what a gap means. Never explain a concept at length outside this skill — an explanation that is not written to a note and drilled is forgotten by the next session.
 ---
 
 # teach
@@ -37,32 +37,73 @@ Read the concept's existing note if there is one, its gap rows, and every
 session file that links it — the misses say exactly what to teach. Teach to
 the misses, not to the textbook table of contents.
 
-## 2. Explain
+## 2. Explain — in layers
+
+Teach in the order the interview asks (`interview/SKILL.md` §2, the ladder):
+from what the thing is, down to how it works, never the other way round.
+Rationale: `BOOTSTRAP.md` §6, "Teaching in layers" (decided 2026-09-30).
 
 In this order, with these headings, in chat:
 
-1. **Mechanism** — what actually happens, at the level below the API. Names
-   of the real moving parts (the card table, the state machine's `MoveNext`,
-   the sync block index). Diagrams in ASCII where the shape matters.
-2. **Failure modes** — how it goes wrong in production, what the symptom
-   looks like, and how to tell it apart from its neighbours.
-3. **Trade-offs** — what it costs, what the alternatives cost, when a senior
-   engineer would choose each. This is the section interviews grade on;
-   never skip it.
+1. **What it is** — the problem it solves and what it does about it, in plain
+   words. Why it exists: what goes wrong without it. No internals, no
+   implementation names. A reader who knows nothing else about the concept
+   can follow this section alone. Target rung 1.
+2. **Using it** — where you meet it in everyday code: what you write, what
+   calls it for you, a short code example. Still no internals. Target rung 2.
+3. **Trade-offs** — when to reach for it, what it costs, the alternatives and
+   what they cost. The costs are stated here as facts ("it allocates", "it
+   holds a thread"); *why* they cost that is the next layer. This is where an
+   interview first separates people; never skip it. Target rung 3.
+4. **How it works** — the machinery underneath: the real moving parts, built
+   on what the first three layers established. ASCII diagrams where the shape
+   matters. Target rung 4.
+5. **Where it breaks** — failure modes and edge cases: how it goes wrong in
+   production, what the symptom looks like, how to tell it apart from its
+   neighbours. Target rung 4.
+6. **In practice** — one worked scenario that needs every layer above: the
+   situation, the reasoning in order, the decision and what it costs. Numbers
+   where numbers decide it. Target rung 5.
 
-Length: enough to whiteboard from, not a chapter. If the concept genuinely
-needs more than a screen or two, split it and say so — the second half
-becomes its own concept.
+**Bridges.** Each section after the first opens with one sentence that picks
+up the question the previous one left open — *"So the pool hands out threads.
+Where does the work it runs come from?"* A section that could be read without
+the one before it is fine; a section that starts cold is not.
 
-Do not quiz during the explanation. Do not ask "does that make sense".
+**Terms.** No term is used before it is explained.
+
+- A new term gets a plain one-line definition where it first appears — what it
+  is, not what it is made of.
+- *What it is* and *Using it* introduce almost no new terms. *Trade-offs* and
+  each later section introduce **at most three**. If a layer needs more, it is
+  doing two jobs; split it.
+- A term that belongs to another concept (the async state machine, a
+  `SynchronizationContext`) gets a one-line gloss and is marked as a later
+  concept — *"the compiler turns the method into a small object that can pause
+  and resume; that is `async-state-machine`, tier 2"*. Never dropped in as
+  though known.
+- Before writing, read the user's gap rows and session misses for terms they
+  used without unpacking. Those get the definition even if they seem basic.
+
+**Pauses.** After about every two layers — after *Using it*, after *How it
+works*, and before *In practice* — stop and ask exactly: *"Questions on this,
+or next layer?"* Answer any question in the same layered voice, then continue.
+This is a place for the user to ask, **not** a comprehension check: never ask
+"does that make sense", never quiz, never ask the user to restate anything.
+
+Length: enough to whiteboard from, not a chapter — six short sections, not six
+long ones. If the concept genuinely needs more than about two screens across
+all layers, split it and say so — the second half becomes its own concept.
 
 ## 3. Write the note
 
 `topics/<topic>/<cluster>/notes/<concept>.md`, where `<cluster>` is the
 kebab-case slug from `TOPIC.md` and matches the note's `cluster:` frontmatter.
 Create the cluster folder if this is its first use. One concept per file. If the file
-exists, replace the Mechanism / Failure modes / Trade-offs sections and keep
-everything else.
+exists, replace the six layer sections — or, in a note written before
+2026-09-30, the old Mechanism / Failure modes / Trade-offs sections, which are
+removed and rewritten as the six layers — and keep everything else (drills,
+model answers, resources, related).
 
 ```markdown
 ---
@@ -75,15 +116,27 @@ taught: 2026-09-15
 
 # GC generations
 
-## Mechanism
+## What it is
 
 ...
 
-## Failure modes
+## Using it
 
 ...
 
 ## Trade-offs
+
+...
+
+## How it works
+
+...
+
+## Where it breaks
+
+...
+
+## In practice
 
 ...
 
@@ -120,11 +173,17 @@ created: 2026-09-14
 
 # GC generations
 
-## Mechanism
+## What it is
 
-## Failure modes
+## Using it
 
 ## Trade-offs
+
+## How it works
+
+## Where it breaks
+
+## In practice
 
 ## Resources
 
@@ -139,8 +198,13 @@ Rules:
 
 - Frontmatter keys are fixed. `taught` is the date of the most recent teach;
   a stub omits it.
-- Mechanism / Failure modes / Trade-offs are written from the explanation
-  just given, tightened. Not a transcript of the chat.
+- The six layer sections are written from the explanation just given,
+  tightened, with their bridges and term definitions kept — the note must read
+  in the same order and at the same pace as the chat did. Answers given during
+  the pauses go into the layer they belong to if they filled a real hole. Not a
+  transcript of the chat.
+- A stub created before 2026-09-30 has the old empty headings; teaching it
+  replaces them with the six layers.
 - Each teach appends a new `## Drill — <date>` section; earlier drills stay.
 - Each teach appends a `## Model answers — <date>` section, after the drill
   sections and before `## Resources`: one `### Q<n> (<session date>) — target
@@ -225,5 +289,8 @@ One sentence: the concept, the drill result, and the interview date.
   model answer.
 - Never write a note without drilling. Never drill without writing the note.
 - Never teach two concepts in one run because they are "related".
+- Never open with internals, and never use a term before its one-line
+  definition. What it is and Using it come first, every time.
+- Never turn a pause into a quiz.
 - Never invent a source or a link. Links go through `study`'s verification
   or do not go in.

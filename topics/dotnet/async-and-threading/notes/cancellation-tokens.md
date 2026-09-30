@@ -7,11 +7,17 @@ created: 2026-09-30
 
 # Cancellation tokens
 
-## Mechanism
+## What it is
 
-## Failure modes
+## Using it
 
 ## Trade-offs
+
+## How it works
+
+## Where it breaks
+
+## In practice
 
 ## Resources
 

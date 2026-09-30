@@ -160,8 +160,11 @@ An awarded grade can never exceed the target. To earn L4 the ladder must reach
 rung 4.
 
 **Coverage caps the target.** Before planning rungs 3–5, check the concept's
-note: the Mechanism, Failure modes or Trade-offs sections must actually treat
-the thing that rung would ask about. A single clause in passing is not
+note. The note's sections follow the ladder (`teach/SKILL.md` §2): rung 3 needs
+the thing asked about treated in *Trade-offs*, rung 4 in *How it works* or
+*Where it breaks*, rung 5 in *In practice*. A note written before 2026-09-30
+still has *Mechanism*, *Failure modes* and *Trade-offs*; any of those covers
+rungs 3–4, and rung 5 needs the scenario's parts covered there. A single clause in passing is not
 coverage. If the note only mentions it, the ladder tops out at L2. If there is
 an `open` gap row or a recorded drill miss on that exact point, it is `teach`'s
 job — aim the rung at a different covered point, drop the rung so the ladder

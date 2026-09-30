@@ -219,8 +219,9 @@ and §9.
   prerequisite, one cold recall from the review queue. If the queue is empty,
   that ladder goes to depth.
 - A rung above L2 may be asked only if the concept's note actually covers the
-  thing asked about in its Mechanism, Failure modes or Trade-offs sections. A
-  passing mention is not coverage. Where the note only mentions it, or an
+  thing asked about: rung 3 in *Trade-offs*, rung 4 in *How it works* or
+  *Where it breaks*, rung 5 in *In practice* (older notes: *Mechanism*,
+  *Failure modes* or *Trade-offs*). A passing mention is not coverage. Where the note only mentions it, or an
   `open` gap or recorded drill miss exists on that exact point, it is
   `teach`'s job: the ladder tops out below it, or that rung is asked as a
   `discovery` question, which ends the climb.
@@ -260,6 +261,21 @@ the chat.
 
 **Spaced repetition intervals:** L1 +1 day, L2 +3 days, L3 +1 week,
 L4 +3 weeks, L5 +2 months. Compute `next` from the session date.
+
+## Teaching
+
+`teach` explains in the order the interview asks (changed 2026-09-30;
+rationale: `BOOTSTRAP.md` §6, "Teaching in layers"): **What it is → Using it
+→ Trade-offs → How it works → Where it breaks → In practice**. Those are the
+note's section headings too.
+
+- Each section opens with a one-sentence bridge from the question the previous
+  one left open.
+- No term before its plain one-line definition. The first two sections use
+  almost no new terms; each later one introduces at most three. A term owned by
+  another concept gets a gloss and is marked as a later concept.
+- In chat, pause after about every two layers: "Questions on this, or next
+  layer?" Never a comprehension check, never a quiz.
 
 ## File conventions
 
