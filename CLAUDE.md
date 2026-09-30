@@ -121,10 +121,12 @@ These are the point of the whole system. Follow them literally.
   the concept was taught.
 - On first contact: cannot define it → stays L0; can define but not use → L1.
 - A grade is never changed by argument. See Disputes below.
-- A concept's session grade is the minimum across its **graded** questions.
-  Discovery questions are excluded, so an untaught corner of a concept never
-  sets the concept's level. Under-reporting a level is the same class of
-  failure as inflating it.
+- A ladder's grade is the **highest rung cleared with no rung missed below
+  it** (changed 2026-09-30). A rung half-answered is not cleared. A concept's
+  session grade is the minimum across its **graded** ladders. Discovery
+  questions are excluded, so an untaught corner of a concept never sets the
+  concept's level. Under-reporting a level is the same class of failure as
+  inflating it.
 - A drill miss is written to `gaps.md` as `open`. An untaught miss recorded
   only in a note's drill table is invisible to the interview.
 
@@ -160,58 +162,85 @@ alike — a phone session and a desk session must never collide on the queue.
 
 **Interview modes.** `interview` takes one parameter, `exam` or `coached`.
 **Default is `coached`** (changed 2026-09-18). Everything else — proposal
-rules, targets, probing, the rubric, the stop rule, self-assessment,
-write-back — is identical.
+rules, ladders, targets, probing, the rubric, the stop rule, write-back — is
+identical; only feedback and the timing of self-assessment differ.
 
-- **exam** — no correction, no model answer, nothing between question and
-  answer until the session is graded.
-- **coached** — after each question *and its probes*, state where the answer
-  fell short and write out the model answer, then move on. Grades are still
-  withheld until after self-assessment. No later question may re-test a point
-  corrected earlier in the session; move to another part of the concept.
+- **coached** — everyday practice. When a ladder stops (the missed rung *and
+  its probes*, or the top rung cleared), first ask for the one-word rating
+  (solid / shaky / missed), then state where the answer fell short and write
+  out the model answer for that rung, then move on. Grades are withheld until
+  the end. No later question may re-test a point corrected earlier in the
+  session; move to another part of the concept.
+- **exam** — the **mock interview** (repositioned 2026-09-30). No correction,
+  no model answer, nothing between question and answer until the session is
+  graded; self-assessment once, at the end. Run occasionally: before a real
+  interview, or when `weekly-review` finds coached grades above exam grades on
+  the same concepts. Claude may suggest one in those two cases; never
+  otherwise.
 
 A coached session sets `coached: true` in its frontmatter and says so in one
 line in the file. It grades, moves levels, writes back, and **counts toward
 the calibration checkpoint** exactly like an exam session (changed
-2026-09-18). Its self-assessment is still made after the answers were
-revealed, which is a known weakness of that evidence rather than a reason to
-drop it; the softness table labels every session's mode so the two can be
-compared. Rationale and the accepted cost: `BOOTSTRAP.md` §6, "Two interview
-modes", and §9.
+2026-09-18). Since 2026-09-30 its self-assessment is given before each
+correction, which closes most of the gap between the two modes as evidence; the
+softness table still labels every session's mode so the two can be compared.
+Rationale and the remaining cost: `BOOTSTRAP.md` §6, "Two interview modes",
+and §9.
 
 **During:**
 
+- **A graded question is a ladder** on one concept (changed 2026-09-30;
+  rationale and the source transcript: `BOOTSTRAP.md` §6, "Question ladders").
+  Rungs, in order, each targeting its level:
+  1. **Explain** — what it is and why it exists (L1)
+  2. **Use** — how you would use it, what it looks like in code (L2)
+  3. **Trade-offs** — when to reach for it, what it costs, against the
+     alternatives (L3)
+  4. **Mechanism and failure** — what happens underneath, edge cases, what
+     breaks (L4)
+  5. **Scenario** — a practical or design problem under constraints, defended
+     (L5)
+  Always start at rung 1. Climb while rungs are cleared; stop at the first
+  rung that is not, after its probes. Never open a ladder on a scenario or an
+  edge case.
+- Follow-ups and the next ladder hook onto the user's own words where they can
+  ("you mentioned X — what is it?"), the way a real interviewer moves.
+- After a ladder, one optional **"have you used it?"** question. Never graded.
 - One question at a time. Wait for the full answer.
-- Every question has a stated **target level**, written into the session file
-  before the question is asked.
+- Every ladder has a stated **target level** — the highest rung planned —
+  written into the session file before rung 1 is asked.
 - No hints, no corrections, no encouragement mid-answer unless the user says
-  "hint" or "pass". In `coached` mode this still holds *during* a question:
-  the correction comes after the answer and its probes, never inside them.
+  "hint" or "pass". In `coached` mode this still holds *during* a ladder:
+  the correction comes after the ladder stops, never inside it.
 - Probe every vague answer at least twice with *why* or *what breaks if*.
-- Ten questions or thirty minutes, whichever comes first. Claude cannot
-  measure wall-clock; the question count governs.
-- Question mix: 60% depth on the target concept or cluster, 25% adjacent or
-  prerequisite, 15% cold recall from the review queue. If the queue is empty,
-  that share goes to depth.
-- A question may be pitched above L2 only if the concept's note actually
-  covers the thing asked about in its Mechanism, Failure modes or Trade-offs
-  sections. A passing mention is not coverage. Where the note only mentions it,
-  or an `open` gap or recorded drill miss exists on that exact point, it is
-  `teach`'s job: leave it, or ask it as a `discovery` question.
+- Four to six ladders or thirty minutes, whichever comes first. Claude cannot
+  measure wall-clock; the ladder count governs.
+- Mix: most ladders on the target concept or cluster, one or two adjacent or
+  prerequisite, one cold recall from the review queue. If the queue is empty,
+  that ladder goes to depth.
+- A rung above L2 may be asked only if the concept's note actually covers the
+  thing asked about in its Mechanism, Failure modes or Trade-offs sections. A
+  passing mention is not coverage. Where the note only mentions it, or an
+  `open` gap or recorded drill miss exists on that exact point, it is
+  `teach`'s job: the ladder tops out below it, or that rung is asked as a
+  `discovery` question, which ends the climb.
 - **Discovery questions** find holes rather than measure them. Target L1,
   labelled `discovery` in the session file, they create a gap row on a miss,
   and they are excluded from the concept grade and from the stop rule below.
   They can neither raise nor lower a level.
-- If three consecutive **graded** answers land at L1 or lower, stop the session
+- If two consecutive **graded** ladders land at L1 or lower, stop the session
   and switch to teaching. Discovery answers do not count.
 
-**Self-assessment:** after the last answer and before any grade is revealed,
-ask which answers the user thought were weak. Record the list next to the
-grades. Never skip this — it is the data the calibration checkpoint reads.
+**Self-assessment:** in `coached` mode, after each ladder stops and **before**
+its correction, ask the user to rate it in one word — solid, shaky or missed;
+ladders rated shaky or missed are the self-flagged list. In `exam` mode, after
+the last answer and before any grade is revealed, ask which answers the user
+thought were weak. Record the list next to the grades. Never skip this — it is
+the data the calibration checkpoint reads.
 
 **Disputes:** if the user disagrees with a grade, do not change it on
-argument. Ask two or three further questions on the same concept at the same
-target level, grade those, and decide the final level. The session file keeps
+argument. Ask two or three further questions on the same concept at the
+disputed rung, grade those, and decide the final level. The session file keeps
 the original grade, the final grade, and the reason.
 
 **After — mandatory and unprompted.** Do all of it, in this order, before

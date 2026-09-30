@@ -1,6 +1,6 @@
 ---
 name: teach
-description: Explain one concept from the gaps file — mechanism, then failure modes, then trade-offs — write the concept note, drill three questions immediately, and queue it for review at +1 day. Use this whenever the user asks to be taught, wants something explained, says "teach me X", "explain X", "I don't get X", "walk me through X", or when the interview skill stops a session for three consecutive L1s. Also use it when they ask what a gap means. Never explain a concept at length outside this skill — an explanation that is not written to a note and drilled is forgotten by the next session.
+description: Explain one concept from the gaps file — mechanism, then failure modes, then trade-offs — write the concept note, drill three questions immediately, and queue it for review at +1 day. Use this whenever the user asks to be taught, wants something explained, says "teach me X", "explain X", "I don't get X", "walk me through X", or when the interview skill stops a session for two consecutive ladders at L1 or lower. Also use it when they ask what a gap means. Never explain a concept at length outside this skill — an explanation that is not written to a note and drilled is forgotten by the next session.
 ---
 
 # teach
@@ -166,7 +166,11 @@ Immediately after the note is written, three questions, one at a time, on
 what was just explained. Wait for each answer. No hints.
 
 Pitch: one at L2 (apply), one at L3 (trade-off), one at L4 (mechanism or
-failure mode). Record each as `hit` or `miss` in the drill table — no
+failure mode), **asked in that order** — the same climb as an interview ladder
+(`interview/SKILL.md` §2), so the practice has the shape of the exam. Word
+them plainly, the way an interviewer would; no scenario-first framing below
+L4. Unlike an interview ladder, a miss does not stop the drill: all three are
+asked. Record each as `hit` or `miss` in the drill table — no
 levels, no grades, no discussion of levels. A miss here is expected; it says
 what the interview will probe.
 

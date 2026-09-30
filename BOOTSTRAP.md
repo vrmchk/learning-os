@@ -365,30 +365,92 @@ its own drill, becomes ineligible for interview, and can therefore never reach
 
 Then let me override, including onto another topic.
 
-**During:** one question at a time, wait for the full answer. Each question is
-pitched at a stated **target level** — written into the session file before
-the question is asked — because "am I improving or is the grading softening"
-is only answerable if difficulty was recorded at the time. No hints, no
-corrections, no encouragement mid-answer unless I say "hint" or "pass". Probe
-every vague answer at least twice with *why* or *what breaks if*. Ten questions
-or thirty minutes, whichever comes first; Claude cannot measure wall-clock, so
-the question count governs. Question mix: 60% depth on the target concept or
-cluster, 25% adjacent or prerequisite, 15% cold recall from the queue — and if
-the queue is empty, that share goes to depth. If three consecutive *graded*
-answers land at L1, stop the session and switch to teaching.
+**During:** one question at a time, wait for the full answer. Each graded
+question is a **ladder** (below) pitched at a stated **target level** — written
+into the session file before the ladder starts — because "am I improving or is
+the grading softening" is only answerable if difficulty was recorded at the
+time. No hints, no corrections, no encouragement mid-answer unless I say "hint"
+or "pass". Probe every vague answer at least twice with *why* or *what breaks
+if*. Four to six ladders or thirty minutes, whichever comes first; Claude cannot
+measure wall-clock, so the ladder count governs. Mix: most ladders on the target
+concept or cluster, one or two on adjacent or prerequisite concepts, one cold
+recall from the queue — and if the queue is empty, that ladder goes to depth.
+If two consecutive *graded* ladders land at L1 or lower, stop the session and
+switch to teaching.
+
+**Question ladders — decided 2026-09-30.** Until this date a session was ten
+single questions, and in practice most of them opened on a scenario or an edge
+case: "a colleague says…", "your service does X under load…". Real technical
+interviews do not run that way. The transcript in
+`examples/senior_dotnet_interview.txt` — a recorded senior .NET interview —
+shows the shape: the interviewer asks what a thing is and why it exists, then
+how it is used, then an edge case, and only then a practical or design problem.
+"Boxing — what is it, why is it needed, what are the risks?" comes before
+anything about boxing in a hot path. "Is `Task` a lighter `Thread`?" comes
+before "run ten HTTP calls and collect the results", which comes before "two of
+them failed — how do you get the exceptions?". Follow-ups grow out of the
+candidate's own words ("you mentioned the heap — what is it?"). When the
+candidate does not know something, the interviewer says the answer in a line and
+moves on rather than pressing. I want to practise for that interview, not for a
+different one.
+
+So a graded question is now a ladder on one concept, climbed in rubric order:
+
+| Rung | Asks | Target |
+|---|---|---|
+| 1 Explain | what it is and why it exists | L1 |
+| 2 Use | how you would use it; what it looks like in code | L2 |
+| 3 Trade-offs | when to reach for it, what it costs, against the alternatives | L3 |
+| 4 Mechanism and failure | what happens underneath, edge cases, what breaks | L4 |
+| 5 Scenario | a practical or design problem under constraints, defended | L5 |
+
+The climb stops at the first rung that is not cleared, after that rung's
+probes. In coached mode that is where the correction comes; then the session
+moves to another concept, ideally one hooked to something I said. Rung 5 — where
+every question used to start — is reached only by clearing 1–4.
+
+**The ladder's grade is the highest rung cleared with none missed below it.**
+This replaced the minimum-across-questions rule for anything inside a ladder,
+because under the minimum rule an easy rung-1 question targeting L1 would cap
+every concept at L1. The anti-inflation rules still apply rung by rung: a rung
+half-answered is not cleared, a missed trade-off means rung 3 was not cleared,
+and a term I cannot unpack is L1 for that term. Rung 1 alone can never award
+more than L1, so fluency on the easy rungs buys nothing. Across *ladders*, the
+minimum rule survives: two ladders on one concept in one session set the
+concept's grade to the lower of the two.
+
+A ladder starts at rung 1 even for a concept already recorded at L3. That is
+what the interview does, the early rungs are short, and a concept at L3 that
+cannot be explained at rung 1 has regressed — which the old format could miss,
+because it never asked.
+
+After a ladder, one optional **"have you used it?"** question — every real
+interview asks it — which is never graded, because an unverifiable claim is not
+evidence.
+
+The accepted cost: fewer concepts get deep evidence per session, because a
+miss at rung 2 ends a ladder early. That is also the honest result. And
+`avg_target` is not comparable across the change: ladder targets are the top
+rung planned, usually L4–L5, where single questions averaged about L3.
+`weekly-review` must compare target against awarded within one side of
+2026-09-30, not across it.
 
 **Two interview modes.** `interview` takes one parameter, and everything else
 about the session is identical in both.
 
-- **coached** (the default since 2026-09-18) — see below.
-- **exam** — nothing between the question and the answer, and no correction
-  until the whole session is graded. The stricter measuring instrument, now
-  asked for by name.
-- **coached** — after each question and its probes, Claude says where the
-  answer fell short and writes out the model answer, then moves on. Grades are
-  still withheld until after self-assessment, and no later question re-tests a
-  point already corrected, because an answer echoed back from a model answer is
-  not unaided evidence.
+- **coached** (the default since 2026-09-18) — everyday practice. After each
+  ladder stops (the missed rung and its probes, or the top rung cleared), I
+  rate the ladder in one word — **solid**, **shaky** or **missed** — *before*
+  any feedback. Then Claude says where the answer fell short and writes out the
+  model answer for that rung, and moves on. Grades are still withheld until the
+  end, and no later question re-tests a point already corrected, because an
+  answer echoed back from a model answer is not unaided evidence.
+- **exam** — the **mock interview** (repositioned 2026-09-30). Nothing between
+  the question and the answer, no correction until the whole session is
+  graded, and the self-assessment asked once at the end. Run occasionally, not
+  as the routine: before a real interview, for the experience of thirty to
+  forty-five minutes with no reassurance; and when `weekly-review` finds
+  coached grades running above exam grades on the same concepts.
 
 Both grade, both write back, both move levels. The difference is only when the
 feedback arrives.
@@ -418,6 +480,18 @@ are generous outright, but it can no longer catch the subtler failure of a
 self-assessment that looks well calibrated only because the answer had already
 been shown.
 
+**Most of that cost was paid down on 2026-09-30.** Ladders and the
+per-ladder rating together address both effects. Leakage shrinks because the
+correction arrives when a ladder stops, and the next ladder is normally a
+different concept. The self-assessment problem is removed outright: the
+one-word rating is given before the model answer for that ladder is shown, so
+it records what I judged, not what I was told. `self_flagged` in a coached
+session lists the ladders I rated shaky or missed. What remains is narrower —
+corrections on earlier concepts can still help on later ones, and my rating of
+ladder 4 is made after hearing the corrections to ladders 1–3 — and it is why
+`exam` survives as a mode rather than being dropped. A single mode would remove
+the only check on whether feedback during a session inflates the grades.
+
 What survives: a coached session is still marked `coached: true`, the softness
 table still names each session's mode, and `weekly-review` can still compare
 the two. A level raised in coached mode was demonstrated in an answer and the
@@ -435,27 +509,33 @@ asked about, in its Mechanism, Failure modes or Trade-offs sections. A passing
 mention is not coverage. Where the note only mentions something, or where there
 is an `open` gap or a recorded drill miss on that exact point, it belongs to
 `teach`, and the interview either leaves it alone or asks it as a **discovery**
-question.
+question. In a ladder this means the climb tops out at the last covered rung:
+rungs 3–5 exist only where the note covers them, and the ladder's target is the
+highest covered rung.
 
 **Discovery questions** exist to find holes, not to measure. They are pitched
 at L1, labelled `discovery` in the session file, and they create a gap row on a
 miss. They are excluded from the concept grade — they can neither raise a level
-nor lower one — and they do not count toward the three-consecutive-lows stop.
+nor lower one — and they do not count toward the consecutive-lows stop. An
+uncovered rung asked as discovery ends the climb and is excluded from the
+ladder's grade.
 
 The reason is calibration in both directions. Pitching L4 at material that was
-never taught measures nothing about the concept, and under the minimum rule one
-such answer sets the concept's whole number. Under-reporting a level is the
+never taught measures nothing about the concept, and one such answer would
+set the concept's whole number. Under-reporting a level is the
 same class of failure as flattering it: the file stops describing what I know,
 and the next session gets pitched wrong. Holes are recorded as gaps, which is
 exactly what gaps are for.
 
-**Self-assessment:** after the last answer and before any grade is revealed,
-Claude asks which answers I thought were weak, and records the list next to
-the grades. This is the data the calibration checkpoint reads.
+**Self-assessment:** in coached mode, the one-word rating after each ladder
+and before its correction; in exam mode, after the last answer and before any
+grade is revealed, Claude asks which answers I thought were weak. Either way
+the list is recorded next to the grades. This is the data the calibration
+checkpoint reads.
 
 **Disputes:** if I disagree with a grade, Claude does not change it on
 argument. It asks two or three further questions on the same concept at the
-same target level, grades those, and decides the final level itself. The
+disputed rung, grades those, and decides the final level itself. The
 session file keeps the original grade, the final grade, and the reason.
 
 **After — mandatory, unprompted:** write the dated session file, update the
@@ -485,6 +565,9 @@ L4 +3 weeks, L5 +2 months.
   interview question would have been. Being graded and told the grade, with no
   model to compare against, leaves me knowing I was wrong and not knowing what
   right looks like.
+- The `teach` drill climbs the same way as an interview ladder — use, then
+  trade-off, then mechanism or failure — so the practice has the shape of the
+  exam.
 
 ## 7. Structure to build
 
@@ -652,6 +735,11 @@ has not gone away — it is now an accepted cost, argued in "Two interview
 modes" in §6 — so a checkpoint answered largely by coached sessions is weaker
 evidence than one answered by exam sessions. The softness table labels every
 session's mode, which is how to tell which kind of evidence closed it.
+
+From 2026-09-30 a coached session's self-assessment is the one-word rating
+given after each ladder and **before** its correction, which closes most of
+that gap: coached sessions from that date are close to exam-grade evidence for
+this checkpoint, and earlier coached sessions are not.
 
 ## 10. Career layer
 

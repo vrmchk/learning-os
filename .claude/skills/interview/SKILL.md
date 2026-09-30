@@ -17,50 +17,63 @@ ever disagree, `CLAUDE.md` wins.
 One parameter, `exam` or `coached`. **Default `coached`** (changed
 2026-09-18) — if the user said nothing, do not ask, just run `coached`.
 
-Recognise `exam` from the argument (`exam`, `exam mode`, `no feedback`, `don't
-correct me`) or from the user asking to be measured rather than taught.
-Coached is also what the words `coached`, `show ideal answers`, `with
-feedback` and `coached mode` select, and what a request for corrections as you
-go means.
+Recognise `exam` from the argument (`exam`, `exam mode`, `mock`, `mock
+interview`, `no feedback`, `don't correct me`) or from the user asking to be
+measured rather than taught. Coached is also what the words `coached`, `show
+ideal answers`, `with feedback` and `coached mode` select, and what a request
+for corrections as you go means.
 Say which mode is running in the same line as the proposal:
 *"Proposing `gc-modes` — rule 1, overdue 2 days. Coached mode."*
 
-The mode changes **one thing**: when the feedback arrives. Proposal rules,
-targets, question mix, probing, coverage caps, the rubric, the three-lows stop
-rule, self-assessment, and the whole of §4 are identical.
+`exam` is the **mock interview** (repositioned 2026-09-30): the occasional
+full rehearsal, not the routine. Suggest one in a single line — never run it
+unasked — only when the user mentions an upcoming real interview, or when the
+newest `weekly-review` report finds coached grades running above exam grades on
+the same concepts.
+
+The mode changes **two things**: when the feedback arrives, and when the
+self-assessment is taken. Proposal rules, ladders, targets, mix, probing,
+coverage caps, the rubric, the consecutive-lows stop rule, and the whole of §4
+are identical.
 
 | | exam | coached |
 |---|---|---|
 | Between question and answer | nothing | nothing |
-| After the answer and its probes | next question | where it fell short, then the model answer |
-| Grades | after self-assessment | after self-assessment |
+| When a ladder stops | next ladder | one-word rating, then where it fell short, then the model answer |
+| Self-assessment | once, after the last answer | the per-ladder rating, before each correction |
+| Grades | after self-assessment | at the end |
 | Level changes, write-back | full | full |
 | Frontmatter | `coached: false` | `coached: true` |
 | Calibration checkpoint | counts | counts |
 
 **Coached mode, exactly:**
 
-1. Ask the question. Probe as normal. **No correction inside a question** — a
-   probe is part of the question, so the feedback waits until probing is done.
-2. Then, before the next question: a short **"Where you were short"** list —
-   what was wrong, what was missing, what was right — and a **model answer** at
-   the length a person could say out loud. Same content as `teach`'s model
-   answers; this is not a second lecture on the concept.
-3. Grade silently as always. **Never reveal the level**, not even loosely
+1. Climb the ladder. Probe as normal. **No correction inside a ladder** —
+   rungs and probes are all part of it, so the feedback waits until the climb
+   stops.
+2. **Rating first.** Ask exactly: *"Before I say anything — solid, shaky, or
+   missed?"* Record the word. Nothing about the answer is said before it is
+   given. A ladder rated shaky or missed is self-flagged.
+3. Then, before the next ladder: a short **"Where you were short"** list —
+   what was wrong, what was missing, what was right — and a **model answer** for
+   the rung that stopped the climb, at the length a person could say out loud.
+   If every planned rung was cleared, only what was missing, if anything. Same
+   content as `teach`'s model answers; this is not a second lecture on the
+   concept.
+4. Grade silently as always. **Never reveal the level**, not even loosely
    ("that was about an L2"). The correction says what was missing, not what it
    scored.
-4. **Never re-test a corrected point later in the session.** An answer repeated
+5. **Never re-test a corrected point later in the session.** An answer repeated
    back from a model answer is not unaided evidence. Move to another part of
    the concept, and if that leaves nothing askable, switch concept.
-5. In the session file: set `coached: true`, and put one paragraph under the
-   proposal line saying the format was coached, that the self-assessment
-   followed the corrections, and which later questions were constrained by
-   rule 4.
+6. In the session file: set `coached: true`, and put one paragraph under the
+   proposal line saying the format was coached, that each rating was given
+   before its correction, and which later questions were constrained by rule 5.
 
-The reason for the default, and the cost accepted by letting coached sessions
-count for calibration, is in `BOOTSTRAP.md` §6, "Two interview modes", and
-§9: a coached session teaches better and measures worse, and the system now
-prefers the sessions that get run.
+The reason for the default, and what remains of the measurement cost, is in
+`BOOTSTRAP.md` §6, "Two interview modes", and §9: ladders and the rating before
+feedback close most of the gap; corrections on earlier concepts can still help
+on later ones, which is why `exam` survives.
 
 ## 1. Before the first question
 
@@ -92,81 +105,124 @@ prefers the sessions that get run.
    *"Proposing `thread-pool-starvation` — rule 1, overdue 3 days."*
 5. **Let the user override**, including onto another topic. If the topic
    folder does not exist, this is an excursion — see §6.
-6. **Plan the mix** before asking anything: 6 depth / 2–3 adjacent or
-   prerequisite / 1–2 cold recall from the queue. If the queue has nothing
-   due, cold-recall slots go to depth. Write the plan in your head, not in
-   chat. Dispute re-asks (§3) do not count toward the ten.
+6. **Plan the mix** before asking anything: four to six ladders — two to four
+   depth / one or two adjacent or prerequisite / one cold recall from the
+   queue. If the queue has nothing due, the cold-recall ladder goes to depth.
+   Adjacent ladders may be chosen during the session to follow something the
+   user said. Write the plan in your head, not in chat. Dispute re-asks (§3)
+   do not count toward the six.
 
 ## 2. Asking
 
 One question at a time. Wait for the full answer. Nothing between the
 question and the answer — in both modes. Coached feedback comes after the
-probes, never inside them.
+ladder stops, never inside it.
 
-For **every** question, before it is asked, fix two things and keep them:
+### The ladder
 
-- the **concept** it tests (one wikilink; a question may touch others, but
-  one is graded)
-- the **target level** it is pitched at — the highest level a complete answer
-  could demonstrate. A question about *what* a term means targets L1; *how to
-  use it* L2; *when and what it costs* L3; *what happens underneath and how
-  it fails* L4; *design under constraints and defend* L5.
+A graded question is a **ladder** on one concept — the shape of a real
+technical interview: explain it, then use it, then its costs, then its edges,
+and only then a practical problem. Rationale and the transcript it came from:
+`BOOTSTRAP.md` §6, "Question ladders".
 
-- the **kind**: `depth`, `adjacent`, `cold recall`, or `discovery`.
+| Rung | Asks | Target | Sounds like |
+|---|---|---|---|
+| 1 Explain | what it is, why it exists | L1 | "What is boxing? Why does it exist?" |
+| 2 Use | how you would use it, what it looks like in code | L2 | "Where does it happen in everyday code?" |
+| 3 Trade-offs | when to reach for it, what it costs, vs the alternatives | L3 | "What does it cost, and what do generics change?" |
+| 4 Mechanism and failure | what happens underneath, edge cases, what breaks | L4 | "What does the box look like in memory? Where does it bite unexpectedly?" |
+| 5 Scenario | a practical or design problem under constraints, defended | L5 | "A hot path allocates 3 GB/min. Find the boxing and fix it — defend the fix." |
 
-An awarded grade can never exceed the target. To earn L4 the question must be
-pitched at L4.
+- **Always start at rung 1**, even for a concept recorded at L3+. Early rungs
+  are short: one question, no ceremony.
+- **Climb while cleared.** A rung is cleared when its answer fully meets its
+  level after probing. Stop at the first rung that is not cleared. Never skip
+  a rung, and never open with a scenario or an edge case.
+- **Word questions like an interviewer.** Plain and direct, the way the rung
+  table reads. A rung may hook onto the user's previous answer ("you said the
+  pool injects slowly — why?").
+- **Top rung = target.** Before rung 1, fix the ladder's target: rung 5 unless
+  coverage caps it lower (below). Write it into the session file first.
+- After a ladder stops, optionally ask **"have you used it in practice?"**.
+  Record the answer in one line under the ladder. It is never graded.
+- The **next ladder** should, where it can, follow from something the user
+  said — an adjacent concept they named, or a term they used loosely. That is
+  how an interview moves, and it makes adjacent ladders earn their place.
 
-**Coverage caps the target.** Before pitching a question above L2, check the
-concept's note: the Mechanism, Failure modes or Trade-offs sections must
-actually treat the thing you are about to ask about. A single clause in passing
-is not coverage. If the note only mentions it, the ceiling is L2. If there is
+For **every** ladder, before rung 1, fix and keep:
+
+- the **concept** it tests (one wikilink; rungs may touch others, but one is
+  graded)
+- the **target level** — the top rung planned
+- the **kind**: `depth`, `adjacent`, `cold recall`, or `discovery`
+
+An awarded grade can never exceed the target. To earn L4 the ladder must reach
+rung 4.
+
+**Coverage caps the target.** Before planning rungs 3–5, check the concept's
+note: the Mechanism, Failure modes or Trade-offs sections must actually treat
+the thing that rung would ask about. A single clause in passing is not
+coverage. If the note only mentions it, the ladder tops out at L2. If there is
 an `open` gap row or a recorded drill miss on that exact point, it is `teach`'s
-job — skip it, or ask it as `discovery`.
+job — aim the rung at a different covered point, drop the rung so the ladder
+tops out below it, or ask it as `discovery`, which ends the climb and is
+excluded from the ladder's grade.
 
-**Discovery questions** find holes; they do not measure. Pitch at L1, label the
-heading `discovery`, grade and record as normal, and write the miss to
-`gaps.md`. They are excluded from the concept grade (§4.2) and from the stop
-rule below. A discovery question can neither raise nor lower a level, so asking
-one is never a way to damage a number. It is how an untested corner gets found
-and handed to `teach`.
+**Discovery questions** find holes; they do not measure. Pitch at L1, label
+`discovery`, grade and record as normal, and write the miss to `gaps.md`. A
+discovery question is either a one-rung ladder on untaught material (the
+heading says `discovery`) or a single uncovered rung at the top of a ladder
+(the rung says `discovery`). Either way it is excluded from the concept grade
+(§4.2) and from the stop rule below. It can neither raise nor lower a level. It
+is how an untested corner gets found and handed to `teach`.
 
-For **open-ended design questions** (target L4–L5, "how would you…", "design
-a…"), write the checklist of what a strong answer must contain **before**
-asking. Three to six items, each a specific thing the answer must say. It goes
-into the session file verbatim, and the answer is graded against it item by
-item. Never revise the checklist after the answer.
+For **rung 5** and any other open-ended design question, write the checklist
+of what a strong answer must contain **before** asking it. Three to six items,
+each a specific thing the answer must say. It goes into the session file
+verbatim, and the answer is graded against it item by item. Never revise the
+checklist after the answer.
 
-**Probing.** A vague answer gets at least two probes — *why?* and *what breaks
-if…?* — before it is graded. Probes are part of the same question. Stop
-probing when the answer is either clearly demonstrated or clearly not; do not
-lead the user to it.
+**Probing.** A vague answer on any rung gets at least two probes — *why?* and
+*what breaks if…?* — before the rung is judged. Probes belong to the rung. Stop
+probing when the rung is clearly cleared or clearly not; do not lead the user
+to it.
 
-**"hint"** — give one hint, then let them continue. The question is capped at
-L2: a hinted answer is not unaided.
+**"hint"** — give one hint, then let them continue. The ladder is capped at
+L2: a hinted answer is not unaided, and no rung above 2 can be cleared after
+it.
 
-**"pass"** — record it, award per the first-contact rule (cannot define →
-L0; can define but not use → L1), move on. Say nothing else.
+**"pass"** — the rung is not cleared; the climb stops. If it was rung 1, award
+per the first-contact rule (cannot define → L0). Say nothing else in exam mode.
 
-**Three consecutive graded questions at L1 or lower** → end the session here.
-Do the full write-back for what was asked (§4), then tell the user you are
+**Two consecutive graded ladders at L1 or lower** → end the session here. Do
+the full write-back for what was asked (§4), then tell the user you are
 switching to `teach` for the concept with the lowest grade, and run it.
-`discovery` questions do not count toward the three: three L1s on material
-nobody has taught means it is new, not that teaching has failed.
+`discovery` ladders do not count: L1s on material nobody has taught mean it is
+new, not that teaching has failed.
 
-Stop at ten questions. Claude cannot measure wall-clock; if the user says time
-is up, stop at once and grade what was answered.
+Stop at six ladders. Claude cannot measure wall-clock; if the user says time
+is up, stop at once and grade what was answered — a ladder cut short is graded
+on the rungs it reached.
 
 ## 3. Grading
 
-Grade each answer as it is completed, **silently**. Record the grade; say
-nothing about it. Grades are revealed only after self-assessment — in coached
-mode too, where the correction says what was missing and never what it scored.
+Judge each rung as it is completed, **silently** — cleared or not. Record it;
+say nothing about it. Grades are revealed only after self-assessment — in
+coached mode too, where the correction says what was missing and never what it
+scored.
 
-Apply `CLAUDE.md`'s anti-inflation rules literally. The ones that bite most:
+**A ladder's grade is the target level of the highest rung cleared with no
+rung missed below it.** Rungs 1–3 cleared, rung 4 missed → L3. Rung 1 missed →
+L0 if the user cannot define it, L1 if they defined it but the answer fell
+short of explaining why it exists. Nothing above the last cleared rung counts,
+however good a later remark was.
 
-- Between two levels → the lower one.
-- Missed the trade-off → cap L2, even if everything said was correct.
+Apply `CLAUDE.md`'s anti-inflation rules literally, **rung by rung**. The ones
+that bite most:
+
+- A rung half-answered is not cleared. Between two levels → the lower one.
+- Missed the trade-off → rung 3 is not cleared, so the ladder caps at L2, even
+  if everything said was correct.
 - Used a term, could not unpack it when probed → L1 for that term. Record the
   term in the miss.
 - Fluent, confident, well-structured → worth nothing. Grade the content.
@@ -174,15 +230,19 @@ Apply `CLAUDE.md`'s anti-inflation rules literally. The ones that bite most:
 - A `discovery` question is graded and recorded like any other, but it is
   excluded from the concept grade in §4.2.
 
-Write the one-line reason at grading time, naming the rule if a cap applied.
+Write the one-line reason at grading time, naming the rung that stopped the
+climb and the rule if a cap applied.
 
-**Self-assessment.** After the last answer, before any grade is shown, ask
-exactly this: *"Before I show grades — which answers did you think were
-weak?"* Record the list. Then reveal the grades table.
+**Self-assessment.** In `coached` mode it is the per-ladder rating (§0 step
+2), already taken; do not ask again at the end — reveal the grades table once
+the last ladder's correction is done. In `exam` mode, after the last answer and
+before any grade is shown, ask exactly this: *"Before I show grades — which
+answers did you think were weak?"* Record the list by ladder number, then
+reveal the grades table.
 
 **Disputes.** If the user disagrees with a grade, do not change it and do not
-debate it. Ask two or three further questions on the same concept at the same
-target level, grade those, and set the final grade from the whole picture.
+debate it. Ask two or three further questions on the same concept at the
+disputed rung, grade those, and set the final grade from the whole picture.
 Record original, final, and the reason. The user can trigger this once per
 concept per session.
 
@@ -214,11 +274,11 @@ date: 2026-09-14
 mode: interview
 coached: false
 excursion: false
-questions: 10
-avg_target: 3.2
-avg_awarded: 2.4
+questions: 4
+avg_target: 4.8
+avg_awarded: 2.3
 concepts: [gc-generations, large-object-heap, gc-modes]
-self_flagged: [3, 7]
+self_flagged: [2]
 disputes: 0
 ---
 
@@ -227,63 +287,90 @@ disputes: 0
 **Proposed by rule:** 5 — lowest-level concepts in focus topic
 **Override:** none
 
-## Q1 — [[gc-generations]] — target L3 — depth
+## Q1 — [[gc-generations]] — target L5 — depth
 
-**Question:** What decides whether an object is allocated in gen 0, and what
-has to be true for it to survive to gen 1?
+**Rung 1 — Explain (L1):** *What is a generational GC, and why does .NET use
+one?* → "objects are grouped by age; most die young, so collecting only the
+young ones is cheap." — **cleared**
 
-**Answer:** Said allocation is always gen 0 except large objects. Said
-survival is "if it's still referenced when a GC happens". Did not mention the
-allocation budget or the card table when probed.
+**Rung 2 — Use (L2):** *What does that mean for how you write allocation-heavy
+code?* → short-lived temporaries are nearly free; objects kept alive a little
+too long get promoted and cost more. — **cleared**
+
+**Rung 3 — Trade-offs (L3):** *What does generational collection cost, and
+what would a non-generational GC do better?* → "it's cheaper" — could not say
+what it pays for.
 
 **Probes:**
-1. *Why gen 0 and not straight to gen 2?* → "because it's cheaper" — could
-   not say why it is cheaper.
+1. *Cheaper in exchange for what?* → no answer on tracking old-to-young
+   references.
 2. *What breaks if a gen-2 object references a gen-0 object?* → did not know
    the write barrier / card table exists.
 
-**Awarded:** L2 — correct on the surface, missed the mechanism (card table)
-and the trade-off (why generational at all). Cap: missed trade-off.
+— **not cleared**; climb stops.
 
-## Q2 — [[large-object-heap]] — target L4 — depth
+**Used it?** Tuned `GCSettings.LatencyMode` once for a batch job. Not graded.
 
-**Question:** ...
+**Awarded:** L2 — rungs 1–2 cleared, rung 3 missed the cost (card table
+bookkeeping on every reference write).
 
-**Checklist:**
-- [ ] threshold is 85,000 bytes
-- [x] LOH is collected only with gen 2
-- [ ] LOH is not compacted by default and why
-- [ ] `GCSettings.LargeObjectHeapCompactionMode` exists
+## Q2 — [[large-object-heap]] — target L5 — adjacent
 
-**Answer:** ...
+Hooked to Q1: the user mentioned "big arrays go somewhere else".
+
+**Rung 1 — Explain (L1):** ... — **cleared**
+
+**Rung 2 — Use (L2):** *When does your code put something on the LOH?* → did
+not know the 85,000-byte threshold; "big objects, maybe a megabyte".
 
 **Probes:** ...
 
-**Awarded:** L1 — one of four checklist items. Used "fragmentation" but could
-not say what fragments or why compaction is off.
+— **not cleared**; climb stops.
+
+**Awarded:** L1 — defined the LOH, could not say when an object lands on it.
 
 ...
 
+## Q4 — [[gc-modes]] — target L5 — depth
+
+... rungs 1–4 cleared ...
+
+**Rung 5 — Scenario (L5):** *A 16-core API in a 2 GB container has p99
+spikes every few seconds. Choose a GC configuration and defend it.*
+
+**Checklist:**
+- [x] Server GC by default in ASP.NET Core; one heap per core
+- [x] container limit → heap hard limit at 75%
+- [ ] 16 heaps in 2 GB means tiny per-heap budgets → frequent gen 0 GCs
+- [ ] `GCHeapCount` or DATAS as the fix, with its cost
+
+**Answer:** ...
+
+— **not cleared** (two of four items).
+
+**Awarded:** L4 — rungs 1–4 cleared, rung 5 missed the per-heap budget
+arithmetic.
+
 ## Self-assessment
 
-User flagged as weak: Q3, Q7
+User flagged as weak: Q2
 
 ## Grades
 
 | Q | Concept | Target | Awarded | Self-flagged | Dispute |
 |---|---|---|---|---|---|
-| 1 | [[gc-generations]] | L3 | L2 | — | — |
-| 2 | [[large-object-heap]] | L4 | L1 | — | — |
-| 3 | [[gc-modes]] | L3 | L3 | weak | — |
-| 4 | [[gc-generations]] | L3 | L2 | — | L1 → L2: re-asked ×2, named the budget on the second |
+| 1 | [[gc-generations]] | L5 | L2 | — | — |
+| 2 | [[large-object-heap]] | L5 | L1 | weak | — |
+| 3 | [[gc-generations]] | L4 | L2 | — | L1 → L2: re-asked ×2 at rung 2, named the promotion cost on the second |
+| 4 | [[gc-modes]] | L5 | L4 | — | — |
 
 ## Level changes
 
 | Concept | Before | After | Reason |
 |---|---|---|---|
-| [[gc-generations]] | L0 | L2 | min of Q1 L2, Q4 L2 |
-| [[large-object-heap]] | L0 | L1 | first contact, could define |
-| [[gc-modes]] | L3 | L3 | held; evidence refreshed |
+| [[gc-generations]] | L0 | L2 | min of Q1 L2, Q3 L2 |
+| [[large-object-heap]] | L0 | L1 | rung 1 cleared, rung 2 missed |
+| [[gc-modes]] | L3 | L4 | Q4 cleared rung 4 |
 
 ## Misses
 
@@ -303,6 +390,19 @@ User flagged as weak: Q3, Q7
 
 Rules for the file:
 
+- Each `## Q<n>` is one **ladder**; `questions` in the frontmatter counts
+  ladders, and `avg_target` / `avg_awarded` average the ladders' targets and
+  grades. Sessions before 2026-09-30 counted single questions; the two are not
+  comparable (`BOOTSTRAP.md` §6).
+- Every rung asked gets its own `**Rung n — <name> (Lx):**` line: the question
+  in italics, the answer summarised, then **cleared** or **not cleared**.
+  Probes sit under the rung they belong to. Rungs not reached are not written.
+- `**Used it?**` appears only if asked, and is never graded.
+- In a coached session each ladder carries a `**Rating:** solid | shaky |
+  missed` line, written after the last rung and before the correction. The
+  `## Self-assessment` section then reads `User rated: Q1 solid, Q2 shaky, …`
+  and `self_flagged` lists the shaky and missed ladders. In an exam session it
+  reads `User flagged as weak: …` as before.
 - Frontmatter keys and order are fixed; the progress script reads them.
   `cluster` is the kebab-case of the cluster heading in `mastery.md`.
   `coached` is `true` only for a coached session (§0); it no longer affects the
@@ -313,14 +413,15 @@ Rules for the file:
   makes backlinks the real gap list.
 - Answers are **summarised**, quoting the key claims verbatim. Not a
   transcript; enough that a reader can check the grade.
-- `Checklist` appears only for design questions, and only as written before
-  the answer.
+- `Checklist` appears only for rung 5 or another design question, and only
+  as written before the answer.
 - `Self-flagged` is `weak` or `—`. `Dispute` is `—` or `<orig> → <final>:
   <reason>`.
 - The kind in each `## Q<n>` heading is `depth`, `adjacent`, `cold recall` or
   `discovery`. The Grades table format does not change — the progress script
-  parses it — so `discovery` is recorded in the heading only, and the Level
-  changes table says which questions were excluded and why.
+  parses it — so `discovery` is recorded in the heading (or on the rung) only,
+  and the Level changes table says which ladders or rungs were excluded and
+  why.
 
 ### 4.2 Mastery table
 
@@ -346,10 +447,11 @@ wikilink from then on. The progress script reads both. Never link a concept
 that has no note — see §4.0.
 
 For each graded concept, the session grade is the **minimum** awarded across
-its **graded** questions in this session, after disputes. Questions whose
-heading says `discovery` are excluded from this minimum: they record a hole,
-they do not set a level. If every question on a concept was `discovery`, the
-level does not move and the evidence link is still written. Then:
+its **graded** ladders in this session, after disputes — each ladder's grade
+being its highest cleared rung (§3). Ladders whose heading says `discovery` are
+excluded from this minimum: they record a hole, they do not set a level. If
+every ladder on a concept was `discovery`, the level does not move and the
+evidence link is still written. Then:
 
 - higher than recorded → raise, set `Since` to today, `Evidence` to this
   session — **unless** the concept's note has `taught:` equal to today. A
@@ -464,10 +566,13 @@ than the session touched.
   is theirs to name.
 - Never reveal a level in a coached correction, and never re-test a point that
   was corrected earlier in the same session.
-- Never grade in chat before self-assessment.
+- Never grade in chat before self-assessment, and in coached mode never say a
+  word about a ladder before its rating is given.
 - Never change a grade because the user argued. Re-ask instead.
 - Never skip a write-back step because the session was short.
 - Never award above target.
+- Never open a ladder on a scenario or an edge case, and never skip a rung.
+  Rung 1 first, every time.
 - Never invent a question the user did not answer, or an answer they did not
   give, to fill the file.
 - Never write `[[concept]]` before the concept's note file exists.

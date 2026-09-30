@@ -72,6 +72,10 @@ say so as the first line of this section.
 eight weeks of interview sessions:
 - trend of `avg_awarded` vs trend of `avg_target`. Awarded climbing while
   target is flat or falling is the drift signal. State both slopes plainly.
+  **Never fit a slope across 2026-09-30.** Sessions from that date grade
+  ladders whose target is the top rung planned (usually L4–L5); earlier ones
+  graded single questions averaging about L3. Compute the trend on each side
+  separately, and say so when the window spans the change.
 - self-flagged-weak answers that received **L3 or above** — list each, with
   session and question. Cumulative count since the start, because the
   calibration checkpoint in `ROADMAP.md` reads this number.
