@@ -81,8 +81,8 @@ it exists to make tier 2 teachable, not as a course in parallel programming.
 
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
-| [[threads-and-scheduling]] | L0 | — | — |
-| [[parallelism-vs-concurrency]] | L0 | — | — |
+| [[threads-and-scheduling]] | L2 | 2026-09-30 | [[2026-09-30-async-and-threading-tier-1]] |
+| [[parallelism-vs-concurrency]] | L1 | 2026-09-30 | [[2026-09-30-async-and-threading-tier-1]] |
 | [[thread-pool-internals]] | L0 | — | — |
 | lock-and-monitor-internals | L0 | — | — |
 | interlocked-and-cas | L0 | — | — |

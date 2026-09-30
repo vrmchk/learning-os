@@ -1,15 +1,15 @@
 # Progress
 
-Generated 2026-09-29 by `scripts/progress.ps1`. Do not edit — regenerate.
+Generated 2026-09-30 by `scripts/progress.ps1`. Do not edit — regenerate.
 
 **Focus:** .NET · cluster: async-and-threading
 
 ## Calibration checkpoint
 
-Interview sessions: **5 / 5** (of which 2 coached).
+Interview sessions: **6 / 5** (of which 3 coached).
 Self-flagged-weak answers graded L3+: **0**.
 
-## Softness — last 5 interview sessions
+## Softness — last 6 interview sessions
 
 | Session | Date | Mode | Target avg | Awarded avg | Gap | Disputes |
 |---|---|---|---|---|---|---|
@@ -18,22 +18,23 @@ Self-flagged-weak answers graded L3+: **0**.
 | [[2026-09-13-gc-triggers-and-budgets]] | 2026-09-13 | exam | 3.40 | 2.40 | 1.00 | 0 |
 | [[2026-09-17-gc-generations-and-loh]] | 2026-09-17 | coached | 3.40 | 2.30 | 1.10 | 0 |
 | [[2026-09-18-finalization-and-stack-layout]] | 2026-09-18 | coached | 2.80 | 2.20 | 0.60 | 0 |
+| [[2026-09-30-async-and-threading-tier-1]] | 2026-09-30 | coached | 4.00 | 1.50 | 2.50 | 0 |
 
-Older half → newer half: target 2.75 → 3.20 (+0.45), awarded 0.95 → 2.30 (+1.35).
+Older half → newer half: target 2.97 → 3.40 (+0.43), awarded 1.43 → 2.00 (+0.57).
 
 ## .NET
 
-93 concepts · average **L0.14** · last evidence 2026-09-18
+93 concepts · average **L0.17** · last evidence 2026-09-30
 
 | L0 | L1 | L2 | L3 | L4 | L5 |
 |---|---|---|---|---|---|
-| 87 | 0 | 5 | 1 | 0 | 0 |
+| 85 | 1 | 6 | 1 | 0 | 0 |
 
 | Cluster | Concepts | Avg | L0 | ≥L3 | Last evidence |
 |---|---|---|---|---|---|
 | Memory and GC | 13 | L1.00 | 7 | 1 | 2026-09-18 |
 | C# language internals | 10 | L0.00 | 10 | 0 | — |
-| Async and threading | 18 | L0.00 | 18 | 0 | — |
+| Async and threading | 18 | L0.17 | 16 | 0 | 2026-09-30 |
 | Concurrency | 7 | L0.00 | 7 | 0 | — |
 | Runtime and type system | 9 | L0.00 | 9 | 0 | — |
 | Performance and diagnostics | 11 | L0.00 | 11 | 0 | — |
@@ -41,7 +42,7 @@ Older half → newer half: target 2.75 → 3.20 (+0.45), awarded 0.95 → 2.30 (
 | Data access and EF Core internals | 11 | L0.00 | 11 | 0 | — |
 | HTTP, networking, and resilience | 6 | L0.00 | 6 | 0 | — |
 
-**Gaps:** open 41 · studying 0 · taught 4 · verified 8 · regressed 0
+**Gaps:** open 45 · studying 0 · taught 3 · verified 9 · regressed 0
 
 Open for more than 7 days:
 
@@ -89,28 +90,28 @@ Open for more than 7 days:
 
 ## Review queue
 
-9 scheduled · **9 overdue** · 0 due in the next 7 days.
+9 scheduled · **7 overdue** · 2 due in the next 7 days.
 
 | Concept | Topic | Due | Days overdue |
 |---|---|---|---|
-| [[gc-generations]] | dotnet | 2026-09-20 | 9 |
-| [[gc-triggers-and-budgets]] | dotnet | 2026-09-20 | 9 |
-| [[large-object-heap]] | dotnet | 2026-09-20 | 9 |
-| [[threads-and-scheduling]] | dotnet | 2026-09-20 | 9 |
-| [[finalization-and-freachable-queue]] | dotnet | 2026-09-21 | 8 |
-| [[parallelism-vs-concurrency]] | dotnet | 2026-09-21 | 8 |
-| [[stack-vs-heap-layout]] | dotnet | 2026-09-21 | 8 |
-| [[thread-pool-internals]] | dotnet | 2026-09-21 | 8 |
-| [[boxing]] | dotnet | 2026-09-24 | 5 |
+| [[gc-generations]] | dotnet | 2026-09-20 | 10 |
+| [[gc-triggers-and-budgets]] | dotnet | 2026-09-20 | 10 |
+| [[large-object-heap]] | dotnet | 2026-09-20 | 10 |
+| [[finalization-and-freachable-queue]] | dotnet | 2026-09-21 | 9 |
+| [[stack-vs-heap-layout]] | dotnet | 2026-09-21 | 9 |
+| [[thread-pool-internals]] | dotnet | 2026-09-21 | 9 |
+| [[boxing]] | dotnet | 2026-09-24 | 6 |
+
+Due soon: [[parallelism-vs-concurrency]] 2026-10-01 · [[threads-and-scheduling]] 2026-10-03
 
 ## Activity
 
 | Window | Interview | Teach | Study | Review |
 |---|---|---|---|---|
-| Last 7 days | 0 | 0 | 0 | 0 |
-| Last 30 days | 5 | 10 | 0 | 1 |
-| All time | 5 | 10 | 0 | 1 |
+| Last 7 days | 1 | 0 | 0 | 0 |
+| Last 30 days | 6 | 10 | 0 | 1 |
+| All time | 6 | 10 | 0 | 1 |
 
-Excursions: 0 of 5 interview sessions.
-Last session: 2026-09-20 — teach — thread-pool-internals.
+Excursions: 0 of 6 interview sessions.
+Last session: 2026-09-30 — interview — async-and-threading-tier-1.
 Last weekly review: [[2026-09-18]].
