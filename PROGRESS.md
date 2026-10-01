@@ -43,7 +43,7 @@ Older half → newer half: target 2.97 → 3.50 (+0.53), awarded 1.43 → 1.88 (
 | Data access and EF Core internals | 11 | L0.00 | 11 | 0 | — |
 | HTTP, networking, and resilience | 6 | L0.00 | 6 | 0 | — |
 
-**Gaps:** open 48 · studying 0 · taught 10 · verified 10 · regressed 0
+**Gaps:** open 48 · studying 0 · taught 12 · verified 10 · regressed 0
 
 Open for more than 7 days:
 
@@ -89,7 +89,7 @@ Open for more than 7 days:
 
 ## Review queue
 
-9 scheduled · **7 overdue** · 2 due in the next 7 days.
+9 scheduled · **6 overdue** · 3 due in the next 7 days.
 
 | Concept | Topic | Due | Days overdue |
 |---|---|---|---|
@@ -99,18 +99,17 @@ Open for more than 7 days:
 | [[finalization-and-freachable-queue]] | dotnet | 2026-09-21 | 10 |
 | [[stack-vs-heap-layout]] | dotnet | 2026-09-21 | 10 |
 | [[boxing]] | dotnet | 2026-09-24 | 7 |
-| [[thread-pool-internals]] | dotnet | 2026-10-01 | 0 |
 
-Due soon: [[threads-and-scheduling]] 2026-10-02 · [[parallelism-vs-concurrency]] 2026-10-03
+Due soon: [[thread-pool-internals]] 2026-10-02 · [[threads-and-scheduling]] 2026-10-02 · [[parallelism-vs-concurrency]] 2026-10-03
 
 ## Activity
 
 | Window | Interview | Teach | Study | Review |
 |---|---|---|---|---|
-| Last 7 days | 2 | 1 | 0 | 0 |
-| Last 30 days | 7 | 11 | 0 | 1 |
-| All time | 7 | 11 | 0 | 1 |
+| Last 7 days | 2 | 2 | 0 | 0 |
+| Last 30 days | 7 | 12 | 0 | 1 |
+| All time | 7 | 12 | 0 | 1 |
 
 Excursions: 0 of 7 interview sessions.
-Last session: 2026-10-01 — teach — threads-and-scheduling.
+Last session: 2026-10-01 — teach — thread-pool-internals.
 Last weekly review: [[2026-09-18]].

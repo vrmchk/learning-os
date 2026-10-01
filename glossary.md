@@ -60,6 +60,22 @@ means you spend the CPU on switching instead of work."
 
 **Deeper:** [[threads-and-scheduling]]
 
+### Continuation
+*.NET · first met: [[thread-pool-internals]]*
+
+**What it is:** The rest of an async method after an `await` — the code that
+runs once the awaited operation finishes.
+
+**Say it like this:** "When an `await` has to wait, the method returns and the
+code after it becomes a continuation. When the operation completes, the
+continuation is scheduled — in ASP.NET Core, onto a thread-pool thread — so it
+can resume on a different thread from the one it started on."
+
+**Not to confuse with:** the method call itself, which runs synchronously on
+the caller's thread up to the first `await` that actually waits.
+
+**Deeper:** [[thread-pool-internals]]
+
 ### Core
 *Hardware · first met: [[threads-and-scheduling]]*
 
@@ -274,6 +290,22 @@ it starts — `SetApartmentState(ApartmentState.STA)`.
 threads are STA, and Office interop needs it. In backend code you almost never
 meet it — it's one of the few reasons to create a thread yourself."
 
+### Sync-over-async
+*.NET · first met: [[thread-pool-internals]]*
+
+**What it is:** Calling async code and then blocking until it finishes —
+`.Result`, `.Wait()`, `.GetAwaiter().GetResult()` — instead of awaiting it.
+
+**Say it like this:** "Sync-over-async throws away what async was for: the
+thread sits blocked for the whole wait instead of going back to the pool. Under
+load that starves the thread pool, and with a synchronization context it can
+deadlock outright. The fix is async all the way up."
+
+**Not to confuse with:** async-over-sync — wrapping blocking code in
+`Task.Run` to look async, which still blocks a thread, just a different one.
+
+**Deeper:** [[thread-pool-internals]]
+
 ### Thread affinity
 *.NET · first met: [[threads-and-scheduling]]*
 
@@ -309,3 +341,17 @@ may be swapped out — a few to tens of milliseconds.
 **Say it like this:** "Each running thread gets a time slice; when it's used
 up, the scheduler can give the core to another ready thread. Your code never
 controls when that happens, which is why a race can happen even on one core."
+
+### Work stealing
+*General · first met: [[thread-pool-internals]]*
+
+**What it is:** A scheduling trick where each worker thread has its own queue
+of jobs, and a worker with nothing to do takes jobs from another worker's
+queue instead of sitting idle.
+
+**Say it like this:** "Work stealing keeps all the threads busy without a
+single shared queue everyone fights over. The .NET thread pool does it: each
+pool thread runs its own newest work first, for cache warmth, and idle threads
+steal the oldest work from busy ones."
+
+**Deeper:** [[thread-pool-internals]]
