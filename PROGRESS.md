@@ -43,13 +43,10 @@ Older half → newer half: target 2.97 → 3.50 (+0.53), awarded 1.43 → 1.88 (
 | Data access and EF Core internals | 11 | L0.00 | 11 | 0 | — |
 | HTTP, networking, and resilience | 6 | L0.00 | 6 | 0 | — |
 
-**Gaps:** open 48 · studying 0 · taught 12 · verified 10 · regressed 0
+**Gaps:** open 42 · studying 0 · taught 20 · verified 10 · regressed 0
 
 Open for more than 7 days:
 
-- [[parallelism-vs-concurrency]] — drill miss: classifies I/O `Task.WhenAll` as concurrency and estimates ~8 threads correctly, but both reasons are wrong — gives "we do not create threads explicitly" as the criterion rather than the work holding no thread while waiting, and treats core count as a cap on pool threads rather than a rough proxy for how many continuations run at once (since 2026-09-20)
-- [[parallelism-vs-concurrency]] — drill miss: declined to trace an awaited I/O call from issue to resumption — no OS completion port or epoll registration, no release of the pool thread, no statement that nothing holds a thread during the wait, no completion dispatching `MoveNext` on a different thread. Taught in this session; distinct from `async-state-machine`, which is untaught (since 2026-09-20)
-- [[parallelism-vs-concurrency]] — design answers are not quantified: restructures the batch job correctly but gives no payoff figure when asked directly. Second occurrence — see the 2026-09-19 drill miss on [[threads-and-scheduling]], where the capacity arithmetic was also absent (since 2026-09-20)
 - [[finalization-and-freachable-queue]] — does not know the freachable queue is a root: cannot say the object and its whole graph are re-marked live and promoted, so the second collection is a gen 1 or gen 2 one; inverts the direction, saying the object "has a reference to the finalize queue" (since 2026-09-18)
 - [[finalization-and-freachable-queue]] — describes `GC.SuppressFinalize` as preventing registration; registration already happened at `new`, and the flag makes the GC skip the existing entry (since 2026-09-18)
 - [[finalization-and-freachable-queue]] — answers the clean-shutdown case with the crash; needed a probe to state that .NET 5+ does not run pending finalizers at process exit (since 2026-09-18)
@@ -100,16 +97,16 @@ Open for more than 7 days:
 | [[stack-vs-heap-layout]] | dotnet | 2026-09-21 | 10 |
 | [[boxing]] | dotnet | 2026-09-24 | 7 |
 
-Due soon: [[thread-pool-internals]] 2026-10-02 · [[threads-and-scheduling]] 2026-10-02 · [[parallelism-vs-concurrency]] 2026-10-03
+Due soon: [[parallelism-vs-concurrency]] 2026-10-02 · [[thread-pool-internals]] 2026-10-02 · [[threads-and-scheduling]] 2026-10-02
 
 ## Activity
 
 | Window | Interview | Teach | Study | Review |
 |---|---|---|---|---|
-| Last 7 days | 2 | 2 | 0 | 0 |
-| Last 30 days | 7 | 12 | 0 | 1 |
-| All time | 7 | 12 | 0 | 1 |
+| Last 7 days | 2 | 3 | 0 | 0 |
+| Last 30 days | 7 | 13 | 0 | 1 |
+| All time | 7 | 13 | 0 | 1 |
 
 Excursions: 0 of 7 interview sessions.
-Last session: 2026-10-01 — teach — thread-pool-internals.
+Last session: 2026-10-01 — teach — parallelism-vs-concurrency.
 Last weekly review: [[2026-09-18]].

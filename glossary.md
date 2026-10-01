@@ -143,6 +143,21 @@ shed load deliberately, and clients are expected to back off and retry."
 **Not to confuse with:** 503 Service Unavailable — the server can't serve at
 all, rather than refusing *you*.
 
+### I/O completion port
+*OS · also: IOCP; epoll on Linux · first met: [[parallelism-vs-concurrency]]*
+
+**What it is:** The OS mechanism that tells a program "the I/O operation you
+started has finished", so the program never has to sit waiting for it.
+Windows calls it an I/O completion port; Linux has `epoll` (and `io_uring`).
+
+**Say it like this:** "When you await a network call, .NET hands the request to
+the OS and registers for a completion notification — an IOCP on Windows, epoll
+on Linux. No thread waits in between; when the data arrives the OS signals
+.NET, and the continuation is queued to the thread pool. That's the 'there is
+no thread' part of async."
+
+**Deeper:** [[parallelism-vs-concurrency]]
+
 ### I/O-bound
 *General · first met: [[parallelism-vs-concurrency]]*
 
@@ -210,6 +225,22 @@ once: arrival rate times time in the system. Traffic fixes that number — so th
 only question is what each in-flight request costs you. As a blocked thread it's
 expensive; as an async state machine it's a few hundred bytes."
 
+### Memory visibility
+*General · first met: [[parallelism-vs-concurrency]]*
+
+**What it is:** Whether a value one CPU core wrote can already be seen by
+another core. With several cores, a write can wait briefly in a core's own
+pending-writes buffer, or be reordered for speed, so another core may still
+read the old value.
+
+**Say it like this:** "Memory visibility is the bug class multicore adds. On
+one core every thread sees the same memory; on several, one core can read a
+stale value another core already wrote. `volatile`, `Interlocked` and `lock`
+all include the barriers that make writes visible in the right order."
+
+**Not to confuse with:** a [[glossary#Race condition]] — that needs only
+interleaving and happens on one core too.
+
 ### p99
 *General · also: 99th percentile, tail latency · first met: [[2026-09-13-gc-triggers-and-budgets]]*
 
@@ -237,6 +268,21 @@ not a megabyte."
 
 **Not to confuse with:** a web page, or pagination in an API.
 
+### Race condition
+*General · first met: [[parallelism-vs-concurrency]]*
+
+**What it is:** A bug where the result depends on the exact timing of two
+operations that touch the same data — sometimes it works, sometimes it doesn't.
+
+**Say it like this:** "A race happens when two operations interleave on shared
+data. `count++` is load, add, store; if another thread runs between those steps,
+an update is lost. It needs only concurrency — a single core preempting at the
+wrong moment is enough — and you fix it with `Interlocked`, a `lock`, or by not
+sharing the state."
+
+**Not to confuse with:** a deadlock — operations stuck waiting for each other
+forever, rather than finishing with the wrong result.
+
 ### Registers
 *Hardware · first met: [[threads-and-scheduling]]*
 
@@ -247,6 +293,19 @@ values being worked on right now — plus where the thread is in its code
 **Say it like this:** "Registers are the core's working memory for the current
 instruction. A thread's 'state' is largely its registers, so a context switch is
 saving one thread's registers and loading another's."
+
+### Scalability
+*General · first met: [[parallelism-vs-concurrency]]*
+
+**What it is:** How much load a system can take on — more requests, more
+users — as you add resources or as traffic grows, without falling over.
+
+**Say it like this:** "Scalability is about handling more, not about going
+faster. Async improves a server's scalability: a waiting request holds no
+thread, so one box can hold far more requests in flight — but no single request
+gets quicker. Scaling out is adding machines; scaling up is a bigger machine."
+
+**Not to confuse with:** [[glossary#Latency]] — how fast one request is.
 
 ### Scheduler
 *OS · first met: [[threads-and-scheduling]]*
