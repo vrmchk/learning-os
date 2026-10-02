@@ -81,12 +81,12 @@ it exists to make tier 2 teachable, not as a course in parallel programming.
 
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
-| [[threads-and-scheduling]] | L2 | 2026-09-30 | [[2026-09-30-async-and-threading-tier-1-2]] |
-| [[parallelism-vs-concurrency]] | L2 | 2026-09-30 | [[2026-09-30-async-and-threading-tier-1-2]] |
-| [[thread-pool-internals]] | L1 | 2026-09-30 | [[2026-09-30-async-and-threading-tier-1-2]] |
+| [[threads-and-scheduling]] | L2 | 2026-09-30 | [[2026-10-02-async-and-threading-tier-1]] |
+| [[parallelism-vs-concurrency]] | L4 | 2026-10-02 | [[2026-10-02-async-and-threading-tier-1]] |
+| [[thread-pool-internals]] | L4 | 2026-10-02 | [[2026-10-02-async-and-threading-tier-1]] |
 | lock-and-monitor-internals | L0 | — | — |
 | interlocked-and-cas | L0 | — | — |
-| semaphoreslim-and-async-locks | L0 | — | — |
+| [[semaphoreslim-and-async-locks]] | L0 | — | [[2026-10-02-async-and-threading-tier-1]] |
 
 The last three moved here from **Concurrency** on 2026-09-18: they are
 foundations for this cluster, and the evidence says the asked form is the
