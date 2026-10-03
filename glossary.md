@@ -19,6 +19,20 @@ threads is a gigabyte of addresses, not a gigabyte of memory."
 **Not to confuse with:** RAM usage (the working set) — how much physical
 memory is really in use.
 
+### Async elision
+*.NET · also: eliding async/await · first met: [[async-state-machine]]*
+
+**What it is:** Returning another method's `Task` directly — `return
+_db.LoadAsync(id);` — instead of marking the method `async` and awaiting it.
+The compiler then generates no state machine for it.
+
+**Say it like this:** "Eliding saves the state machine, so it's fine for a
+one-line pass-through. But anything after the call, a `using` or a `try`, runs
+when the method returns — before the work is done — so the resource gets
+disposed under the running operation."
+
+**Deeper:** [[async-state-machine]]
+
 ### Cache
 *Hardware · also: CPU cache · first met: [[threads-and-scheduling]]*
 
@@ -115,6 +129,21 @@ thread, not on the thread pool."
 **Not to confuse with:** an event or callback — the device telling you, rather
 than you asking.
 
+### Fire-and-forget
+*General · first met: [[async-state-machine]]*
+
+**What it is:** Starting an asynchronous operation and never waiting for it or
+looking at its result — in .NET, calling an async method and dropping the
+returned `Task`.
+
+**Say it like this:** "Fire-and-forget means nobody awaits the task, so nobody
+sees its exception or knows when it finished. In ASP.NET Core it can also
+outlive the request and touch disposed services — use a background queue or a
+hosted service instead."
+
+**Not to confuse with:** `async void` — that has no `Task` at all, so its
+exceptions crash the process instead of being silently lost.
+
 ### Handle
 *OS · first met: [[threads-and-scheduling]]*
 
@@ -129,6 +158,24 @@ process runs out."
 
 **Not to confuse with:** a .NET object reference — a handle points into the
 OS's world, not the managed heap. Linux calls them file descriptors.
+
+### Hoisting
+*General · first met: [[async-state-machine]]*
+
+**What it is:** The compiler moving a local variable out of a method's stack
+frame into a field of a generated object, so it survives after the method
+returns — done for locals that cross an `await`, and for locals captured by a
+lambda.
+
+**Say it like this:** "A local that's still needed after an `await` gets
+hoisted into a field of the async state machine. It's one object holding all
+of them, moved to the heap once at the first real pause — not each local boxed
+on its own."
+
+**Not to confuse with:** boxing — copying one value-type value into its own
+heap object.
+
+**Deeper:** [[async-state-machine]]
 
 ### HTTP 429
 *Web · also: Too Many Requests · first met: [[threads-and-scheduling]]*
@@ -348,6 +395,19 @@ it starts — `SetApartmentState(ApartmentState.STA)`.
 **Say it like this:** "STA is COM's 'one thread only' rule. WinForms and WPF UI
 threads are STA, and Office interop needs it. In backend code you almost never
 meet it — it's one of the few reasons to create a thread yourself."
+
+### State machine
+*General · first met: [[async-state-machine]]*
+
+**What it is:** An object that is always in one of a fixed set of numbered
+states and has one operation that does the work for the current state, then
+moves to the next. It lets a piece of work stop and later resume where it was.
+
+**Say it like this:** "A state machine remembers which step it's on. The C#
+compiler turns every async method into one: the state number says which
+`await` to resume after, and a single `MoveNext` method runs the next step."
+
+**Deeper:** [[async-state-machine]]
 
 ### Sync-over-async
 *.NET · first met: [[thread-pool-internals]]*

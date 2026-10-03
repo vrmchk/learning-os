@@ -100,7 +100,7 @@ answerable at depth, so it is taught as the mechanism and graded as support.
 
 | Concept | Level | Since | Evidence |
 |---|---|---|---|
-| async-state-machine | L0 | — | — |
+| [[async-state-machine]] | L0 | — | — |
 | synchronization-context-and-configureawait | L0 | — | — |
 | async-deadlocks | L0 | — | — |
 | thread-pool-starvation | L0 | — | — |

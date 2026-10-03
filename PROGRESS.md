@@ -1,6 +1,6 @@
 # Progress
 
-Generated 2026-10-02 by `scripts/progress.ps1`. Do not edit — regenerate.
+Generated 2026-10-04 by `scripts/progress.ps1`. Do not edit — regenerate.
 
 **Focus:** .NET · cluster: async-and-threading
 
@@ -44,7 +44,7 @@ Older half → newer half: target 3.08 → 3.52 (+0.45), awarded 1.65 → 2.00 (
 | Data access and EF Core internals | 11 | L0.00 | 11 | 0 | — |
 | HTTP, networking, and resilience | 6 | L0.00 | 6 | 0 | — |
 
-**Gaps:** open 50 · studying 0 · taught 1 · verified 29 · regressed 0
+**Gaps:** open 52 · studying 0 · taught 2 · verified 29 · regressed 0
 
 Open for more than 7 days:
 
@@ -87,16 +87,17 @@ Open for more than 7 days:
 
 ## Review queue
 
-9 scheduled · **6 overdue** · 1 due in the next 7 days.
+10 scheduled · **7 overdue** · 1 due in the next 7 days.
 
 | Concept | Topic | Due | Days overdue |
 |---|---|---|---|
-| [[gc-generations]] | dotnet | 2026-09-20 | 12 |
-| [[gc-triggers-and-budgets]] | dotnet | 2026-09-20 | 12 |
-| [[large-object-heap]] | dotnet | 2026-09-20 | 12 |
-| [[finalization-and-freachable-queue]] | dotnet | 2026-09-21 | 11 |
-| [[stack-vs-heap-layout]] | dotnet | 2026-09-21 | 11 |
-| [[boxing]] | dotnet | 2026-09-24 | 8 |
+| [[gc-generations]] | dotnet | 2026-09-20 | 14 |
+| [[gc-triggers-and-budgets]] | dotnet | 2026-09-20 | 14 |
+| [[large-object-heap]] | dotnet | 2026-09-20 | 14 |
+| [[finalization-and-freachable-queue]] | dotnet | 2026-09-21 | 13 |
+| [[stack-vs-heap-layout]] | dotnet | 2026-09-21 | 13 |
+| [[boxing]] | dotnet | 2026-09-24 | 10 |
+| [[async-state-machine]] | dotnet | 2026-10-03 | 1 |
 
 Due soon: [[threads-and-scheduling]] 2026-10-05
 
@@ -104,10 +105,10 @@ Due soon: [[threads-and-scheduling]] 2026-10-05
 
 | Window | Interview | Teach | Study | Review |
 |---|---|---|---|---|
-| Last 7 days | 3 | 3 | 0 | 0 |
-| Last 30 days | 8 | 13 | 0 | 1 |
-| All time | 8 | 13 | 0 | 1 |
+| Last 7 days | 3 | 4 | 0 | 0 |
+| Last 30 days | 8 | 14 | 0 | 1 |
+| All time | 8 | 14 | 0 | 1 |
 
 Excursions: 0 of 8 interview sessions.
-Last session: 2026-10-02 — interview — async-and-threading-tier-1.
+Last session: 2026-10-02 — teach — async-state-machine.
 Last weekly review: [[2026-09-18]].

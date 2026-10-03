@@ -27,3 +27,4 @@ for interviews; drill or resource counts otherwise.
 | 2026-10-01 | dotnet | teach | thread-pool-internals | 3 | — | — | 1 hit 2 miss | [[thread-pool-internals]] |
 | 2026-10-01 | dotnet | teach | parallelism-vs-concurrency | 3 | — | — | 1 hit 2 miss | [[parallelism-vs-concurrency]] |
 | 2026-10-02 | dotnet | interview | async-and-threading-tier-1 | 4 | 3.5 | 2.8 | +2 −0 =1 | [[2026-10-02-async-and-threading-tier-1]] |
+| 2026-10-02 | dotnet | teach | async-state-machine | 3 | — | — | 0 hit 2 miss 1 skipped | [[async-state-machine]] |
